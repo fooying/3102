@@ -7,10 +7,10 @@
 """
 
 import requests
-import config
+from config import PROXY
 
 
 def request(url, method="GET", proxy=False, **kwargs):
-    proxies = config.PROXY if proxy else {}
-    req = requests.request(url, method, proxies=proxies, **kwargs)
+    proxies = PROXY if proxy else {}
+    req = requests.request(method, url, proxies=proxies, **kwargs)
     return req.text

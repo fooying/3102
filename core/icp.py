@@ -7,20 +7,48 @@
 """
 
 import re
+from fdomain.rootdomain import Domain
 
 from comm.request import request
-from config import ICP_API_CONFIG
+from comm.config import ICP_API_CONFIG
 
 
-class ICP(object):
+class ICP:
     def __init__(self, api_name="icpchaxun"):
         self.api_name = api_name if api_name in ICP_API_CONFIG else "icpchaxun"
         self.config = ICP_API_CONFIG[api_name]
 
+    def _get_text_list(self, config, value):
+        import pdb;pdb.set_trace()
+        url = config[0] % value
+        regx = config[1]
+        text = request(url)
+        result = re.findall(regx, text, re.I|re.S|re.X)
+        return result
+
     def query_zt_by_domain(self, domain):
+        """
+        根据domain获取ICP主体名称
+        """
+        query_config = self.config["get_zt"]
+        zt_name = self._get_text_list(query_config, domain)[0]
+        return zt_name
 
     def query_domains_by_zt(self, zt_name):
+        """
+        根据主体名称,获取备案的其他根域
+        """
+        query_config = self.config["get_domains"]
+        domains = self._get_text_list(query_config, zt_name)
+        return domains
 
-
-
-
+    @classmethod
+    def get_rootdomains_by_domain(cls, domain):
+        """
+        通过域名获取同主体的备案根域列表
+        """
+        domain = Domain.get_domain(domain)
+        zt_name = cls().query_zt_by_domain(domain)
+        domains = cls().query_domains_by_zt(zt_name)
+        #todo: 判断是否正确格式域名和ip并做归类
+        return domains
