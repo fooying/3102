@@ -17,8 +17,7 @@ ICP_API_CONFIG = {
         "get_zt": (
             "http://www.icpchaxun.com/beian.aspx?icpType=-1&icpValue=%s",
             """
-            <a\starget="_blank"\shref="/zhuti/.*?">.*?
-            \s*?([^\s]*?)</a>''',
+            <a\starget="_blank"\shref="/zhuti/[^"]*?">\s*?[^<]*?\s*?([^\s]*?)</a>
             """
         ),
         "get_domains": (

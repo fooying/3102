@@ -19,7 +19,6 @@ class ICP:
         self.config = ICP_API_CONFIG[api_name]
 
     def _get_text_list(self, config, value):
-        import pdb;pdb.set_trace()
         url = config[0] % value
         regx = config[1]
         text = request(url)
@@ -40,7 +39,13 @@ class ICP:
         """
         query_config = self.config["get_domains"]
         domains = self._get_text_list(query_config, zt_name)
-        return domains
+        new_domains = []
+        for domain in domains:
+            if domain[0]:
+                new_domains.append(domain[0])
+            if domain[1]:
+                new_domains.append(domain[1])
+        return list(set(new_domains))
 
     @classmethod
     def get_rootdomains_by_domain(cls, domain):
@@ -50,5 +55,13 @@ class ICP:
         domain = Domain.get_domain(domain)
         zt_name = cls().query_zt_by_domain(domain)
         domains = cls().query_domains_by_zt(zt_name)
-        #todo: 判断是否正确格式域名和ip并做归类
+        root_domain = Domain.get_root_domain(domain)
+        if root_domain:
+            domains.append(domain)
+        # todo: 判断是否正确格式域名和ip并做归类
         return domains
+
+if __name__ == '__main__':
+    import sys
+    domain = sys.argv[1]
+    print ICP.get_rootdomains_by_domain(domain)
