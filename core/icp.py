@@ -14,8 +14,8 @@ from comm.config import ICP_API_CONFIG
 
 
 class ICP:
-    def __init__(self, api_name="icpchaxun"):
-        self.api_name = api_name if api_name in ICP_API_CONFIG else "icpchaxun"
+    def __init__(self, api_name='icpchaxun'):
+        self.api_name = api_name if api_name in ICP_API_CONFIG else 'icpchaxun'
         self.config = ICP_API_CONFIG[api_name]
 
     def _get_text_list(self, config, value):
@@ -29,7 +29,7 @@ class ICP:
         """
         根据domain获取ICP主体名称
         """
-        query_config = self.config["get_zt"]
+        query_config = self.config['get_zt']
         zt_name = self._get_text_list(query_config, domain)[0]
         return zt_name
 
@@ -37,7 +37,7 @@ class ICP:
         """
         根据主体名称,获取备案的其他根域
         """
-        query_config = self.config["get_domains"]
+        query_config = self.config['get_domains']
         domains = self._get_text_list(query_config, zt_name)
         new_domains = []
         for domain in domains:
