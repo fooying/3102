@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 # coding=utf-8
-# Fooying@2014-10-20 10:48:21
 
 """
-封装请求模块
+Copyright (c) 2014 Fooying (http://www.fooying.com)
+Mail:f00y1n9[at]gmail.com
 """
 
 import requests
 from config import PROXY
 
 
-def request(url, method="GET", proxy=False, **kwargs):
+def request(url, method='GET', proxy=False, **kwargs):
     proxies = PROXY if proxy else {}
     req = requests.request(method, url, proxies=proxies, **kwargs)
     return req.text

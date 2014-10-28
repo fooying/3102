@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding=utf-8
-# Fooying@2014-10-13 14:29:01
 
 """
-封装的ICP模块
+Copyright (c) 2014 Fooying (http://www.fooying.com)
+Mail:f00y1n9[at]gmail.com
 """
 
 import re
@@ -27,7 +27,7 @@ class ICP:
 
     def query_zt_by_domain(self, domain):
         """
-        根据domain获取ICP主体名称
+        function to get icp subject
         """
         query_config = self.config['get_zt']
         zt_name = self._get_text_list(query_config, domain)[0]
@@ -35,7 +35,7 @@ class ICP:
 
     def query_domains_by_zt(self, zt_name):
         """
-        根据主体名称,获取备案的其他根域
+        function to get others rootdomain by icp subject
         """
         query_config = self.config['get_domains']
         domains = self._get_text_list(query_config, zt_name)
@@ -50,7 +50,7 @@ class ICP:
     @classmethod
     def get_rootdomains_by_domain(cls, domain):
         """
-        通过域名获取同主体的备案根域列表
+        function to get others rootdomain by a known rootdomain
         """
         domain = Domain.get_domain(domain)
         zt_name = cls().query_zt_by_domain(domain)
@@ -58,7 +58,7 @@ class ICP:
         root_domain = Domain.get_root_domain(domain)
         if root_domain:
             domains.append(domain)
-        # todo: 判断是否正确格式域名和ip并做归类
+        # todo: Judge the domain/ip format
         return domains
 
 if __name__ == '__main__':
