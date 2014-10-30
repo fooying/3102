@@ -7,7 +7,8 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
-import request import request
+
+from request import request
 from fdomain.rootdomain import Domain
 
 
@@ -33,3 +34,8 @@ class SubDomain:
             time.sleep(3)
         result.append(domain)
         return list(set(result))
+
+
+if __name__ == '__main__':
+    S = SubDomain()
+    print(S.get_subdomain_by_links('www.qq.com'))
