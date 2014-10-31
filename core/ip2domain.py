@@ -8,8 +8,8 @@ Mail:f00y1n9[at]gmail.com
 
 import re
 
-from request import request
-from rootdomain import Domain
+from comm.request import request
+from comm.rootdomain import Domain
 
 
 class Ip2Domain:

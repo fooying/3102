@@ -24,7 +24,7 @@ import dns.reversename
 import socket
 from dns.zone import *
 from dns.dnssec import algorithm_to_text
-from printer import *
+from comm.printer import *
 
 
 DNS_PORT_NUMBER = 53

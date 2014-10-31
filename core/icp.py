@@ -7,8 +7,8 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
-from rootdomain import Domain
 
+from comm.rootdomain import Domain
 from comm.request import request
 from comm.config import ICP_API_CONFIG
 
