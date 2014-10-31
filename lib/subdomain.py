@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 import re
 
 from request import request
-from fdomain.rootdomain import Domain
+from rootdomain import Domain
 
 
 class SubDomain:
