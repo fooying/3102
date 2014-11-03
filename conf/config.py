@@ -6,6 +6,8 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+VERSION = 'BETA 1.0'
+
 PROXY = {
     # 'http'：'http://user:password@host',
     'http': 'http://121.12.255.212:8086'
