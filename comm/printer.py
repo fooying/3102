@@ -24,7 +24,7 @@ def print_status(message=""):
 
 
 def print_good(message=""):
-    print(format_message(message, 32, '*'))
+    print(format_message(message, 32, '+'))
 
 
 def print_error(message=""):

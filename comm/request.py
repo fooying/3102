@@ -19,5 +19,8 @@ def request(url, method='GET', proxy=False, **kwargs):
     }
     if 'headers' not in kwargs:
         kwargs['headers'] = headers
-    req = requests.request(method, url, proxies=proxies, **kwargs)
-    return req.text
+    try:
+        req = requests.request(method, url, proxies=proxies, **kwargs)
+        return req.text
+    except:
+        return ''

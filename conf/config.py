@@ -6,6 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import sys
+import platform
+
 VERSION = 'BETA 1.0'
 
 PROXY = {
@@ -31,3 +34,17 @@ ICP_API_CONFIG = {
         ),
     }
 }
+
+START_STR = r'''
+         _____  __  _____  _____
+        |____ |/  ||  _  |/ __  \
+            / /`| || |/' |`' / /'
+            \ \ | ||  /| |  / /
+        .___/ /_| |\ |_/ /./ /___
+        \____/ \___/\___/ \_____/
+
+Domain/ip Fuzzing tool for vulnerability mining
+       By Fooying www.fooying.com
+'''
+if sys.stdout.isatty() and platform.system() != 'Windows':
+    START_STR = '\033[1;32m' + START_STR + '\033[1;m'

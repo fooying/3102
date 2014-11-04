@@ -21,7 +21,6 @@ class Ip2Domain:
     def get_domains_by_ip(self, ip):
         print_status('Start get domain by ip through bing...')
         url = 'http://cn.bing.com/search?q=ip:%s&first=999999991&FORM=PERE' % ip
-        print url
         html = request(url, 'GET')
 
         domain_regx = r'''
@@ -30,7 +29,6 @@ class Ip2Domain:
         domain_list = re.findall(domain_regx, html, re.X)
 
         total_page_regx = r'''<span\sclass="sb_count">\d*?\s-\s\d*?\s[^\(]*?\([^\s]*?\s(\d*?)\s[^\)]*?\)</span>'''
-        import pdb;pdb.set_trace()
         result = re.search(total_page_regx, html)
         try:
             total_num = int(result.group(1).replace(',', ''))
