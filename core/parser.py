@@ -36,12 +36,12 @@ def parse(args=None):
     )
     parser.add_argument('-V', '--version', action='version',
                         version=VERSION_INFO)
-
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
         '-d', '--domain', dest='domain',
         help='Target domain/rootdomain'
     )
-    parser.add_argument(
+    group.add_argument(
         '-i', '--ip', dest='ip',
         help='Target ip'
     )

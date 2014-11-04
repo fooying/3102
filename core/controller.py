@@ -17,6 +17,7 @@ todo:
 """
 
 
+import sys
 from copy import deepcopy
 
 from core.parser import parse
@@ -31,8 +32,8 @@ from plugins.ip2domain import Ip2Domain
 from plugins.domain2ip import Domain2Ip
 
 def start():
-    print_status('Get input...')
     parse()
+    print_status('Get input...')
     print_status('Fuzzing take turns...')
     while task.domains or task.ips or task.rootdomains:
         if task.domains:
