@@ -99,7 +99,7 @@ def output():
             f.write('%s,%s,%s\n' % (domain, get_level(domain), get_source(domain)))
     with open('ips.txt', 'w') as f:
         for ip in result.ips:
-            f.write('%s,%s,%s\m' %(ip,get_level(ip), get_source(ip)))
+            f.write('%s,%s,%s\n' %(ip,get_level(ip), get_source(ip)))
     with open('rootdomains.txt', 'w') as f:
         for domain in result.rootdomains:
             f.write('%s,%s,%s\n' %(domain, get_level(domain), get_source(domain)))
