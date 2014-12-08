@@ -15,16 +15,17 @@ class Domain:
         """
         return http(s)://www.example.com
         """
-        if not url.startswith(("http://", "https://")):
-            url = "http://" + url
+        if url.startswith("http://"):
+            url = url[7:]
+        if url.startswith("https://"):
+            url = url[8:]
         if url.endswith("/"):
             url = url[:-1]
         return url
 
     @classmethod
     def get_domain(cls, url):
-        url = url.replace("https://", "")
-        url = url.replace("http://", "")
+        url = self.url_format(url)
         domain = url[:url.index("/")+1] if "/" in url else url
         return domain
 
