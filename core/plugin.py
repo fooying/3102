@@ -10,6 +10,9 @@ import os
 import logging
 
 from core.data import conf, api
+from gevent.monkey import patch_all
+
+patch_all()
 
 
 class Plugin(object):

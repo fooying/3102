@@ -17,10 +17,10 @@ from comm.log import init_logger
 from comm.rootdomain import Domain
 from comm.utils import get_domain_type
 from core.data import kb, conf, api, result
-from core.plugin_controller import PluginController
+from core.controllers.plugin_controller import PluginController
 
 
-logger = logging.getLoger('3102')
+logger = logging.getLogger('3102')
 
 
 def task_monitor(pc):
@@ -82,18 +82,49 @@ def save_result(one_result, domain, domain_type):
                 result.tmp[module].add(domain)
 
 
-def start(target, max_level, out_file, out_format='txt'):
+def get_log_level(level_num):
+    log_level = {
+        1: logging.DEBUG,
+        2: logging.INFO,
+        3: logging.WARNING,
+        4: logging.ERROR,
+    }
+    return log_level.get(level_num)
+
+
+def get_proxy_list_by_file(file_path):
+    if file_path and os.path.exists(file_path):
+        with open(file_path) as f:
+            proxys = f.read().splitlines()
+        proxy_list = []
+        for proxy in proxys:
+            proxy = proxy.split(',')
+            proxy_list.append((proxy[0], proxy[1]))
+    else:
+        proxy_list = []
+    return proxy_list
+
+
+def start(args):
+    target = args.target
     domain_type = get_domain_type(target)
     if domain_type in settings.ALLOW_INPUT:
         target = Domain.url_format(target)
-        init_logger()
+
+        # 初始化日志
+        log_level = get_log_level(args.log_level)
+        init_logger(log_file_path=args.log_file, log_level=log_level)
         logger.info('system init...')
         conf.settings = settings
         conf.max_level = max_level
-        api.request = Req()
+        # 初始化爬虫
+        proxy_list = get_proxy_list_by_file(args.proxy_file)
+        api.request = Req(args.timeout, proxy_list, args.verify_proxy)
+
         logger.info('plugin init...')
         plugin_controller = PluginController()
         plugin_controller.init()
+
         logger.info('start fuzzing domain/ip...')
         # 首个目标
         first_target = {
@@ -109,7 +140,9 @@ def start(target, max_level, out_file, out_format='txt'):
         # 开启插件执行
         plugin_controller.start()
         # 回收结果
-        # todo
+        output_file = args.output_file
+        print result
+
         logger.info('Complete Fuzzing!')
     else:
         logger.error(
