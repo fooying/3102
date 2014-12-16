@@ -17,7 +17,7 @@ patch_all()
 class WorkerPool(object):
     def __init__(self, pool_size=5000):
         self.job_pool = Pool(size=pool_size)
-        self.result = []
+        self.result = Queue()
         self.target_queue = Queue()
 
     def add_job(self, job_func, *args, **kwargs):
@@ -33,7 +33,15 @@ class WorkerPool(object):
         self.job_pool.join(timeout=timeout, raise_error=False)
 
     def _call_func(self, job_ret):
-        self.result.append(job_ret)
+        self.result.add(job_ret)
+
+    def is_finished(self):
+        finished = True
+        for job in self.job.pool:
+            if not job.ready():
+                finished = False
+                break
+        return finished
 
     def shutdown(self):
         self.job_pool.kill()
