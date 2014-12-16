@@ -6,10 +6,11 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import os
 import sys
 import platform
 
-VERSION = 'BETA 1.0'
+VERSION = 'BETA 2.0'
 
 PROXY = {
     # 'http'：'http://user:password@host',
@@ -48,3 +49,17 @@ START_STR = r'''
 '''
 if sys.stdout.isatty() and platform.system() != 'Windows':
     START_STR = '\033[1;32m' + START_STR + '\033[1;m'
+
+# 允许的输入和输出
+ALLOW_OUTPUT = ALLOW_INPUTS = ['domain', 'root_domain', 'ip']
+
+# 环境路径配置
+dirname = os.path.dirname
+abspath = os.path.abspath
+join = os.path.join
+
+ROOT_PATH = dirname(dirname(abspath(__file__)))
+
+PLUGINS_PATH = join(ROOT_PATH, 'plugins')
+
+

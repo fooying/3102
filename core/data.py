@@ -8,37 +8,32 @@ Mail:f00y1n9[at]gmail.com
 
 from attrdict import AttrDict
 
-# task queue
-task = AttrDict()
-task.domains = set()
-task.ips = set()
-task.rootdomains = set()
+# 配置存储
+conf = AttrDict()
+conf.plugins = AttrDict()  # 加载的插件配置
+conf.reg_plugins = AttrDict()
+conf.reg_plugins.domain = set([])
+conf.reg_plugins.root_domain = set([])
+conf.reg_plugins.ip = set([])
+conf.max_level = 10
 
-# result queue
+# 中间数据存储
+kb = AttrDict()
+kb.plugins = AttrDict()
+
+kb.status = AttrDict()
+kb.status.level = 0
+kb.status.task_num = 0
+kb.status.result_num = 0
+
+# 全局接口
+api = AttrDict()
+api.request = None
+
+# 结果存储
 result = AttrDict()
-result.domains = set()
-result.ips = set()
-result.rootdomains = set()
+result.domian = AttrDict()
+result.ip = AttrDict()
+result.root_domain = AttrDict()
 
-# all target
-all_target = AttrDict()
-
-# some control's switch
-control = AttrDict()
-control.stop = False  # if stop sched
-control.max_level = 3  # max level of get ip/domain/rootdomain
-control.domain_level = 0 # current level of domain
-control.ip_level = 0  # current level of ip
-control.rootdomain_level = 0 # current level of rootdomain
-control.tmp_queue = []  # temp queue
-
-# target type
-target = AttrDict()
-target.value = ''
-target.type = ''
-target.level = 0
-target.source = ''
-target.remarks = ''
-
-first_target = target
-
+result.tmp = AttrDict()
