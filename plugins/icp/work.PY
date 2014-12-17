@@ -37,7 +37,7 @@ class icp(Plugin):
     def _get_text_list(self, config, value):
         url = config[0] % value
         regx = config[1]
-        text = self.request('GET', url)
+        text = self.req.request('GET', url).text
         result = re.findall(regx, text, re.I|re.S|re.X)
         return result
 
@@ -46,22 +46,26 @@ class icp(Plugin):
         function to get icp subject
         """
         query_config = self.config['get_zt']
-        zt_name = self._get_text_list(query_config, domain)[0]
+        result = self._get_text_list(query_config, domain)
+        zt_name = result[0] if result else None
         return zt_name
 
     def query_domains_by_zt(self, zt_name):
         """
         function to get others rootdomain by icp subject
         """
-        query_config = self.config['get_domains']
-        domains = self._get_text_list(query_config, zt_name)
-        new_domains = []
-        for domain in domains:
-            if domain[0]:
-                new_domains.append(domain[0])
-            if domain[1]:
-                new_domains.append(domain[1])
-        return list(set(new_domains))
+        if zt_name:
+            query_config = self.config['get_domains']
+            domains = self._get_text_list(query_config, zt_name)
+            new_domains = []
+            for domain in domains:
+                if domain[0]:
+                    new_domains.append(domain[0])
+                if domain[1]:
+                    new_domains.append(domain[1])
+            return list(set(new_domains))
+        else:
+            return []
 
     def start(self, target, domain_type, level):
         """

@@ -6,106 +6,24 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-import copy
-import time
-import gevent
 import logging
 import threading
 
 
 from conf import settings
+from core.data import api
+from core.data import conf
 from comm.request import Req
+from core.output import output
 from comm.log import init_logger
 from comm.rootdomain import Domain
+from comm.utils import get_log_level
 from comm.utils import get_domain_type
-from core.data import kb, conf, api, result
+from comm.utils import get_proxy_list_by_file
+from core.controllers.taskmanager import task_monitor
 from core.controllers.plugin_controller import PluginController
 
-
 logger = logging.getLogger('3102')
-
-
-def task_monitor(pc):
-    """
-    输出:
-        当前进行层级
-        当前请求数
-    """
-    while True:
-        try:
-            one_result = pc.wp.result.get(timeout=5)
-        except gevent.queue.Empty:
-            if pc.wp.target_queue.empty() and pc.wp.is_finished():
-                pc.exit = True
-                break
-        else:
-            add_task_and_save(pc, one_result)
-        #print_task_status()
-
-
-def print_task_status():
-    msg = 'level: %s, task num: %s, result num: %s' % (
-        kb.status.level, kb.status.task_num, kb.status.result_num
-    )
-    logger.info(msg)
-
-
-def add_task_and_save(pc, one_result):
-    level = one_result.get('level', -1) + 1
-    module = one_result.get('module')
-    if level > kb.status.level:
-        kb.status.level = level
-    for task_type in one_result.get('result', {}).keys():
-        for domain in one_result.get('result', {}).get(task_type, []):
-            domain = Domain.url_format(domain)
-            save_result(one_result, domain, task_type)
-            tmp_result = result.tmp.get(module, [])
-            if level <= conf.max_level and domain not in tmp_result:
-                target = {
-                    'level': level,
-                    'domain_type': task_type,
-                    'target': domain
-                }
-                pc.wp.target_queue.put(target)
-                kb.status.task_num += 1
-
-
-def save_result(one_result, domain, domain_type):
-    if domain not in result[domain_type]:
-        want_save_result = copy.deepcopy(one_result)
-        want_save_result.update({'taget': domain})
-        want_save_result.pop('result')
-        result[domain_type][domain] = want_save_result
-        kb.status.result_num += 1
-        module = one_result.get('module')
-        if conf.plugins.get(module, {}).get('onerepeat'):
-            if module and module not in result.tmp:
-                result.tmp[module] = set([])
-            else:
-                result.tmp[module].add(domain)
-
-
-def get_log_level(level_num):
-    log_level = {
-        1: logging.DEBUG,
-        2: logging.INFO,
-        3: logging.WARNING,
-        4: logging.ERROR,
-    }
-    return log_level.get(level_num)
-
-
-def get_proxy_list_by_file(file_path):
-    if file_path and os.path.exists(file_path):
-        with open(file_path) as f:
-            proxys = f.read().splitlines()
-        proxy_list = []
-        for proxy in proxys:
-            proxy = proxy.split(',')
-            proxy_list.append((proxy[0], proxy[1]))
-    else:
-        proxy_list = []
-    return proxy_list
 
 
 def start(args):
@@ -147,8 +65,10 @@ def start(args):
         plugin_controller.start()
 
         # 回收结果
+        logger.debug('output result to file...')
         output_file = args.output_file
-        print result
+        output(output_file)
+        logger.info('result had output to[%s]!' % output_file)
 
         logger.info('Complete Fuzzing!')
     else:

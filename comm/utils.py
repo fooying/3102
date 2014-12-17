@@ -6,7 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import os
 import re
+import logging
 
 from comm.rootdomain import Domain
 
@@ -95,3 +97,26 @@ def get_domain_type(domain):
             return 'domain'
     else:
         return False
+
+
+def get_log_level(level_num):
+    log_level = {
+        1: logging.DEBUG,
+        2: logging.INFO,
+        3: logging.WARNING,
+        4: logging.ERROR,
+    }
+    return log_level.get(level_num)
+
+
+def get_proxy_list_by_file(file_path):
+    if file_path and os.path.exists(file_path):
+        with open(file_path) as f:
+            proxys = f.read().splitlines()
+        proxy_list = []
+        for proxy in proxys:
+            proxy = proxy.split(',')
+            proxy_list.append((proxy[0], proxy[1]))
+    else:
+        proxy_list = []
+    return proxy_list

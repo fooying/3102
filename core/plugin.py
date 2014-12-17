@@ -17,9 +17,9 @@ patch_all()
 
 class Plugin(object):
     def __init__(self, name):
-        self.plugin_path = os.path.join(conf.settings.PLUGIN_PATH, name)
+        self.plugin_path = os.path.join(conf.settings.PLUGINS_PATH, name)
         self.logger = logging.getLogger('3102')
-        self.request = api.request
+        self.req = api.request
         self.conf = conf.plugins[name]
 
     def start(self):

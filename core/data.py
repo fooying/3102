@@ -35,5 +35,3 @@ result = AttrDict()
 result.domain = AttrDict()
 result.ip = AttrDict()
 result.root_domain = AttrDict()
-
-result.tmp = AttrDict()
