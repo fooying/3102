@@ -1,3 +1,5 @@
-argparse
-attrdict
-requests
+Downloading/unpacking list
+  Cannot fetch index base URL http://pypi.python.org/simple/
+  Could not find any downloads that satisfy the requirement list
+No distributions at all found for list
+Storing complete log in /home/vagrant/.pip/pip.log

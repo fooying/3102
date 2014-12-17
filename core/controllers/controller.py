@@ -9,7 +9,6 @@ Mail:f00y1n9[at]gmail.com
 import logging
 import threading
 
-
 from conf import settings
 from core.data import api
 from core.data import conf
