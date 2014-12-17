@@ -32,7 +32,7 @@ api.request = None
 
 # 结果存储
 result = AttrDict()
-result.domian = AttrDict()
+result.domain = AttrDict()
 result.ip = AttrDict()
 result.root_domain = AttrDict()
 

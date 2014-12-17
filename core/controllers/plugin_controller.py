@@ -25,7 +25,7 @@ class PluginController(object):
     def __init__(self):
         self.exit = False
         self.wp = WorkerPool()
-        self.plugin_path = conf.settings.PLUGIN_PATH
+        self.plugin_path = conf.settings.PLUGINS_PATH
 
     def plugin_init(self):
         """
@@ -67,7 +67,7 @@ class PluginController(object):
         """
         inputs = conf.plugins[plugin]['input']
         for inp in inputs:
-            if inp in conf.settings.ALLOW_INPUT:
+            if inp in conf.settings.ALLOW_INPUTS:
                 conf.reg_plugins[inp].add(plugin)
 
     def __load_plugin(self, plugin_name):
@@ -87,7 +87,7 @@ class PluginController(object):
     def start(self):
         while not self.exit:
             try:
-                target = self.wp.target_queue.get_nowait()
+                target = self.wp.target_queue.get(timeout=5)
             except gevent.queue.Empty:
                 pass
             else:
@@ -95,7 +95,7 @@ class PluginController(object):
 
     def _run_plugin_by_type(self, target):
         domain_type = target.get('domain_type')
-        if domain_type in conf.settings.ALLOW_INPUT:
+        if domain_type in conf.settings.ALLOW_INPUTS:
             for plugin in conf.reg_plugins[domain_type]:
                 _plugin = getattr(kb.plugins[plugin]['handle'], plugin)()
                 self.wp.add_job(getattr(_plugin, 'start'), **target)

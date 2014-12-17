@@ -7,8 +7,10 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import copy
+import time
 import gevent
 import logging
+import threading
 
 
 from conf import settings
@@ -31,13 +33,14 @@ def task_monitor(pc):
     """
     while True:
         try:
-            one_result = pc.wp.result.get_nowait()
+            one_result = pc.wp.result.get(timeout=5)
         except gevent.queue.Empty:
-            if pc.wp.target_queue.empty() and pc.wp.is_finshed():
+            if pc.wp.target_queue.empty() and pc.wp.is_finished():
+                pc.exit = True
                 break
         else:
             add_task_and_save(pc, one_result)
-            print_task_status()
+        #print_task_status()
 
 
 def print_task_status():
@@ -56,14 +59,14 @@ def add_task_and_save(pc, one_result):
         for domain in one_result.get('result', {}).get(task_type, []):
             domain = Domain.url_format(domain)
             save_result(one_result, domain, task_type)
-            tmp_result = result.tmp[module]
+            tmp_result = result.tmp.get(module, [])
             if level <= conf.max_level and domain not in tmp_result:
                 target = {
                     'level': level,
                     'domain_type': task_type,
                     'target': domain
                 }
-                pc.wp.target_queue.add(target)
+                pc.wp.target_queue.put(target)
                 kb.status.task_num += 1
 
 
@@ -108,7 +111,7 @@ def get_proxy_list_by_file(file_path):
 def start(args):
     target = args.target
     domain_type = get_domain_type(target)
-    if domain_type in settings.ALLOW_INPUT:
+    if domain_type in settings.ALLOW_INPUTS:
         target = Domain.url_format(target)
 
         # 初始化日志
@@ -116,14 +119,14 @@ def start(args):
         init_logger(log_file_path=args.log_file, log_level=log_level)
         logger.info('system init...')
         conf.settings = settings
-        conf.max_level = max_level
+        conf.max_level = args.max_level
         # 初始化爬虫
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
         logger.info('plugin init...')
         plugin_controller = PluginController()
-        plugin_controller.init()
+        plugin_controller.plugin_init()
 
         logger.info('start fuzzing domain/ip...')
         # 首个目标
@@ -134,11 +137,15 @@ def start(args):
             'parent_target': ''
         }
         first_target['result'][domain_type].append(target)
-        plugin_controller.wp.result.add(first_target)
+        logger.info('start plugin...')
+        plugin_controller.wp.result.put(first_target)
         # 开启任务监控
-        gevent.joinall(gevent.spawn(task_monitor, plugin_controller))
+        kwargs = {'pc': plugin_controller}
+        monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
+        monitor.start()
         # 开启插件执行
         plugin_controller.start()
+
         # 回收结果
         output_file = args.output_file
         print result

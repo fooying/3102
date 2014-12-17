@@ -17,14 +17,22 @@ class ColorFormatter(logging.Formatter):
 
     BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
-    COLOR_SEQ = "\033[1;%dm%s\033[1;m"
+    COLOR_SEQ = "\033[1;%dm[%s] %s\033[1;m"
 
     COLORS = {
+        'DEBUG': GREEN,
+        'INFO': BLUE,
         'WARNING': YELLOW,
-        'INFO': WHITE,
-        'DEBUG': BLUE,
-        'CRITICAL': YELLOW,
-        'ERROR': RED
+        'ERROR': RED,
+        'CRITICAL': RED,
+    }
+
+    SYMBOLS = {
+        'DEBUG': '+',
+        'INFO': '*',
+        'WARNING': '-',
+        'ERROR': '!',
+        'CRITICAL': '!',
     }
 
     def __init__(self, use_color=True, *args, **kwargs):
@@ -36,7 +44,8 @@ class ColorFormatter(logging.Formatter):
         levelname = record.levelname
         if self.use_color and levelname in self.COLORS:
             fore_color = 30 + self.COLORS[levelname]
-            format_str = self.COLOR_SEQ %(fore_color, format_str)
+            fore_symbol = self.SYMBOLS[levelname]
+            format_str = self.COLOR_SEQ %(fore_color, fore_symbol, format_str)
         return format_str
 
 
@@ -44,11 +53,11 @@ def init_logger(name='3102', log_file_path=None, show_color=True,
                 log_level=logging.DEBUG):
 
     logger = logging.getLogger(name)
-    logger.setLevel(log_level)
+    logger.setLevel(logging.DEBUG)
 
     color_stream_handler = logging.StreamHandler()
     color_stream_handler.setFormatter(SIMPLE_FORMATER)
-    color_stream_handler.setLevel(log_level)
+    color_stream_handler.setLevel(logging.DEBUG)
     if show_color:
         color_stream_handler.setFormatter(ColorFormatter())
     logger.addHandler(color_stream_handler)

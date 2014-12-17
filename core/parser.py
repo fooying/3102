@@ -56,7 +56,7 @@ def parse(args=None):
     }
     parser.add_argument(
         '--log_level', dest='log_level',
-        type=int, default=3, choices=loglevel_choices,
+        type=int, default=1, choices=loglevel_choices,
         help=_format_help('level of logging', loglevel_choices)
     )
     parser.add_argument(

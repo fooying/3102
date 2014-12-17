@@ -25,13 +25,13 @@ class Domain:
 
     @classmethod
     def get_domain(cls, url):
-        url = self.url_format(url)
+        url = cls().url_format(url)
         domain = url[:url.index("/")+1] if "/" in url else url
         return domain
 
     @classmethod
     def get_root_domain(cls, url):
-        domain = cls.get_domain(url)
+        domain = cls().get_domain(url)
         domain_blocks = domain.split(".")
         index = -2
         suffix = ".".join(domain_blocks[index:])

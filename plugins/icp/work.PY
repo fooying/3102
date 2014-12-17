@@ -8,37 +8,36 @@ Mail:f00y1n9[at]gmail.com
 
 import re
 
+from core.plugin import Plugin
 from comm.rootdomain import Domain
-from comm.request import request
-from comm.config import ICP_API_CONFIG
+from comm.utils import is_ip, is_url
 
 ICP_API_CONFIG = {
-    'icpchaxun': {
-        'get_zt': (
-            'http://www.icpchaxun.com/beian.aspx?icpType=-1&icpValue=%s',
-            '''
-            <a\starget="_blank"\shref="/zhuti/[^"]*?">\s*?[^<]*?\s*?([^\s]*?)</a>
-            '''
-        ),
-        'get_domains': (
-            'http://www.icpchaxun.com/zhuti/%s/',
-            '''
-            <a\shref="/yuming/[.a-z0-9_\w]*?/">([.a-z0-9_\w]*?)</a>|
-            onclick="goto\('/yuming/[.a-z0-9_\w]*?/'\);">([.a-z0-9_\w]*?)</span>
-            '''
-        ),
-    }
+    'get_zt': (
+        'http://www.icpchaxun.com/beian.aspx?icpType=-1&icpValue=%s',
+        '''
+        <a\starget="_blank"\shref="/zhuti/[^"]*?">\s*?[^<]*?\s*?([^\s]*?)</a>
+        '''
+    ),
+    'get_domains': (
+        'http://www.icpchaxun.com/zhuti/%s/',
+        '''
+        <a\shref="/yuming/[.a-z0-9_\w]*?/">([.a-z0-9_\w]*?)</a>|
+        onclick="goto\('/yuming/[.a-z0-9_\w]*?/'\);">([.a-z0-9_\w]*?)</span>
+        '''
+    ),
 }
 
-class ICP:
-    def __init__(self, api_name='icpchaxun'):
-        self.api_name = api_name if api_name in ICP_API_CONFIG else 'icpchaxun'
-        self.config = ICP_API_CONFIG[api_name]
+
+class icp(Plugin):
+    def __init__(self):
+        super(icp, self).__init__('icp')
+        self.config = ICP_API_CONFIG
 
     def _get_text_list(self, config, value):
         url = config[0] % value
         regx = config[1]
-        text = request(url)
+        text = self.request('GET', url)
         result = re.findall(regx, text, re.I|re.S|re.X)
         return result
 
@@ -64,21 +63,29 @@ class ICP:
                 new_domains.append(domain[1])
         return list(set(new_domains))
 
-    @classmethod
-    def get_rootdomains_by_domain(cls, domain):
+    def start(self, target, domain_type, level):
         """
         function to get others rootdomain by a known rootdomain
         """
-        domain = Domain.get_domain(domain)
-        zt_name = cls().query_zt_by_domain(domain)
-        domains = cls().query_domains_by_zt(zt_name)
-        root_domain = Domain.get_root_domain(domain)
-        if root_domain:
-            domains.append(domain)
-        # todo: Judge the domain/ip format
-        return domains
+        domain = Domain.get_domain(target)
+        zt_name = self.query_zt_by_domain(target)
+        domains = self.query_domains_by_zt(zt_name)
+        domains.append(target)
+        ips = []
+        root_domains = []
+        for domain in domains:
+            if is_ip(domain) and domain not in ips:
+                ips.append(domain)
+            elif is_url(domain) and domain not in root_domains:
+                root_domains.append(domain)
 
-if __name__ == '__main__':
-    import sys
-    domain = sys.argv[1]
-    print ICP.get_rootdomains_by_domain(domain)
+        result = {
+            'result': {
+                'root_domain': root_domains,
+                'ip': ips,
+                'domain': []
+            },
+            'module': 'icp',
+            'parent_target': target
+        }
+        return result
