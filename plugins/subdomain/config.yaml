@@ -1,0 +1,7 @@
+enable: true
+onerepeat: False
+input: ['root_domain']
+output: ['ip', 'domain']
+descript: 子域名查询
+name: subdomain
+chinesename: 子域名查询
