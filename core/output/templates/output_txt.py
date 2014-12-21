@@ -12,8 +12,8 @@ from template import Output
 class OutputTxt(Output):
 
     def save(self, output_file):
-        super(OutputTxt, self).save()
-        with open(self.output_file, 'w') as f:
+        super(OutputTxt, self).save(output_file)
+        with open(output_file, 'w') as f:
             for key in self.result.keys():
                 for domain in self.result[key]:
-                    f.write('%s\n' domain.target)
+                    f.write('%s\n' % domain)

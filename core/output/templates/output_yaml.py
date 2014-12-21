@@ -14,6 +14,6 @@ from template import Output
 class OutputYaml(Output):
 
     def save(self, output_file):
-        super(OutputYaml, self).save()
-        with open(self.output_file, 'w') as f:
+        super(OutputYaml, self).save(output_file)
+        with open(output_file, 'w') as f:
             dump(u'%s' % self.result, f, encoding=('utf-8'))

@@ -24,6 +24,7 @@ class Output(object):
         self.target = target
         self.output_file = output_file
         self.__get_tmp_output_file()
+        self.logger = logger
 
     def save(self):
         self.__deal_config()
@@ -31,11 +32,11 @@ class Output(object):
             self.__write_result()
         except Exception, e:
             self.logger.error(str(e))
-            self.logger.info(
+            self.logger.warning(
                 u'output failure, retry output by default template and path...'
             )
             self.output_format = DEFAULT_FORMAT
-            self.output_file = self.output_tmp_file
+            self.output_file = self.tmp_output_file
             self.__write_result()
 
     def __deal_config(self):
@@ -43,7 +44,7 @@ class Output(object):
             self.output_file = self.tmp_output_file
             self.logger.warning(
                 u'Not specified result file, set to default file:[%s].'
-                % self.output_tmp_file
+                % self.tmp_output_file
             )
         else:
             py_file = os.path.join(
@@ -68,7 +69,7 @@ class Output(object):
 
     def __write_result(self):
         import_template_path = '.'.join(
-            os.path.split(conf.settings.OUTPUT_TEMPLATE_OPPOSITE_PATH)
+            conf.settings.OUTPUT_TEMPLATE_OPPOSITE_PATH.split(os.path.sep)
         )
         template_path = '%s.output_%s' % (
             import_template_path, self.output_format

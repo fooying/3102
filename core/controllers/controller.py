@@ -6,19 +6,22 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import os
 import logging
 import threading
 
-from conf import settings
-from core.data import api
-from core.data import conf
 from comm.request import Req
-from core.output import output
 from comm.log import init_logger
 from comm.rootdomain import Domain
 from comm.utils import get_log_level
 from comm.utils import get_domain_type
 from comm.utils import get_proxy_list_by_file
+
+from conf import settings
+from core.data import api
+from core.data import conf
+from core.data import result
+from core.output.output import Output
 from core.controllers.taskmanager import task_monitor
 from core.controllers.plugin_controller import PluginController
 
@@ -66,10 +69,13 @@ def start(args):
         # 回收结果
         logger.debug('output result to file...')
         output_file = args.output_file
-        output(output_file)
-        logger.info('result had output to[%s]!' % output_file)
-
-        logger.info('Complete Fuzzing!')
+        Output(target, args.output_format, output_file).save()
+        logger.debug(os.linesep.join(['result count:',
+            '    ip: %s' % len(result.ip),
+            '    domain: %s' % len(result.domain),
+            '    root domain: %s' % len(result.root_domain),
+        ]))
+        logger.info('Complete 3102!')
     else:
         logger.error(
             'Please input a target in the correct'

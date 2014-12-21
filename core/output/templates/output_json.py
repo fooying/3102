@@ -15,6 +15,6 @@ from template import Output
 class OutputJson(Output):
 
     def save(self, output_file):
-        super(OutputJson, self).save()
-        with open(self.output_file, 'w') as f:
+        super(OutputJson, self).save(output_file)
+        with open(output_file, 'w') as f:
             json.dump(u'%s' % self.result, f, sort_keys=True, indent=4)
