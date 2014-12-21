@@ -59,6 +59,11 @@ onerepeat:
   * 封装的requests.Request
   * 使用参考http://www.python-requests.org/en/latest/api/?highlight=request#requests.request
 * self.conf 对应config.yaml里的配置
+
+### 可以使用的方法
+* 具体参考comm目录下的文件与方法
+* from comm.文件名 import 方法
+
 ### 插件测试用例
 * 进入tests下对应单元或功能测试目录下创建对应插件目录,编写测试用例
 
