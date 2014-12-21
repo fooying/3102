@@ -74,8 +74,8 @@ class Output(object):
             import_template_path, self.output_format
         )
         _handle = __import__(template_path, fromlist='*')
-        _report = getattr(_handle, 'Output%s' % self.output_format)
-        _report().save()
+        _report = getattr(_handle, 'Output%s' % self.output_format.capitalize())
+        _report().save(self.output_file)
         if self.output_file:
             self.logger.debug(
                 u'Result has been output to [%s].',
