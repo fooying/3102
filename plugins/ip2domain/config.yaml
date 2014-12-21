@@ -1,0 +1,7 @@
+enable: true
+onerepeat: False
+input: ['ip']
+output: ['root_domain', 'domain']
+descript: IP反查域名
+name: ip2domain
+chinesename: IP反查域名
