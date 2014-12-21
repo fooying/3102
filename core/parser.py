@@ -28,7 +28,7 @@ def parse(args=None):
     )
     parser.add_argument(
         '-h', '--help', action='help',
-        help='show this help message and exit'
+        help='Show this help message and exit'
     )
     parser.add_argument('-V', '--version', action='version',
                         version=VERSION_INFO)
@@ -38,15 +38,23 @@ def parse(args=None):
     )
     parser.add_argument(
         '-m', '--max_level', dest='max_level', default=10,
-        type=int, help=_format_help('max level to get domain/ip/rootdomain')
+        type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
     parser.add_argument(
-        '-o', '--output_file', dest='output_file', default='result.txt',
-        help=_format_help('file to ouput result')
+        '-o', '--output_file', dest='output_file',
+        help=_format_help('File to ouput result')
+    )
+    parser.add_argument(
+        '--format', dest='output_format', default='txt',
+        help=_format_help([
+            'The format to output result,',
+            'default list:',
+            'txt/json/yaml'
+        ])
     )
     parser.add_argument(
         '--log_file', dest='log_file',
-        help=_format_help('log file')
+        help=_format_help('Log file')
     )
     loglevel_choices = {
         1: 'DEBUG',
@@ -57,25 +65,25 @@ def parse(args=None):
     parser.add_argument(
         '--log_level', dest='log_level',
         type=int, default=1, choices=loglevel_choices,
-        help=_format_help('level of logging', loglevel_choices)
+        help=_format_help('Log level of output to file', loglevel_choices)
     )
     parser.add_argument(
         '--proxy_file', dest='proxy_file',
         help=_format_help([
-            'proxy file, one line one proxy, each line format:'
-            'schem,proxy url,'
-            'eg:http,http://1.1.1.1:123'
+            'Proxy file, one line one proxy, each line format:',
+            'schem,proxy url,',
+            'eg:http,http://1.1.1.1:123',
         ])
     )
     parser.add_argument(
         '--verify_proxy', dest='verify_proxy', action='store_true',
         default=False,
-        help=_format_help('if verify the proxy list')
+        help=_format_help('If verify the proxy list')
     )
     parser.add_argument(
         '--timeout', dest='timeout',
         type=int, default=10,
-        help=_format_help('request timeout')
+        help=_format_help('Request timeout')
     )
     args = parser.parse_args(args)
     return args
