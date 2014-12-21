@@ -33,7 +33,8 @@ class WorkerPool(object):
         self.job_pool.join(timeout=timeout, raise_error=False)
 
     def _call_func(self, job_ret):
-        self.result.put(job_ret)
+        if job_ret:
+            self.result.put(job_ret)
 
     def is_finished(self):
         finished = True

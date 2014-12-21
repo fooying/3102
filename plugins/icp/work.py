@@ -68,9 +68,6 @@ class icp(Plugin):
             return []
 
     def start(self, target, domain_type, level):
-        """
-        function to get others rootdomain by a known rootdomain
-        """
         domain = Domain.get_domain(target)
         zt_name = self.query_zt_by_domain(target)
         domains = self.query_domains_by_zt(zt_name)
@@ -90,6 +87,7 @@ class icp(Plugin):
                 'domain': []
             },
             'module': 'icp',
-            'parent_target': target
+            'parent_target': target,
+            'level': level,
         }
         return result
