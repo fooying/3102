@@ -14,6 +14,9 @@ from comm.utils import get_domain_type
 
 
 class ip2domain(Plugin):
+    def __init__(self):
+        super(ip2domain, self).__init__('ip2domain')
+
     def __get_count(self, html):
         total_page_regx = (
             r'''<span\sclass="sb_count">\d*?\s-\s\d*?'''

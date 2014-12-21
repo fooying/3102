@@ -12,6 +12,9 @@ from core.plugin import Plugin
 
 
 class domain2ip(Plugin):
+    def __init__(self):
+        super(domain2ip, self).__init__('domain2ip')
+
     def start(self, target, domain_type, level):
         try:
             ip = socket.gethostbyname(target)

@@ -12,6 +12,8 @@ from core.plugin import Plugin
 
 
 class subdomain(Plugin):
+    def __init__(self):
+        super(subdomain, self).__init__('subdomain')
 
     def start(self, target, domain_type, level):
         domain_level = 4
