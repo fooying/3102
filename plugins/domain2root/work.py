@@ -16,7 +16,7 @@ class domain2root(Plugin):
         super(domain2root, self).__init__('domain2root')
 
     def start(self, target, domain_type, level):
-        super(icp, self).start(target, domain_type, level)
+        super(domain2root, self).start(target, domain_type, level)
         try:
             root_domain = Domain.get_rootdomain(target)
         except:
