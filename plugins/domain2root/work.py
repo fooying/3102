@@ -18,7 +18,7 @@ class domain2root(Plugin):
     def start(self, target, domain_type, level):
         super(domain2root, self).start(target, domain_type, level)
         try:
-            root_domain = Domain.get_rootdomain(target)
+            root_domain = Domain.get_root_domain(target)
         except:
             root_domain = None
         if root_domain:
