@@ -36,7 +36,8 @@ join = os.path.join
 
 ROOT_PATH = dirname(dirname(abspath(__file__)))
 
-PLUGINS_PATH = join(ROOT_PATH, 'plugins')
+PLUGINS_OPPOSITE_PATH = 'plugins'
+PLUGINS_PATH = join(ROOT_PATH, PLUGINS_OPPOSITE_PATH)
 OUTPUT_TEMPLATE_OPPOSITE_PATH = join('core', 'output', 'templates')
 OUTPUT_TEMPLATE_PATH = join(ROOT_PATH, OUTPUT_TEMPLATE_OPPOSITE_PATH)
 

@@ -57,7 +57,7 @@ class PluginController(object):
         registered_plugin['name'] = plugin
         try:
             _import_path = '.'.join(
-                conf.setting.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
+                conf.settings.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
             )
             plugin_path = '%s.%s.work' % (_import_path, plugin)
             _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数
