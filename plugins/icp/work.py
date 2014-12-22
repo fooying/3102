@@ -68,6 +68,7 @@ class icp(Plugin):
             return []
 
     def start(self, target, domain_type, level):
+        super(icp, self).start(target, domain_type, level)
         domain = Domain.get_domain(target)
         zt_name = self.query_zt_by_domain(target)
         domains = self.query_domains_by_zt(zt_name)
@@ -86,8 +87,9 @@ class icp(Plugin):
                 'ip': ips,
                 'domain': []
             },
-            'module': 'icp',
+            'module': self.name,
             'parent_target': target,
             'level': level,
         }
+        super(icp, self).end()
         return result

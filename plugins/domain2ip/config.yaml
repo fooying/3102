@@ -1,5 +1,5 @@
 enable: true
-onerepeat: False
+onerepeat: false
 input: ['root_domain', 'domain']
 output: ['ip']
 descript: 查询域名的IP

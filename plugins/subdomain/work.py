@@ -16,6 +16,7 @@ class subdomain(Plugin):
         super(subdomain, self).__init__('subdomain')
 
     def start(self, target, domain_type, level):
+        super(subdomain, self).start(target, domain_type, level)
         domain_level = 4
         domain = target
         url = 'http://i.links.cn/subdomain/'
@@ -36,10 +37,11 @@ class subdomain(Plugin):
                     'ip': [],
                     'domain': list(set(result))
                 },
-                'module': 'icp',
+                'module': self.name,
                 'parent_target': target,
                 'level': level,
             }
         except:
             result = None
+        super(subdomain, self).end()
         return result

@@ -47,6 +47,7 @@ class ip2domain(Plugin):
         return domains, root_domains, ips
 
     def start(self, target, domain_type, level):
+        super(ip2domain, self).start(target, domain_type, level)
         url = ('http://cn.bing.com/search?q='
                'ip:%s&first=999999991&FORM=PERE' % target)
         html = self.req.request('GET', url).text
@@ -74,8 +75,9 @@ class ip2domain(Plugin):
                 'ip': ips,
                 'domain': domains
             },
-            'module': 'ip2domain',
+            'module': self.name,
             'parent_target': target,
             'level': level,
         }
+        super(ip2domain, self).end()
         return result

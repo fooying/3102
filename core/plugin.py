@@ -21,8 +21,9 @@ class Plugin(object):
         self.logger = logging.getLogger('3102')
         self.req = api.request
         self.conf = conf.plugins[name]
+        self.name = name
 
-    def start(self):
+    def start(self, target, domain_type, level):
         pass
 
     def end(self):
