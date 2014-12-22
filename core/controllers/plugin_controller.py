@@ -87,7 +87,7 @@ class PluginController(object):
 
     def _run_plugin_by_type(self, target):
         domain_type = target.get('domain_type')
-        parent_module = target.get('parent_module')
+        parent_module = target.pop('parent_module')
         onerepeat = conf.plugins.get(parent_module, {}).get('onerepeat')
         if domain_type in conf.settings.ALLOW_INPUTS:
             for plugin in conf.reg_plugins[domain_type]:
