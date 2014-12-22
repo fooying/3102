@@ -46,7 +46,6 @@ class PluginController(object):
                     else:
                         if conf.plugins[plugin]['enable']:
                             self.__register_plugin(plugin)
-                            self.__classify_plugin(plugin)
                         else:
                             conf.plugins.pop(plugin)
 
@@ -57,9 +56,16 @@ class PluginController(object):
         registered_plugin = kb.plugins[plugin] = {}
         registered_plugin['name'] = plugin
         try:
-            registered_plugin['handle'] = self.__load_plugin(plugin)
+            _import_path = '.'.join(
+                conf.setting.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
+            )
+            plugin_path = '%s.%s.work' % (_import_path, plugin)
+            _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数
+            registered_plugin['handle'] = _plugin
         except Exception:
             logger.exception('register plugin failed!')
+        else:
+            self.__classify_plugin(plugin)
 
     def __classify_plugin(self, plugin):
         """
@@ -69,20 +75,6 @@ class PluginController(object):
         for inp in inputs:
             if inp in conf.settings.ALLOW_INPUTS:
                 conf.reg_plugins[inp].add(plugin)
-
-    def __load_plugin(self, plugin_name):
-        """
-        动态载入插件模块函数
-        """
-        _plugin = None
-        plugin_path = 'plugins.%s.work' % plugin_name
-        try:
-            _plugin = __import__(plugin_path, fromlist='*')
-        except Exception:
-            logger.exception(
-                'plugin[%s] __load_plugin failed!' % plugin_name
-            )
-        return _plugin
 
     def start(self):
         while not self.exit:
