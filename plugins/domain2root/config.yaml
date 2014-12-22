@@ -1,0 +1,7 @@
+enable: true
+onerepeat: false
+input: ['domain']
+output: ['root_domain']
+descript: 转换domain为root_domain
+name: domain2root
+chinesename: 取域名根域
