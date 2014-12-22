@@ -79,7 +79,7 @@ class PluginController(object):
     def start(self):
         while not self.exit:
             try:
-                target = self.wp.target_queue.get(timeout=5)
+                target = self.wp.target_queue.get(timeout=8)
             except gevent.queue.Empty:
                 pass
             else:
@@ -87,8 +87,12 @@ class PluginController(object):
 
     def _run_plugin_by_type(self, target):
         domain_type = target.get('domain_type')
+        parent_module = target.get('parent_module')
+        onerepeat = conf.plugins.get(parent_module, {}).get('onerepeat')
         if domain_type in conf.settings.ALLOW_INPUTS:
             for plugin in conf.reg_plugins[domain_type]:
+                if onerepeat and parent_module == plugin:
+                    continue
                 _plugin = getattr(kb.plugins[plugin]['handle'], plugin)()
                 self.wp.add_job(getattr(_plugin, 'start'), **target)
             self.wp.run()

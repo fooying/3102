@@ -19,15 +19,10 @@ logger = logging.getLogger('3102')
 
 
 def task_monitor(pc):
-    """
-    输出:
-        当前进行层级
-        当前请求数
-    """
     while True:
         try:
-            one_result = pc.wp.result.get(timeout=5)
-        except gevent.queue.Empty:
+            one_result = pc.wp.result.get(timeout=1)
+        except gevent.queue.Empty, e:
             if pc.wp.target_queue.empty() and pc.wp.is_finished():
                 pc.exit = True
                 break
@@ -52,17 +47,17 @@ def add_task_and_save(pc, one_result):
             print_task_status()
         module = one_result.get('module')
 
-        if not conf.plugins.get(module, {}).get('onerepeat'):
-            for task_type in one_result.get('result', {}).keys():
-                for domain in one_result.get('result', {}).get(task_type, []):
-                    domain = Domain.url_format(domain)
-                    target = {
-                        'level': level,
-                        'domain_type': task_type,
-                        'target': domain
-                    }
-                    pc.wp.target_queue.put(target)
-                    kb.status.task_num += 1
+        for task_type in one_result.get('result', {}).keys():
+            for domain in one_result.get('result', {}).get(task_type, []):
+                domain = Domain.url_format(domain)
+                target = {
+                    'level': level,
+                    'domain_type': task_type,
+                    'target': domain
+                    'parent_module': module
+                }
+                pc.wp.target_queue.put(target)
+                kb.status.task_num += 1
 
 
 def save_result(one_result):
