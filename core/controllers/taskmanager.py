@@ -46,16 +46,16 @@ def print_task_status():
 def add_task_and_save(pc, one_result):
     level = one_result.get('level', -1) + 1
     module = one_result.get('module')
-    if level > kb.status.level:
-        kb.status.level = level
-        print_task_status()
-    module = one_result.get('module')
+    if level <= conf.max_level:
+        if level > kb.status.level:
+            kb.status.level = level
+            print_task_status()
+        module = one_result.get('module')
 
-    if not conf.plugins.get(module, {}).get('onerepeat'):
-        for task_type in one_result.get('result', {}).keys():
-            for domain in one_result.get('result', {}).get(task_type, []):
-                domain = Domain.url_format(domain)
-                if level <= conf.max_level:
+        if not conf.plugins.get(module, {}).get('onerepeat'):
+            for task_type in one_result.get('result', {}).keys():
+                for domain in one_result.get('result', {}).get(task_type, []):
+                    domain = Domain.url_format(domain)
                     target = {
                         'level': level,
                         'domain_type': task_type,
