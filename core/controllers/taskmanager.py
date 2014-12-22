@@ -53,7 +53,7 @@ def add_task_and_save(pc, one_result):
                 target = {
                     'level': level,
                     'domain_type': task_type,
-                    'target': domain
+                    'target': domain,
                     'parent_module': module
                 }
                 pc.wp.target_queue.put(target)
