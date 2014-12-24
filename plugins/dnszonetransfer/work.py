@@ -52,7 +52,7 @@ class dnszonetransfer(Plugin):
                             domain = ''
                         if domain:
                             domains.append(domain)
-                        if 'adderss':
+                        if 'adderss' in record:
                             ips.append(record['address'])
                     else:
                         ips.append(record['ns_server'])
