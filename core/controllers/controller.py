@@ -67,7 +67,7 @@ def start(args):
         plugin_controller.start()
 
         # 回收结果
-        logger.debug('output result to file...')
+        logger.debug('\noutput result to file...')
         output_file = args.output_file
         Output(target, args.output_format, output_file).save()
         logger.debug(os.linesep.join(['result count:',
