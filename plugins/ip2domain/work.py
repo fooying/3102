@@ -10,6 +10,7 @@ import re
 import time
 
 from core.plugin import Plugin
+from comm.rootdomain import Domain
 from comm.utils import get_domain_type
 
 
@@ -37,6 +38,7 @@ class ip2domain(Plugin):
         root_domains = []
         ips = []
         for domain in domain_list:
+            domain = Domain.get_domain(domain)
             domain_type = get_domain_type(domain)
             if domain_type == 'ip' and domain not in ips:
                 ips.append(domain)
