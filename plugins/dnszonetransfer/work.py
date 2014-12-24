@@ -28,17 +28,19 @@ class dnszonetransfer(Plugin):
         domains = []
         ips = []
         for record_list in record_lists:
-            for record in record_list:
-                domains.append(record[1])
-                ips.append(record[2])
+            if record_list:
+                for record in record_list:
+                    domains.append(record[1])
+                    ips.append(record[2])
 
-        for record in transfer_list:
-            if 'zone_server' in record:
-                domains.append(record['name'])
-                ips.append(record['zone_server'])
-                ips.append(record['address'])
-            else:
-                ips.append(record['ns_server'])
+        if transfer_list:
+            for record in transfer_list:
+                if 'zone_server' in record:
+                    domains.append(record['name'])
+                    ips.append(record['zone_server'])
+                    ips.append(record['address'])
+                else:
+                    ips.append(record['ns_server'])
 
         ips = list(set(ips))
         domains = list(set(domains))
