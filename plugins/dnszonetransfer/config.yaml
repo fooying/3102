@@ -1,0 +1,7 @@
+enable: true
+onerepeat: true
+input: ['root_domain']
+output: ['ip', 'domain']
+descript: 通过dns域传送漏洞获取域名
+name: dnszonetransfer
+chinesename: DNS域传送漏洞
