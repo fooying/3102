@@ -22,8 +22,8 @@ from core.data import api
 from core.data import conf
 from core.data import result
 from core.output.output import Output
-from core.controllers.taskmanager import task_monitor
 from core.controllers.plugin_controller import PluginController
+from core.controllers.taskmanager import task_monitor, start_job
 
 logger = logging.getLogger('3102')
 
@@ -59,15 +59,19 @@ def start(args):
         first_target['result'][domain_type].append(target)
         logger.info('start plugin...')
         plugin_controller.wp.result.put(first_target)
+
         # 开启任务监控
         kwargs = {'pc': plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
+        start_monitor = threading.Thread(target=start_job, kwargs=kwargs)
+        start_monitor.start()
+
         # 开启插件执行
         plugin_controller.start()
 
         # 回收结果
-        logger.debug('\noutput result to file...')
+        logger.debug('output result to file...')
         output_file = args.output_file
         Output(target, args.output_format, output_file).save()
         logger.debug(os.linesep.join(['result count:',
