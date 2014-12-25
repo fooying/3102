@@ -18,6 +18,12 @@ from comm.rootdomain import Domain
 
 logger = logging.getLogger('3102')
 
+def cycle_join_pool(pc):
+    while not pc.exit:
+        pc.run_job()
+        print_task_status(pc)
+        gevent.sleep(10)
+
 
 def task_monitor(pc):
     while True:
@@ -77,10 +83,3 @@ def save_result(one_result, domain, task_type):
         want_save_result.pop('result')
         result[task_type][domain] = want_save_result
         kb.status.result_num += 1
-
-
-def start_job(pc):
-    while not pc.exit:
-        pc.run_job()
-        print_task_status(pc)
-        gevent.sleep(10)
