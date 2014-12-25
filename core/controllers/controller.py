@@ -23,7 +23,7 @@ from core.data import conf
 from core.data import result
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
-from core.controllers.taskmanager import task_monitor, start_job
+from core.controllers.taskmanager import task_monitor, cycle_join_pool
 
 logger = logging.getLogger('3102')
 
@@ -41,6 +41,7 @@ def start(args):
         conf.settings = settings
         conf.max_level = args.max_level
         # 初始化爬虫
+        logger.info('spider init...')
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
@@ -64,7 +65,7 @@ def start(args):
         kwargs = {'pc': plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
-        start_monitor = threading.Thread(target=start_job, kwargs=kwargs)
+        start_monitor = threading.Thread(target=cycle_join_pool, kwargs=kwargs)
         start_monitor.start()
 
         # 开启插件执行

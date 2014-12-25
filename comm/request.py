@@ -33,6 +33,7 @@ class Req(object):
         """
         进行代码验证处理,建议提供的代理列表是可用的,直接关闭验证
         """
+        logger.info('start verify proxy...')
         wp = WorkerPool()
         for proxy in self.proxy_list:
             proxies = {
@@ -44,7 +45,7 @@ class Req(object):
         result = wp.result
         wp.run()
         self.proxy_list = [proxy[1] for proxy in result if proxy[0]]
-        logger.info('start verify completed!')
+        logger.info('proxy verify completed!')
         self.verify_proxy = False
 
     def __emulate_request(self, **kwargs):

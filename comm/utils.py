@@ -116,7 +116,7 @@ def get_proxy_list_by_file(file_path):
         proxy_list = []
         for proxy in proxys:
             proxy = proxy.split(',')
-            proxy_list.append((proxy[0], proxy[1]))
+            proxy_list.append({proxy[0]: proxy[1]})
     else:
         proxy_list = []
     return proxy_list

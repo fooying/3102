@@ -13,7 +13,7 @@ import logging
 from core.data import kb
 from core.data import conf
 from core.data import result
-from comm.util import is_intra_ip
+from comm.utils import is_intra_ip
 from comm.rootdomain import Domain
 
 logger = logging.getLogger('3102')
