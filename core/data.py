@@ -23,7 +23,8 @@ kb.plugins = AttrDict()
 
 kb.status = AttrDict()
 kb.status.level = 0
-kb.status.task_num = 1
+kb.status.total_task_num = 0
+kb.status.do_task_num = 0
 kb.status.result_num = 0
 
 # 全局接口
