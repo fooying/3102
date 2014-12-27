@@ -52,34 +52,38 @@ class ip2domain(Plugin):
         super(ip2domain, self).start(target, domain_type, level)
         url = ('http://cn.bing.com/search?q='
                'ip:%s&first=999999991&FORM=PERE' % target)
-        html = self.req.request('GET', url).text
+        result = None
+        try:
+            html = self.req.request('GET', url).text
+        except:
+            html = ''
+        else:
+            domain_regx = r'''
+                <h2><a\shref="https?://([^"]*?)"\starget="_blank"\sh="ID=[^"]*?">[^<]*?</a></h2>
+            '''
+            domain_list = re.findall(domain_regx, html, re.X)
 
-        domain_regx = r'''
-            <h2><a\shref="https?://([^"]*?)"\starget="_blank"\sh="ID=[^"]*?">[^<]*?</a></h2>
-        '''
-        domain_list = re.findall(domain_regx, html, re.X)
+            total_num, page_count = self.__get_count(html)
 
-        total_num, page_count = self.__get_count(html)
+            if page_count > 0:
+                for n in range(total_num-1):
+                    url = ('http://cn.bing.com/search?q='
+                           'ip:%s&first=%s1&FORM=PERE3' % (target, n))
+                    html = self.req.request('GET', url).text
+                    new_domain_list = re.findall(domain_regx, html, re.X)
+                    domain_list.extend(new_domain_list)
+                    time.sleep(1)
 
-        if page_count > 0:
-            for n in range(total_num-1):
-                url = ('http://cn.bing.com/search?q='
-                       'ip:%s&first=%s1&FORM=PERE3' % (target, n))
-                html = self.req.request('GET', url).text
-                new_domain_list = re.findall(domain_regx, html, re.X)
-                domain_list.extend(new_domain_list)
-                time.sleep(1)
-
-        domains, root_domains, ips = self.__classify_result(domain_list)
-        result = {
-            'result': {
-                'root_domain': root_domains,
-                'ip': ips,
-                'domain': domains
-            },
-            'module': self.name,
-            'parent_target': target,
-            'level': level,
-        }
+            domains, root_domains, ips = self.__classify_result(domain_list)
+            result = {
+                'result': {
+                    'root_domain': root_domains,
+                    'ip': ips,
+                    'domain': domains
+                },
+                'module': self.name,
+                'parent_target': target,
+                'level': level,
+            }
         super(ip2domain, self).end()
         return result

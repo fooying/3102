@@ -37,7 +37,10 @@ class icp(Plugin):
     def _get_text_list(self, config, value):
         url = config[0] % value
         regx = config[1]
-        text = self.req.request('GET', url).text
+        try:
+            text = self.req.request('GET', url).text
+        except:
+            text = ''
         result = re.findall(regx, text, re.I|re.S|re.X)
         return result
 

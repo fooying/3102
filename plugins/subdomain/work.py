@@ -26,10 +26,13 @@ class subdomain(Plugin):
             'b3': 1 if domain_level >= 3 else 0,
             'b4': 1 if domain_level >= 4 else 0,
         }
-        html = self.req.request('POST', url, data=data, timeout=30)
-        regex = ('''<a\shref="http://[^"]*?"\srel=nof'''
-                 '''ollow\starget=_blank>http://([^"]*?)</a></div>''')
         try:
+            html = self.req.request('POST', url, data=data, timeout=30)
+        except:
+            result = None
+        else:
+            regex = ('''<a\shref="http://[^"]*?"\srel=nof'''
+                     '''ollow\starget=_blank>http://([^"]*?)</a></div>''')
             result = re.findall(regex, html)
             result = {
                 'result': {
@@ -41,7 +44,5 @@ class subdomain(Plugin):
                 'parent_target': target,
                 'level': level,
             }
-        except:
-            result = None
         super(subdomain, self).end()
         return result

@@ -19,6 +19,9 @@ class domain2ip(Plugin):
         super(domain2ip, self).start(target, domain_type, level)
         try:
             ip = socket.gethostbyname(target)
+        except socket.gaierror:
+            result = None
+        else:
             result = {
                 'result': {
                     'root_domain': [],
@@ -29,7 +32,5 @@ class domain2ip(Plugin):
                 'parent_target': target,
                 'level': level,
             }
-        except socket.gaierror:
-            result = None
         super(domain2ip, self).end()
         return result
