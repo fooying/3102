@@ -27,7 +27,7 @@ class subdomain(Plugin):
             'b4': 1 if domain_level >= 4 else 0,
         }
         try:
-            html = self.req.request('POST', url, data=data, timeout=30)
+            html = self.req.request('POST', url, data=data, timeout=30).text
         except:
             result = None
         else:
