@@ -34,7 +34,6 @@ class Plugin(object):
         key = '%s_%s' % (self.name, domain)
         kb.progress[key]['status'] = 'runing'
         kb.progress[key]['start_time'] = time.time()
-        print key
 
     def end(self):
         key = '%s_%s' % (self.name, self.domain)

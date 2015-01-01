@@ -19,17 +19,11 @@ from comm.rootdomain import Domain
 logger = logging.getLogger('3102')
 
 
-def cycle_join_pool(pc):
-    while not pc.exit_flag:
-        print_task_status()
-        pc.run_job()
-        gevent.sleep(5)
-
-
 def task_monitor(pc):
     while not pc.exit_flag:
-        print_task_status()
         try:
+            if conf.max_level <= kb.status.level:
+                print_task_status()
             one_result = pc.wp.result.get(timeout=1)
         except gevent.queue.Empty:
             if pc.wp.target_queue.empty() and is_all_job_done():
@@ -39,15 +33,19 @@ def task_monitor(pc):
             add_task_and_save(pc, one_result)
 
 
-def print_task_status():
+def print_task_status(log=False):
     status = get_all_job_status()
     msg = ('Job Monitor:level[%s], total[%s], done[%s], '
            'wait[%s], runing[%s], result num[%s].') % (
         kb.status.level, status['total'], status['done'],
         status['wait'], status['runing'], kb.status.result_num
     )
-    msg = msg.ljust(78, ' ')
-    logger.debug(msg)
+    msg = msg.ljust(80, ' ')
+    if log:
+        logger.info(msg)
+    else:
+        print '\033[1;34m[m] %s\033[1;m\r' % msg,;
+
 
 
 def add_task_and_save(pc, one_result):
@@ -56,6 +54,7 @@ def add_task_and_save(pc, one_result):
     if level <= conf.max_level:
         if level > kb.status.level:
             kb.status.level = level
+            print_task_status(True)
 
         module = one_result.get('module')
 
@@ -73,7 +72,6 @@ def add_task_and_save(pc, one_result):
                     }
                     pc.wp.target_queue.put(target)
                     save_result(one_result, domain, task_type)
-        #pc.run_job()
         print_task_status()
 
 

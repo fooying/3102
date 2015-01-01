@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
+import time
 import signal
 import logging
 import threading
@@ -24,7 +25,7 @@ from core.data import conf
 from core.data import result
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
-from core.controllers.taskmanager import task_monitor, cycle_join_pool
+from core.controllers.taskmanager import task_monitor
 
 logger = logging.getLogger('3102')
 domain = output_file = output_format = None
@@ -32,7 +33,8 @@ plugin_controller = None
 
 
 def complate():
-    logger.debug('output result to file...')
+    print '\n'
+    logger.info('output result to file...')
     Output(domain, output_format, output_file).save()
     logger.debug(os.linesep.join(['result count:',
        '    ip: %s' % len(result.ip),
@@ -91,15 +93,12 @@ def start(args):
         plugin_controller.wp.result.put(first_target)
 
         # 开启任务监控
-        logger.info('start task monitor...')
+        logger.info('start task monitor and plugin...')
         kwargs = {'pc': plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
-        start_monitor = threading.Thread(target=cycle_join_pool, kwargs=kwargs)
-        start_monitor.start()
 
         # 开启插件执行
-        logger.info('start plugin...')
         plugin_controller.start()
 
         complate()

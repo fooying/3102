@@ -21,7 +21,7 @@ class ColorFormatter(logging.Formatter):
 
     COLORS = {
         'DEBUG': GREEN,
-        'INFO': BLUE,
+        'INFO': WHITE,
         'WARNING': YELLOW,
         'ERROR': RED,
         'CRITICAL': RED,
