@@ -65,7 +65,7 @@ class Output(object):
         file_name = urlparse.urlparse(domain).hostname
         file_name = file_name.replace('.', '_')
         temp_dir = tempfile.gettempdir()
-        output_file = os.path.join(temp_dir, file_name+'.txt')
+        output_file = os.path.join(temp_dir, file_name+'.csv')
         self.tmp_output_file = output_file
 
     def __write_result(self):
