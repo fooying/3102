@@ -582,7 +582,8 @@ def main():
     #print(resolver.get_txt())
     #print(resolver.get_spf())
     ##tresolver = DnsHelper('weightmans.com')
-    tresolver = DnsHelper('qhu.edu.cn')
+    import pdb;pdb.set_trace()
+    tresolver = DnsHelper('scanv.com')
     print(tresolver.zone_transfer())
 
 
