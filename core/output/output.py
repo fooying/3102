@@ -14,7 +14,7 @@ import urlparse
 from core.data import conf
 from comm.log import CUSTOM_LOGGING
 
-DEFAULT_FORMAT = 'txt'
+DEFAULT_FORMAT = 'csv'
 logger = logging.getLogger('3102')
 
 

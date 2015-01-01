@@ -40,7 +40,7 @@ def print_task_status(log=False):
         kb.status.level, status['total'], status['done'],
         status['wait'], status['runing'], kb.status.result_num
     )
-    msg = msg.ljust(80, ' ')
+    msg = msg.ljust(100, ' ')
     if log:
         logger.info(msg)
     else:
@@ -77,7 +77,7 @@ def add_task_and_save(pc, one_result):
 
 def save_result(one_result, domain, task_type):
         want_save_result = copy.deepcopy(one_result)
-        want_save_result.update({'taget': domain})
+        want_save_result.update({'domain': domain})
         want_save_result.pop('result')
         result[task_type][domain] = want_save_result
         kb.status.result_num += 1

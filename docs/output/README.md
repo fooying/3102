@@ -23,3 +23,19 @@ format为结果输出的格式化类型,如txt
   * 子属性类型为attrdict
   * 每个结果以dict存储在self.rsult.domain/ip/root_domain
   * 结果结构,{'target':str, 'module':str, 'level':int, 'parent_target':str}
+
+### 结果结构[self.result]
+```
+self.result.ip = [
+    {
+        domain,:{# str,具体domain,值同下方domain
+            'domain': str, 当前的domain/ip
+            'module': str, 处理的插件
+            'level': int, 所在level
+            'parent_domain': str, 父domain
+            }
+    },
+    ...
+]
+self.result.domain 与self.result.root_domain结构同上
+```
