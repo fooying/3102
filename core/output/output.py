@@ -12,6 +12,7 @@ import tempfile
 import urlparse
 
 from core.data import conf
+from comm.log import CUSTOM_LOGGING
 
 DEFAULT_FORMAT = 'txt'
 logger = logging.getLogger('3102')
@@ -78,7 +79,8 @@ class Output(object):
         _report = getattr(_handle, 'Output%s' % self.output_format.capitalize())
         _report().save(self.output_file)
         if self.output_file:
-            self.logger.debug(
+            self.logger.log(
+                CUSTOM_LOGGING.good,
                 u'Result has been output to [%s].',
                 self.output_file
             )

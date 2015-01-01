@@ -7,10 +7,15 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import sys
 import logging
 
 FORMAT = ("$BOLD[%(asctime)s] [%(levelname)s] %(message)s$RESET")
 SIMPLE_FORMATER = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+
+
+class CUSTOM_LOGGING:
+    good = 99
 
 
 class ColorFormatter(logging.Formatter):
@@ -20,19 +25,21 @@ class ColorFormatter(logging.Formatter):
     COLOR_SEQ = "\033[1;%dm[%s] %s\033[1;m"
 
     COLORS = {
-        'DEBUG': GREEN,
+        'DEBUG': BLUE,
         'INFO': WHITE,
         'WARNING': YELLOW,
         'ERROR': RED,
         'CRITICAL': RED,
+        'GOOD': GREEN,
     }
 
     SYMBOLS = {
-        'DEBUG': '+',
+        'DEBUG': '~',
         'INFO': '*',
         'WARNING': '-',
         'ERROR': '!',
         'CRITICAL': '!',
+        'GOOD': '+',
     }
 
     def __init__(self, use_color=True, *args, **kwargs):
@@ -52,10 +59,11 @@ class ColorFormatter(logging.Formatter):
 def init_logger(name='3102', log_file_path=None, show_color=True,
                 log_level=logging.DEBUG):
 
+    logging.addLevelName(CUSTOM_LOGGING.good, "GOOD")
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
-    color_stream_handler = logging.StreamHandler()
+    color_stream_handler = logging.StreamHandler(sys.stdout)
     color_stream_handler.setFormatter(SIMPLE_FORMATER)
     color_stream_handler.setLevel(logging.DEBUG)
     if show_color:

@@ -14,6 +14,7 @@ import threading
 
 from comm.request import Req
 from comm.log import init_logger
+from comm.log import CUSTOM_LOGGING
 from comm.rootdomain import Domain
 from comm.utils import get_log_level
 from comm.utils import get_domain_type
@@ -36,7 +37,7 @@ def complate():
     print '\n'
     logger.info('output result to file...')
     Output(domain, output_format, output_file).save()
-    logger.debug(os.linesep.join(['result count:',
+    logger.log(CUSTOM_LOGGING.good, os.linesep.join(['result count:',
        '    ip: %s' % len(result.ip),
        '    domain: %s' % len(result.domain),
        '    root domain: %s' % len(result.root_domain),
