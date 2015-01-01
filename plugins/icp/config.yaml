@@ -1,0 +1,7 @@
+enable: true
+onerepeat: true
+input: ['root_domain']
+output: ['ip', 'root_domain']
+descript: 通过ICP查询同备案主体的其他根域
+name: icp
+chinesename: ICP查询

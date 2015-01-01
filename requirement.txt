@@ -1,3 +1,5 @@
-argparse
 attrdict
+gevent
 requests
+pyyaml
+dnspython

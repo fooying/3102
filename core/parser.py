@@ -8,11 +8,8 @@ Mail:f00y1n9[at]gmail.com
 
 import os
 import argparse
-from copy import deepcopy
 
-from core.data import task, all_target, target, control
-from conf.config import VERSION
-from comm.rootdomain import Domain
+from conf.settings import VERSION
 
 
 VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
@@ -20,8 +17,7 @@ VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
 INDENT = ' ' * 2
 USAGE = os.linesep.join([
     '',
-    '%seg1: python run3102.py --ip ' % INDENT,
-    '%seg2: python run3102.py --domain ' % INDENT,
+    '%seg1: python run3102.py --target ' % INDENT,
     ])
 
 
@@ -32,48 +28,78 @@ def parse(args=None):
     )
     parser.add_argument(
         '-h', '--help', action='help',
-        help='show this help message and exit'
+        help='Show this help message and exit'
     )
     parser.add_argument('-V', '--version', action='version',
                         version=VERSION_INFO)
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument(
-        '-d', '--domain', dest='domain',
-        help='Target domain/rootdomain'
-    )
-    group.add_argument(
-        '-i', '--ip', dest='ip',
-        help='Target ip'
+    parser.add_argument(
+        '-t', '--target', dest='target', required=True,
+        help=_format_help('Target domain/rootdomain/ip')
     )
     parser.add_argument(
-        '-l', '--max_level', dest='max_level', default=3,
-        type=int, help='max level to get domain/ip/rootdomain, default:3'
+        '-m', '--max_level', dest='max_level', default=4,
+        type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
-
+    parser.add_argument(
+        '-o', '--output_file', dest='output_file',
+        help=_format_help('File to ouput result')
+    )
+    parser.add_argument(
+        '--format', dest='output_format', default='txt',
+        help=_format_help([
+            'The format to output result,',
+            'default list:',
+            'txt/json/yaml'
+        ])
+    )
+    parser.add_argument(
+        '--log_file', dest='log_file',
+        help=_format_help('Log file')
+    )
+    loglevel_choices = {
+        1: 'DEBUG',
+        2: 'INFO',
+        3: 'WARNING',
+        4: 'ERROR',
+    }
+    parser.add_argument(
+        '--log_level', dest='log_level',
+        type=int, default=1, choices=loglevel_choices,
+        help=_format_help('Log level of output to file', loglevel_choices)
+    )
+    parser.add_argument(
+        '--proxy_file', dest='proxy_file',
+        help=_format_help([
+            'Proxy file, one line one proxy, each line format:',
+            'schem,proxy url,',
+            'eg:http,http://1.1.1.1:123',
+        ])
+    )
+    parser.add_argument(
+        '--verify_proxy', dest='verify_proxy', action='store_true',
+        default=False,
+        help=_format_help('If verify the proxy list')
+    )
+    parser.add_argument(
+        '--timeout', dest='timeout',
+        type=int, default=10,
+        help=_format_help('Request timeout')
+    )
     args = parser.parse_args(args)
-    try:
-        if args.domain:
-            domain = args.domain
-            root_domain = Domain.get_root_domain(domain)
-            new_target = deepcopy(target)
-            new_target.value = domain
-            new_target.source = 'input'
-            if root_domain != domain:
-                domain_type = 'domain'
-            else:
-                domain_type = 'rootdomain'
-            new_target.type = domain_type
-            task['%ss' % domain_type].add(domain)
-            all_target[domain.replace('.', '_')] = new_target
-        if args.ip:
-            ip = args.ip
-            new_target = deepcopy(target)
-            new_target.value = ip
-            new_target.source = 'input'
-            new_target.type = 'ip'
-            task.ips.add(ip)
-            all_target[ip.replace('.', '_')] = new_target
+    return args
 
-        control.max_level = args.max_level
-    except Exception, e:
-        print_error(str(e))
+
+def _format_help(help_info, choices=None):
+    if isinstance(help_info, list):
+        help_str_list = help_info[:]
+    else:
+        help_str_list = [help_info]
+
+    if choices:
+        help_str_list.extend([
+            '%s%s - %s' % (INDENT, k, v) for k, v in choices.items()
+        ])
+
+    help_str_list.append(INDENT + '(DEFAULT: %(default)s)')
+
+    return os.linesep.join(help_str_list)

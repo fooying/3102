@@ -1,0 +1,7 @@
+enable: true
+onerepeat: false
+input: ['root_domain', 'domain']
+output: ['ip']
+descript: 查询域名的IP
+name: domain2ip
+chinesename: 查询域名IP
