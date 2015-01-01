@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 from template import Output
 
 
-class OutputCsc(Output):
+class OutputCsv(Output):
 
     def save(self, output_file):
         super(OutputCsv, self).save(output_file)
