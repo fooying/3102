@@ -23,7 +23,7 @@ logger = logging.getLogger('3102')
 
 class PluginController(object):
     def __init__(self):
-        self.exit = False
+        self.exit_flag = False
         self.wp = WorkerPool()
         self.plugin_path = conf.settings.PLUGINS_PATH
 
@@ -40,30 +40,29 @@ class PluginController(object):
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
                     try:
-                        conf.plugins[plugin] = yaml.load(f)
+                        plugin_config = yaml.load(f)
                     except Exception:
                         logger.exception('load %s\'s config fail!' % plugin)
                     else:
-                        if conf.plugins[plugin]['enable']:
+                        if plugin_config['enable']:
+                            conf.plugins[plugin] = plugin_config
                             self.__register_plugin(plugin)
-                        else:
-                            conf.plugins.pop(plugin)
 
     def __register_plugin(self, plugin):
         """
         注册插件
         """
-        registered_plugin = kb.plugins[plugin] = {}
-        registered_plugin['name'] = plugin
+        kb.plugins[plugin] = {}
+        kb.plugins[plugin]['name'] = plugin
         try:
             _import_path = '.'.join(
                 conf.settings.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
             )
             plugin_path = '%s.%s.work' % (_import_path, plugin)
             _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数
-            registered_plugin['handle'] = _plugin
+            kb.plugins[plugin]['handle'] = _plugin
         except Exception:
-            logger.exception('register plugin failed!')
+            logger.exception('register plugin %s failed!' % plugin)
         else:
             self.__classify_plugin(plugin)
 
@@ -77,28 +76,34 @@ class PluginController(object):
                 conf.reg_plugins[inp].add(plugin)
 
     def start(self):
-        while not self.exit:
+        while not self.exit_flag:
             try:
-                target = self.wp.target_queue.get(timeout=5)
+                target = self.wp.target_queue.get(timeout=1)
             except gevent.queue.Empty:
                 pass
             else:
-                self._add_job_by_type(target)
+                self.__add_job_by_type(target)
 
-    def _add_job_by_type(self, target):
+    def __add_job_by_type(self, target):
         domain_type = target.get('domain_type')
         parent_module = target.pop('parent_module')
         onerepeat = conf.plugins.get(parent_module, {}).get('onerepeat')
+        domain = target.get('domain')
+
         if domain_type in conf.settings.ALLOW_INPUTS:
             for plugin in conf.reg_plugins[domain_type]:
                 if onerepeat and parent_module == plugin:
                     continue
                 _plugin = getattr(kb.plugins[plugin]['handle'], plugin)()
                 self.wp.add_job(getattr(_plugin, 'start'), **target)
+                self.__init_plugin_progress(plugin, domain)
+
+    def __init_plugin_progress(self, plugin, domain):
+        key = '%s_%s' % (plugin, domain)
+        kb.progress[key] = {'status':'wait', 'start_time':0, 'end_time':0}
 
     def run_job(self):
-        kb.status.do_task_num += len(self.wp.job_pool)
         self.wp.run()
 
     def exit(self):
-        self.exit = True
+        self.exit_flag = True

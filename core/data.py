@@ -19,17 +19,21 @@ conf.max_level = 10
 
 # 中间数据存储
 kb = AttrDict()
+# 用于存储插件的信息,如import的方法等
 kb.plugins = AttrDict()
 
+# 用于存储全局的状态信息
 kb.status = AttrDict()
-kb.status.level = 0
-kb.status.total_task_num = 0
-kb.status.do_task_num = 0
-kb.status.result_num = 0
+kb.status.level = 0  # 当前进行层级
+kb.status.result_num = 0  # 结果数
+
+# 用于存储每个任务的进度详情
+kb.progress =  AttrDict()
 
 # 全局接口
 api = AttrDict()
 api.request = None
+api.logger = None
 
 # 结果存储
 result = AttrDict()

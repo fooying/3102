@@ -7,10 +7,14 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
+import time
 import logging
 
-from core.data import conf, api
 from gevent.monkey import patch_all
+
+from core.data import kb
+from core.data import api
+from core.data import conf
 
 patch_all()
 
@@ -22,12 +26,28 @@ class Plugin(object):
         self.req = api.request
         self.conf = conf.plugins[name]
         self.name = name
+        self.result = None
 
-    def start(self, target, domain_type, level):
-        pass
+    def start(self, domain, domain_type, level):
+        self.domain = domain
+        self.level = level
+        key = '%s_%s' % (self.name, domain)
+        kb.progress[key]['status'] = 'runing'
+        kb.progress[key]['start_time'] = time.time()
+        print key
 
     def end(self):
-        pass
+        key = '%s_%s' % (self.name, self.domain)
+        kb.progress[key]['status'] = 'done'
+        kb.progress[key]['end_time'] = time.time()
+        update_dict = {
+            'module': self.name,
+            'parent_domain': self.domain,
+            'level': self.level,
+        }
+        if type(self.result) == dict:
+            self.result = {'result': self.result}
+            self.result.update(update_dict)
 
     def get_plugin_name(self, chinese=False):
         """

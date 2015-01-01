@@ -15,22 +15,17 @@ class domain2ip(Plugin):
     def __init__(self):
         super(domain2ip, self).__init__('domain2ip')
 
-    def start(self, target, domain_type, level):
-        super(domain2ip, self).start(target, domain_type, level)
+    def start(self, domain, domain_type, level):
+        super(domain2ip, self).start(domain, domain_type, level)
         try:
-            ip = socket.gethostbyname(target)
+            ip = socket.gethostbyname(domain)
         except socket.gaierror:
-            result = None
+            pass
         else:
-            result = {
-                'result': {
-                    'root_domain': [],
-                    'ip': [ip],
-                    'domain': []
-                },
-                'module': self.name,
-                'parent_target': target,
-                'level': level,
+            self.result = {
+                'root_domain': [],
+                'ip': [ip],
+                'domain': []
             }
         super(domain2ip, self).end()
-        return result
+        return self.result

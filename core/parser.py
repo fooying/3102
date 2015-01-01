@@ -37,7 +37,7 @@ def parse(args=None):
         help=_format_help('Target domain/rootdomain/ip')
     )
     parser.add_argument(
-        '-m', '--max_level', dest='max_level', default=6,
+        '-m', '--max_level', dest='max_level', default=4,
         type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
     parser.add_argument(

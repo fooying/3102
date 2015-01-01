@@ -29,29 +29,24 @@ onerepeat:
 * 编写插件同名类,集成Plugin
 * 必须重写__init__方法,参考icp插件
  * 在__init__里调用super(插件名, self).__init__('插件名')
-* 类内必须存在start方法,参数必须为start(self, target, domain_type, level)
-  * target str,插件执行目标
+* 类内必须存在start方法,参数必须为start(self, domain, domain_type, level)
+  * domain str,插件执行目标
   * domain_type str,输入的目标类型(domain/root_domain/ip)
   * level int,当前执行的层数
-  * 要求在start方法里调用super(插件名, self).start(target, domain_type, level)
+  * 要求在start方法里调用super(插件名, self).start(domain, domain_type, level)
   * 要求在程序执行结束返回结果前调super(插件名, self).end()
 * 插件执行结果返回
-  * 如果没有结果直接返回None
-  * 如果有结果,按以下结构return结果
+  * 如果没有结果则直接return self.result(不用赋值,默认值为None)
+  * 如果有结果,按以下结构return结果(对self.result赋值)
+  * 要求结果中存在root_domain/ip/domain三个key,值为list
   ```
-    result = {
-            'result': {
-                'root_domain': root_domains,
-                'ip': ips,
-                'domain': domains
-            },
-            'module': self.name,
-            'parent_target': target,
-            'level': level,
-        }
+    self.result = {
+        'root_domain': root_domains,
+        'ip': ips,
+        'domain': domains
+    }
   ```
-  * 结果应该判断类型去重归入result.root_domain/ip/domain,可根据下方API说明使用方法
-  * parent_target固定为当前target,level也固定为当前level, module固定为self.name
+  * 结果应该判断类型去重归入self.result.root_domain/ip/domain,可根据下方API说明使用方法
 
 ### 插件可使用API
 * self.plugin_path 当前插件目录

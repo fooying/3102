@@ -70,12 +70,12 @@ class icp(Plugin):
         else:
             return []
 
-    def start(self, target, domain_type, level):
-        super(icp, self).start(target, domain_type, level)
-        domain = Domain.get_domain(target)
-        zt_name = self.query_zt_by_domain(target)
+    def start(self, domain, domain_type, level):
+        super(icp, self).start(domain, domain_type, level)
+        target_domain = Domain.get_domain(domain)
+        zt_name = self.query_zt_by_domain(target_domain)
         domains = self.query_domains_by_zt(zt_name)
-        domains.append(target)
+        domains.append(target_domain)
         ips = []
         root_domains = []
         for domain in domains:
@@ -84,15 +84,10 @@ class icp(Plugin):
             elif is_url(domain) and domain not in root_domains:
                 root_domains.append(domain)
 
-        result = {
-            'result': {
-                'root_domain': root_domains,
-                'ip': ips,
-                'domain': []
-            },
-            'module': self.name,
-            'parent_target': target,
-            'level': level,
+        self.result = {
+            'root_domain': root_domains,
+            'ip': ips,
+            'domain': []
         }
         super(icp, self).end()
-        return result
+        return self.result

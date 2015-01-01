@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
+import signal
 import logging
 import threading
 
@@ -26,42 +27,71 @@ from core.controllers.plugin_controller import PluginController
 from core.controllers.taskmanager import task_monitor, cycle_join_pool
 
 logger = logging.getLogger('3102')
+domain = output_file = output_format = None
+plugin_controller = None
+
+
+def complate():
+    logger.debug('output result to file...')
+    Output(domain, output_format, output_file).save()
+    logger.debug(os.linesep.join(['result count:',
+       '    ip: %s' % len(result.ip),
+       '    domain: %s' % len(result.domain),
+       '    root domain: %s' % len(result.root_domain),
+    ]))
+    logger.info('Complete 3102!')
+
+
+def on_signal(signum, frame):
+    logger.warning('3102 will exit,signal:%d' % signum)
+    plugin_controller.exit()
 
 
 def start(args):
-    target = args.target
-    domain_type = get_domain_type(target)
+    global output_file
+    global output_format
+    global domain
+    global plugin_controller
+    domain = args.target
+    domain_type = get_domain_type(domain)
     if domain_type in settings.ALLOW_INPUTS:
-        target = Domain.url_format(target)
+        domain = Domain.url_format(domain)
 
         # 初始化日志
         log_level = get_log_level(args.log_level)
         init_logger(log_file_path=args.log_file, log_level=log_level)
         logger.info('system init...')
+        # 初始化配置
         conf.settings = settings
         conf.max_level = args.max_level
+        output_file = args.output_file
+        output_format = args.output_format
         # 初始化爬虫
-        logger.info('spider init...')
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
-        logger.info('plugin init...')
         plugin_controller = PluginController()
         plugin_controller.plugin_init()
+        logger.info('Loaded plugins: %s' % ','.join(conf.plugins.keys()))
 
-        logger.info('start fuzzing domain/ip...')
+        # 绑定信号事件
+        signal.signal(signal.SIGUSR1, on_signal)
+        signal.signal(signal.SIGTERM, on_signal)
+        signal.signal(signal.SIGINT, on_signal)
+
+        logger.info('start target...')
         # 首个目标
         first_target = {
             'result': {'root_domain': [], 'domain': [], 'ip': []},
             'module': '',
             'level': 0,
-            'parent_target': ''
+            'parent_domain': ''
         }
-        first_target['result'][domain_type].append(target)
-        logger.info('start plugin...')
+        first_target['result'][domain_type].append(domain)
         plugin_controller.wp.result.put(first_target)
 
         # 开启任务监控
+        logger.info('start task monitor...')
         kwargs = {'pc': plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
@@ -69,18 +99,10 @@ def start(args):
         start_monitor.start()
 
         # 开启插件执行
+        logger.info('start plugin...')
         plugin_controller.start()
 
-        # 回收结果
-        logger.debug('output result to file...')
-        output_file = args.output_file
-        Output(target, args.output_format, output_file).save()
-        logger.debug(os.linesep.join(['result count:',
-            '    ip: %s' % len(result.ip),
-            '    domain: %s' % len(result.domain),
-            '    root domain: %s' % len(result.root_domain),
-        ]))
-        logger.info('Complete 3102!')
+        complate()
     else:
         logger.error(
             'Please input a target in the correct'

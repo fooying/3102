@@ -15,24 +15,17 @@ class domain2root(Plugin):
     def __init__(self):
         super(domain2root, self).__init__('domain2root')
 
-    def start(self, target, domain_type, level):
-        super(domain2root, self).start(target, domain_type, level)
+    def start(self, domain, domain_type, level):
+        super(domain2root, self).start(domain, domain_type, level)
         try:
-            root_domain = Domain.get_root_domain(target)
+            root_domain = Domain.get_root_domain(domain)
         except:
             root_domain = None
         if root_domain:
-            result = {
-                'result': {
-                    'root_domain': [root_domain],
-                    'ip': [],
-                    'domain': []
-                },
-                'module': self.name,
-                'parent_target': target,
-                'level': level,
+            self.result = {
+                'root_domain': [root_domain],
+                'ip': [],
+                'domain': []
             }
-        else:
-            result = None
         super(domain2root, self).end()
-        return result
+        return self.result

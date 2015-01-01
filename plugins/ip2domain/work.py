@@ -48,10 +48,10 @@ class ip2domain(Plugin):
                 domains.append(domain)
         return domains, root_domains, ips
 
-    def start(self, target, domain_type, level):
-        super(ip2domain, self).start(target, domain_type, level)
+    def start(self, domain, domain_type, level):
+        super(ip2domain, self).start(domain, domain_type, level)
         url = ('http://cn.bing.com/search?q='
-               'ip:%s&first=999999991&FORM=PERE' % target)
+               'ip:%s&first=999999991&FORM=PERE' % domain)
         result = None
         try:
             html = self.req.request('GET', url).text
@@ -68,22 +68,17 @@ class ip2domain(Plugin):
             if page_count > 0:
                 for n in range(total_num-1):
                     url = ('http://cn.bing.com/search?q='
-                           'ip:%s&first=%s1&FORM=PERE3' % (target, n))
+                           'ip:%s&first=%s1&FORM=PERE3' % (domain, n))
                     html = self.req.request('GET', url).text
                     new_domain_list = re.findall(domain_regx, html, re.X)
                     domain_list.extend(new_domain_list)
                     time.sleep(1)
 
             domains, root_domains, ips = self.__classify_result(domain_list)
-            result = {
-                'result': {
-                    'root_domain': root_domains,
-                    'ip': ips,
-                    'domain': domains
-                },
-                'module': self.name,
-                'parent_target': target,
-                'level': level,
+            self.result = {
+                'root_domain': root_domains,
+                'ip': ips,
+                'domain': domains
             }
         super(ip2domain, self).end()
-        return result
+        return self.result

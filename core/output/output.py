@@ -18,10 +18,10 @@ logger = logging.getLogger('3102')
 
 
 class Output(object):
-    def __init__(self, target, output_format=DEFAULT_FORMAT, output_file=None):
+    def __init__(self, domain, output_format=DEFAULT_FORMAT, output_file=None):
         self.output_format = output_format
         self.template_path = conf.settings.OUTPUT_TEMPLATE_PATH
-        self.target = target
+        self.domain = domain
         self.output_file = output_file
         self.__get_tmp_output_file()
         self.logger = logger
@@ -58,10 +58,10 @@ class Output(object):
                 self.logger.warning(info)
 
     def __get_tmp_output_file(self):
-        target = self.target
-        if not target.startswith(('http://', 'https://')):
-            target = 'http://' + target
-        file_name = urlparse.urlparse(target).hostname
+        domain = self.domain
+        if not domain.startswith(('http://', 'https://')):
+            domain = 'http://' + domain
+        file_name = urlparse.urlparse(domain).hostname
         file_name = file_name.replace('.', '_')
         temp_dir = tempfile.gettempdir()
         output_file = os.path.join(temp_dir, file_name+'.txt')

@@ -18,36 +18,36 @@ from comm.rootdomain import Domain
 
 logger = logging.getLogger('3102')
 
+
 def cycle_join_pool(pc):
-    while not pc.exit:
+    while not pc.exit_flag:
+        print_task_status()
         pc.run_job()
-        print_task_status(pc)
-        gevent.sleep(10)
+        gevent.sleep(5)
 
 
 def task_monitor(pc):
-    while True:
+    while not pc.exit_flag:
+        print_task_status()
         try:
             one_result = pc.wp.result.get(timeout=1)
         except gevent.queue.Empty:
-            if pc.wp.target_queue.empty() and pc.wp.is_finished():
+            if pc.wp.target_queue.empty() and is_all_job_done():
                 pc.exit()
                 break
         else:
             add_task_and_save(pc, one_result)
 
 
-def print_task_status(pc):
-    status = pc.wp.get_status()
-    msg = ('Task Monitor:level %s:total task: %s ,'
-           'wait task: %s, result num: %s') % (
-        kb.status.level, kb.status.total_task_num,
-        kb.status.total_task_num - kb.status.do_task_num,
-        kb.status.result_num
+def print_task_status():
+    status = get_all_job_status()
+    msg = ('Job Monitor:level[%s], total[%s], done[%s], '
+           'wait[%s], runing[%s], result num[%s].') % (
+        kb.status.level, status['total'], status['done'],
+        status['wait'], status['runing'], kb.status.result_num
     )
     msg = msg.ljust(78, ' ')
     logger.debug(msg)
-    print status
 
 
 def add_task_and_save(pc, one_result):
@@ -56,7 +56,6 @@ def add_task_and_save(pc, one_result):
     if level <= conf.max_level:
         if level > kb.status.level:
             kb.status.level = level
-            print_task_status(pc)
 
         module = one_result.get('module')
 
@@ -69,12 +68,13 @@ def add_task_and_save(pc, one_result):
                     target = {
                         'level': level,
                         'domain_type': task_type,
-                        'target': domain,
+                        'domain': domain,
                         'parent_module': module
                     }
-                    kb.status.total_task_num += 1
                     pc.wp.target_queue.put(target)
                     save_result(one_result, domain, task_type)
+        #pc.run_job()
+        print_task_status()
 
 
 def save_result(one_result, domain, task_type):
@@ -83,3 +83,23 @@ def save_result(one_result, domain, task_type):
         want_save_result.pop('result')
         result[task_type][domain] = want_save_result
         kb.status.result_num += 1
+
+
+def get_all_job_status():
+    status = {
+        'total': len(kb.progress),
+        'wait': 0,
+        'runing': 0,
+        'done': 0,
+    }
+    for job_progress in kb.progress.values():
+        job_status = job_progress['status']
+        status[job_status] += 1
+    return status
+
+
+def is_all_job_done():
+    all_job_status = set()
+    for job_progress in kb.progress.values():
+        all_job_status.add(job_progress['status'])
+    return True if all_job_status == set(['done']) else False
