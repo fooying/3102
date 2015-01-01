@@ -45,11 +45,11 @@ def parse(args=None):
         help=_format_help('File to ouput result')
     )
     parser.add_argument(
-        '--format', dest='output_format', default='txt',
+        '--format', dest='output_format', default='csv',
         help=_format_help([
             'The format to output result,',
             'default list:',
-            'txt/json/yaml'
+            'csv/txt/json/yaml'
         ])
     )
     parser.add_argument(
