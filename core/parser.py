@@ -85,6 +85,14 @@ def parse(args=None):
         type=int, default=10,
         help=_format_help('Request timeout')
     )
+    parser.add_argument('-p', '--plugins', metavar='plugin',
+        dest='plugins_specific', nargs='+',
+        default=None,
+        help=_format_help([
+            'Specify the plugins',
+            'avaliable: dnszonetransfer, domain2ip, domain2root, icp, ip2domain, subdomain',
+            'default: configured by the enable option in plugins\' config.yaml'])
+    )
     args = parser.parse_args(args)
     return args
 

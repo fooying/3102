@@ -74,7 +74,7 @@ def start(args):
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
         plugin_controller = PluginController()
-        plugin_controller.plugin_init()
+        plugin_controller.plugin_init(args.plugins_specific)
         logger.info('Loaded plugins: %s' % ','.join(conf.plugins.keys()))
 
         # 绑定信号事件
