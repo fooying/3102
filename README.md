@@ -76,7 +76,7 @@ optional arguments:
   --format OUTPUT_FORMAT
                         The format to output result,
                         default list:
-                        csv/txt/json/yaml
+                        csv/txt/json/yaml/html
                           (DEFAULT: csv)
   --log_file LOG_FILE   Log file
                           (DEFAULT: None)

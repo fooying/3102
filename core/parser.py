@@ -49,7 +49,7 @@ def parse(args=None):
         help=_format_help([
             'The format to output result,',
             'default list:',
-            'csv/txt/json/yaml'
+            'csv/txt/json/yaml/html'
         ])
     )
     parser.add_argument(
