@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
+from textwrap import dedent
 from template import Output
 
 
@@ -16,7 +17,7 @@ class OutputHtml(Output):
         super(OutputHtml, self).save(output_file)
         html = self._html_generate()
         with open(output_file, 'w') as f:
-            f.write(html)
+            f.write(dedent(html))
 
     def _html_generate(self):
         tr = '<tr> <td>{{ domain }}</td> <td>{{ module }}</td> <td>{{ level }}</td> <td>{{ parent_domain }}</td> </tr>\n'
@@ -41,7 +42,7 @@ class OutputHtml(Output):
             keys.add(match.groups()[0])
         return sorted(list(keys))
 
-    _html_base = """
+    _html_base = """\
     <!DOCTYPE html>
     <html lang="zh-cn">
         <head>
@@ -70,4 +71,4 @@ class OutputHtml(Output):
             </div>
         </body>
     </html>
-"""
+    """
