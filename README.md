@@ -43,7 +43,10 @@ $ source venv/bin/activate
   * 对应单元测试和功能测试进行开发测试用例
   * 不同的模块进入到对应目录进行开发
 
-* 也欢迎参与主架构的改进和新功能的开发,直接发送Pull Reques
+* 也欢迎参与主架构的改进和新功能的开发,直接发送Pull Requests
+
+### 感谢
+* 感谢名单 [docs/THANKS.md](docs/THANKS.md)
 
 ### 使用说明
 ```
@@ -77,7 +80,7 @@ optional arguments:
                         The format to output result,
                         default list:
                         csv/txt/json/yaml
-                          (DEFAULT: csv)
+                          (DEFAULT: html)
   --log_file LOG_FILE   Log file
                           (DEFAULT: None)
   --log_level {1,2,3,4}

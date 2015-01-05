@@ -9,3 +9,7 @@ Conqu3r<bruisezeng(at)qq.com>
 
 huakai<huakai(at)paxmac.org>
 * for suggesting a couple of features
+
+flsf<jianmaflsf(at)gmail.com>
+* for reporting and fix a minor bug
+* for contributing a result output template script output_html.py
