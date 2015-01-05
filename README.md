@@ -69,15 +69,15 @@ optional arguments:
                           (DEFAULT: None)
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
-                          (DEFAULT: 10)
+                          (DEFAULT: 4)
   -o OUTPUT_FILE, --output_file OUTPUT_FILE
                         File to ouput result
                           (DEFAULT: None)
   --format OUTPUT_FORMAT
                         The format to output result,
                         default list:
-                        txt/json/yaml
-                          (DEFAULT: txt)
+                        csv/txt/json/yaml
+                          (DEFAULT: csv)
   --log_file LOG_FILE   Log file
                           (DEFAULT: None)
   --log_level {1,2,3,4}
@@ -96,4 +96,5 @@ optional arguments:
                           (DEFAULT: False)
   --timeout TIMEOUT     Request timeout
                           (DEFAULT: 10)
+
 ```
