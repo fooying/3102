@@ -1,6 +1,6 @@
 # Individuals
 
-黄源小童鞋<iangyuejiao(at)163.com>
+黄源小童鞋<murongjianjia(at)gmail.com>
 * for initiate project
 * for suggesting a couple of features
 
