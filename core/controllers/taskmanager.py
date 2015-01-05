@@ -35,12 +35,12 @@ def task_monitor(pc):
 
 def print_task_status(log=False):
     status = get_all_job_status()
-    msg = ('Job Monitor:level[%s], total[%s], done[%s], '
-           'wait[%s], runing[%s], result num[%s].') % (
+    msg = ('Monitor:level[%s], total[%s], done[%s], '
+           'runing[%s], result num[%s].') % (
         kb.status.level, status['total'], status['done'],
-        status['wait'], status['runing'], kb.status.result_num
+        status['runing'], kb.status.result_num
     )
-    msg = msg.ljust(100, ' ')
+    msg = msg.ljust(80, ' ')
     if log:
         logger.info(msg)
     else:
@@ -72,7 +72,6 @@ def add_task_and_save(pc, one_result):
                     }
                     pc.wp.target_queue.put(target)
                     save_result(one_result, domain, task_type)
-        print_task_status()
 
 
 def save_result(one_result, domain, task_type):

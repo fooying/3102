@@ -6,6 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+from gevent.monkey import patch_all
+patch_all()
+
 import os
 import time
 import signal
