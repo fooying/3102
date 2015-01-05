@@ -6,6 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+from gevent.monkey import patch_all
+patch_all()
+
 import os
 import time
 import signal
@@ -33,7 +36,7 @@ domain = output_file = output_format = None
 plugin_controller = None
 
 
-def complate():
+def complete():
     print '\n'
     logger.info('output result to file...')
     Output(domain, output_format, output_file).save()
@@ -102,7 +105,7 @@ def start(args):
         # 开启插件执行
         plugin_controller.start()
 
-        complate()
+        complete()
     else:
         logger.error(
             'Please input a target in the correct'
