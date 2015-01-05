@@ -36,7 +36,7 @@ domain = output_file = output_format = None
 plugin_controller = None
 
 
-def complate():
+def complete():
     print '\n'
     logger.info('output result to file...')
     Output(domain, output_format, output_file).save()
@@ -105,7 +105,7 @@ def start(args):
         # 开启插件执行
         plugin_controller.start()
 
-        complate()
+        complete()
     else:
         logger.error(
             'Please input a target in the correct'
