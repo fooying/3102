@@ -26,6 +26,7 @@ class Output(object):
         self.output_file = output_file
         self.__get_tmp_output_file()
         self.logger = logger
+        self.__check_file_extension()
 
     def save(self):
         self.__deal_config()
@@ -36,7 +37,6 @@ class Output(object):
             self.logger.warning(
                 u'output failure, retry output by default template and path...'
             )
-            self.output_format = DEFAULT_FORMAT
             self.output_file = self.tmp_output_file
             self.__write_result()
 
@@ -44,7 +44,7 @@ class Output(object):
         if not self.output_file:
             self.output_file = self.tmp_output_file
             self.logger.warning(
-                u'Not specified result file, set to default file:[%s].'
+                u'Not specified result file, set to default file: [%s]'
                 % self.tmp_output_file
             )
         else:
@@ -55,7 +55,7 @@ class Output(object):
 
             if not os.path.exists(py_file) and not os.path.exists(pyc_file):
                 info = (u'The specifies format template file does not exist,'
-                        'modify the default output:[%s].' % DEFAULT_FORMAT)
+                        'modify the default output: [%s]' % self.output_format)
                 self.logger.warning(info)
 
     def __get_tmp_output_file(self):
@@ -65,7 +65,7 @@ class Output(object):
         file_name = urlparse.urlparse(domain).hostname
         file_name = file_name.replace('.', '_')
         temp_dir = tempfile.gettempdir()
-        output_file = os.path.join(temp_dir, file_name + '.' + DEFAULT_FORMAT)
+        output_file = os.path.join(temp_dir, file_name + '.' + self.output_format)
         self.tmp_output_file = output_file
 
     def __write_result(self):
@@ -81,6 +81,11 @@ class Output(object):
         if self.output_file:
             self.logger.log(
                 CUSTOM_LOGGING.good,
-                u'Result has been output to [%s].',
+                u'Result has been output to [%s]',
                 self.output_file
             )
+
+    def __check_file_extension(self):
+        extension = self.output_format
+        if self.output_file and not self.output_file.endswith('.' + extension):
+            self.output_file += '.' + extension
