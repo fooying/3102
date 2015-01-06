@@ -10,6 +10,7 @@ import os
 import argparse
 
 from conf.settings import VERSION
+from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
 
 VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
@@ -49,7 +50,7 @@ def parse(args=None):
         help=_format_help([
             'The format to output result,',
             'default list:',
-            'csv/txt/json/yaml/html'
+            Output.get_output_formats()
         ])
     )
     parser.add_argument(
