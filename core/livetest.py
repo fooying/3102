@@ -14,14 +14,14 @@ class LiveTest(object):
         for key in ['root_domain', 'ip', 'domain']:
             for item in result[key]:
                 req = self.req.request('GET', 'http://' + result[key][item]['domain'], timeout=10)
-                result[key][item]['code'] = req.status_code
+                result[key][item]['status_code'] = req.status_code
             if self.exit_flag:
                 break
 
     def __init_targets(self):
         for key in ['root_domain', 'ip', 'domain']:
             for item in result[key]:
-                result[key][item]['code'] = 'unkonwn'
+                result[key][item]['status_code'] = 'unkonwn'
 
     def exit(self):
         self.exit_flag = True
