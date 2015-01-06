@@ -23,7 +23,7 @@ from comm.utils import get_log_level
 from comm.utils import get_domain_type
 from comm.utils import get_proxy_list_by_file
 
-from conf import settings
+from config import settings
 from core.data import api
 from core.data import conf
 from core.data import result

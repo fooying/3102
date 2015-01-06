@@ -8,7 +8,7 @@ Mail:f00y1n9[at]gmail.com
 
 import sys
 
-from conf.settings import START_STR
+from config.settings import START_STR
 
 
 def main(args=None):

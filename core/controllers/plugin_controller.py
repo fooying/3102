@@ -15,6 +15,7 @@ from gevent.monkey import patch_all
 
 from core.data import kb
 from core.data import conf
+from config import settings
 from comm.coroutine import WorkerPool
 
 patch_all()
@@ -25,18 +26,17 @@ class PluginController(object):
     def __init__(self):
         self.exit_flag = False
         self.wp = WorkerPool()
-        self.plugin_path = conf.settings.PLUGINS_PATH
+        self.plugin_path = settings.PLUGINS_PATH
 
     @classmethod
     def get_available_plugins(cls):
         """
         返回plugins目录下所有enable为true的plugin名称
         """
-        from conf.settings import PLUGINS_PATH
-        plugin_list = os.listdir(PLUGINS_PATH)
+        plugin_list = os.listdir(settings.PLUGINS_PATH)
         for plugin in plugin_list:
             plugin_config_path = os.path.join(
-                PLUGINS_PATH, plugin, 'config.yaml'
+                settings.PLUGINS_PATH, plugin, 'config.yaml'
             )
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
@@ -81,7 +81,7 @@ class PluginController(object):
         kb.plugins[plugin]['name'] = plugin
         try:
             _import_path = '.'.join(
-                conf.settings.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
+                settings.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
             )
             plugin_path = '%s.%s.work' % (_import_path, plugin)
             _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数
@@ -97,7 +97,7 @@ class PluginController(object):
         """
         inputs = conf.plugins_load[plugin]['input']
         for inp in inputs:
-            if inp in conf.settings.ALLOW_INPUTS:
+            if inp in settings.ALLOW_INPUTS:
                 conf.reg_plugins[inp].add(plugin)
 
     def start(self):
@@ -115,7 +115,7 @@ class PluginController(object):
         onerepeat = conf.plugins_load.get(parent_module, {}).get('onerepeat')
         domain = target.get('domain')
 
-        if domain_type in conf.settings.ALLOW_INPUTS:
+        if domain_type in settings.ALLOW_INPUTS:
             for plugin in conf.reg_plugins[domain_type]:
                 if onerepeat and parent_module == plugin:
                     continue
