@@ -6,6 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
+import sys
+if 'threading' in sys.modules:
+    del sys.modules['threading']
 from gevent.monkey import patch_all
 patch_all()
 

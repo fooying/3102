@@ -11,7 +11,7 @@ import logging
 import tempfile
 import urlparse
 
-from core.data import conf
+from config import settings
 from comm.log import CUSTOM_LOGGING
 
 DEFAULT_FORMAT = 'csv'
@@ -21,7 +21,7 @@ logger = logging.getLogger('3102')
 class Output(object):
     def __init__(self, domain, output_format=DEFAULT_FORMAT, output_file=None):
         self.output_format = output_format
-        self.template_path = conf.settings.OUTPUT_TEMPLATE_PATH
+        self.template_path = settings.OUTPUT_TEMPLATE_PATH
         self.domain = domain
         self.output_file = output_file
         self.__get_tmp_output_file()
@@ -39,6 +39,18 @@ class Output(object):
             )
             self.output_file = self.tmp_output_file
             self.__write_result()
+
+    @classmethod
+    def get_output_formats(cls):
+        formats = set([])
+        file_list = os.listdir(settings.OUTPUT_TEMPLATE_PATH)
+        for file_name in file_list:
+            if file_name.startswith('output_'):
+                output_format = file_name[7:-3] if file_name.endswith('.py')\
+                    else file_name[7:-4]
+                formats.add(output_format)
+        format_str = '/'.join(formats)
+        return format_str
 
     def __deal_config(self):
         if not self.output_file:
@@ -65,18 +77,22 @@ class Output(object):
         file_name = urlparse.urlparse(domain).hostname
         file_name = file_name.replace('.', '_')
         temp_dir = tempfile.gettempdir()
-        output_file = os.path.join(temp_dir, file_name + '.' + self.output_format)
+        output_file = os.path.join(
+            temp_dir, file_name + '.' + self.output_format
+        )
         self.tmp_output_file = output_file
 
     def __write_result(self):
         import_template_path = '.'.join(
-            conf.settings.OUTPUT_TEMPLATE_OPPOSITE_PATH.split(os.path.sep)
+            settings.OUTPUT_TEMPLATE_OPPOSITE_PATH.split(os.path.sep)
         )
         template_path = '%s.output_%s' % (
             import_template_path, self.output_format
         )
         _handle = __import__(template_path, fromlist='*')
-        _report = getattr(_handle, 'Output%s' % self.output_format.capitalize())
+        _report = getattr(
+            _handle, 'Output%s' % self.output_format.capitalize()
+        )
         _report().save(self.output_file)
         if self.output_file:
             self.logger.log(
