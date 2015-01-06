@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 import os
 import argparse
 
-from conf.settings import VERSION
+from config.settings import VERSION
 from core.controllers.plugin_controller import PluginController
 
 VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
