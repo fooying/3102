@@ -64,7 +64,7 @@ class Req(object):
                            'Chrome/37.0.2062.124 Safari/537.36')
         })
         s.verify = self.verify
-        s.timeout = self.timeout
+        kwargs['timeout'] = self.timeout
         if self.proxy_list:
             proxy = random.choice(self.proxy_list)
             s.proxies = proxy

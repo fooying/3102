@@ -43,7 +43,10 @@ $ source venv/bin/activate
   * 对应单元测试和功能测试进行开发测试用例
   * 不同的模块进入到对应目录进行开发
 
-* 也欢迎参与主架构的改进和新功能的开发,直接发送Pull Reques
+* 也欢迎参与主架构的改进和新功能的开发,直接发送Pull Requests
+
+### 感谢
+* 感谢名单 [docs/THANKS.md](docs/THANKS.md)
 
 ### 使用说明
 ```
@@ -69,15 +72,15 @@ optional arguments:
                           (DEFAULT: None)
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
-                          (DEFAULT: 10)
+                          (DEFAULT: 4)
   -o OUTPUT_FILE, --output_file OUTPUT_FILE
                         File to ouput result
                           (DEFAULT: None)
   --format OUTPUT_FORMAT
                         The format to output result,
                         default list:
-                        txt/json/yaml
-                          (DEFAULT: txt)
+                        csv/txt/json/yaml
+                          (DEFAULT: html)
   --log_file LOG_FILE   Log file
                           (DEFAULT: None)
   --log_level {1,2,3,4}
@@ -96,4 +99,5 @@ optional arguments:
                           (DEFAULT: False)
   --timeout TIMEOUT     Request timeout
                           (DEFAULT: 10)
+
 ```
