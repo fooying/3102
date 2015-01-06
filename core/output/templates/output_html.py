@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
+from textwrap import dedent
 from template import Output
 
 
@@ -19,12 +20,19 @@ class OutputHtml(Output):
             f.write(html)
 
     def _html_generate(self):
-        tr = '<tr> <td>{{ domain }}</td> <td>{{ module }}</td> <td>{{ level }}</td> <td>{{ parent_domain }}</td> </tr>\n'
-        tr_str = ''
+        tr = '<tr> <td>{{ domain }}</td> <td>{{ module }}</td> <td>{{ level }}</td> <td>{{ parent_domain }}</td> </tr>'
+        tr_dict = {}
+        tables = ''
+        self._table_base = dedent(self._table_base)
+        self._html_base = dedent(self._html_base)
         for key in ['root_domain', 'ip', 'domain']:
             for item in self.result[key].values():
-                tr_str += self._generate_key(tr, item)
-        html = self._html_base % tr_str
+                group = tr_dict.setdefault(item['module'], [])
+                group.append(item)
+        for item in tr_dict:
+            tr_str = '\n'.join([self._generate_key(tr, _) for _ in tr_dict[item]])
+            tables += self._table_base % self._reindent(tr_str, 4)
+        html = self._html_base % self._reindent(tables, 16)
         return html
 
     def _generate_key(self, template, context):
@@ -41,7 +49,27 @@ class OutputHtml(Output):
             keys.add(match.groups()[0])
         return sorted(list(keys))
 
-    _html_base = """
+    def _reindent(self, s, num_space):
+        leading_space = num_space * ' '
+        lines = [leading_space + line for line in s.splitlines()]
+        return '\n'.join(lines)
+
+    _table_base = """\
+    <thead>
+        <tr>
+            <th>domain</th>
+            <th>module</th>
+            <th>level</th>
+            <th>parent_domain</th>
+        </tr>
+    </thead>
+    <tbody>
+    %s
+    </tbody>
+    """
+
+
+    _html_base = """\
     <!DOCTYPE html>
     <html lang="zh-cn">
         <head>
@@ -54,20 +82,9 @@ class OutputHtml(Output):
         <body>
             <div class="container">
                 <table class="table">
-                    <caption></caption>
-                    <thead>
-                        <tr>
-                            <th>domain</th>
-                            <th>module</th>
-                            <th>level</th>
-                            <th>parent_domain</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        %s
-                    </tbody>
+    %s
                 </table>
             </div>
         </body>
     </html>
-"""
+    """
