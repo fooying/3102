@@ -32,11 +32,10 @@ class PluginController(object):
         """
         返回plugins目录下所有enable为true的plugin名称
         """
-        from conf.settings import PLUGINS_PATH
-        plugin_list = os.listdir(PLUGINS_PATH)
+        plugin_list = os.listdir(conf.settings.PLUGINS_PATH)
         for plugin in plugin_list:
             plugin_config_path = os.path.join(
-                PLUGINS_PATH, plugin, 'config.yaml'
+                conf.settings.PLUGINS_PATH, plugin, 'config.yaml'
             )
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
