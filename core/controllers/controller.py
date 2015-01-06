@@ -77,8 +77,8 @@ def start(args):
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
         plugin_controller = PluginController()
-        plugin_controller.plugin_init()
-        logger.info('Loaded plugins: %s' % ','.join(conf.plugins.keys()))
+        plugin_controller.plugin_init(args.plugins_specific)
+        logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)

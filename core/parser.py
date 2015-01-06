@@ -10,7 +10,7 @@ import os
 import argparse
 
 from conf.settings import VERSION
-
+from core.controllers.plugin_controller import PluginController
 
 VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
 
@@ -84,6 +84,15 @@ def parse(args=None):
         '--timeout', dest='timeout',
         type=int, default=10,
         help=_format_help('Request timeout')
+    )
+    available_plugins = PluginController.get_available_plugins().keys()
+    parser.add_argument('-p', '--plugins', metavar='plugin',
+        dest='plugins_specific', nargs='+',
+        default=None,
+        help=_format_help([
+            'Specify the plugins',
+            'avaliable: '+' ,'.join(available_plugins) ,
+            'default: configured by the enable option in plugins\' config.yaml'])
     )
     args = parser.parse_args(args)
     return args
