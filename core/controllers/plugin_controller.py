@@ -27,22 +27,48 @@ class PluginController(object):
         self.wp = WorkerPool()
         self.plugin_path = conf.settings.PLUGINS_PATH
 
+    @staticmethod
+    def available_plugins():
+        """
+        返回plugins目录下所有enable为true的plugin名称
+        """
+        from conf.settings import PLUGINS_PATH
+        plugin_list = os.listdir(PLUGINS_PATH)
+        plugins_available = []
+        for plugin in plugin_list:
+            plugin_config_path = os.path.join(
+                PLUGINS_PATH, plugin, 'config.yaml'
+            )
+            if os.path.exists(plugin_config_path):
+                with open(plugin_config_path) as f:
+                    try:
+                        plugin_config = yaml.load(f)
+                    except Exception:
+                        logger.exception('load %s\'s config fail!' % plugin)
+                    else:
+                        if plugin_config['enable']:
+                            plugins_available.append(plugin)
+        return plugins_available
+
     def plugin_init(self, plugins_sepcific=None):
         """
         初始化插件
         """
-        plugin_list = os.listdir(self.plugin_path)
+        plugins_available = PluginController.available_plugins()
         if plugins_sepcific:
             for plugin in plugins_sepcific:
-                if plugin in plugin_list:
-                    self.__load_plugin(plugin, force_enable=True)
+                if plugin in plugins_available:
+                    self.__load_plugin(plugin)
                 else:
                     logger.exception('plugin: %s NOT found!' % plugin)
         else:
-            for plugin in plugin_list:
+            for plugin in plugins_available:
                 self.__load_plugin(plugin)
 
-    def __load_plugin(self, plugin, force_enable=False):
+    def __load_plugin(self, plugin):
+        """
+        载入名为plugin的插件
+        """
         plugin_config_path = os.path.join(
             self.plugin_path, plugin, 'config.yaml'
         )
@@ -54,9 +80,8 @@ class PluginController(object):
                 except Exception:
                     logger.exception('load %s\'s config fail!' % plugin)
                 else:
-                    if force_enable or plugin_config['enable']:
-                        conf.plugins[plugin] = plugin_config
-                        self.__register_plugin(plugin)
+                    conf.plugins[plugin] = plugin_config
+                    self.__register_plugin(plugin)
 
     def __register_plugin(self, plugin):
         """
