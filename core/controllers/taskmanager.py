@@ -99,4 +99,7 @@ def is_all_job_done():
     all_job_status = set()
     for job_progress in kb.progress.values():
         all_job_status.add(job_progress['status'])
-    return True if all_job_status == set(['done']) else False
+    if all_job_status == set(['done']) or not all_job_status:
+        return True
+    else:
+        return False

@@ -37,6 +37,16 @@ def parse(args=None):
         '-t', '--target', dest='target', required=True,
         help=_format_help('Target domain/rootdomain/ip')
     )
+    available_plugins = PluginController.get_available_plugins().keys()
+    parser.add_argument(
+        '-p', '--plugins', metavar='plugin',
+        dest='plugins_specific', nargs='+',
+        default=None,
+        help=_format_help([
+            'Specify the plugins',
+            'avaliable: '+' ,'.join(available_plugins),
+        ])
+    )
     parser.add_argument(
         '-m', '--max_level', dest='max_level', default=4,
         type=int, help=_format_help('Max level to get domain/ip/rootdomain')
@@ -85,16 +95,6 @@ def parse(args=None):
         '--timeout', dest='timeout',
         type=int, default=10,
         help=_format_help('Request timeout')
-    )
-    available_plugins = PluginController.get_available_plugins().keys()
-    parser.add_argument(
-        '-p', '--plugins', metavar='plugin',
-        dest='plugins_specific', nargs='+',
-        default=None,
-        help=_format_help([
-            'Specify the plugins',
-            'avaliable: '+' ,'.join(available_plugins),
-        ])
     )
     args = parser.parse_args(args)
     return args
