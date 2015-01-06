@@ -24,7 +24,7 @@ class Plugin(object):
         self.plugin_path = os.path.join(conf.settings.PLUGINS_PATH, name)
         self.logger = logging.getLogger('3102')
         self.req = api.request
-        self.conf = conf.plugins[name]
+        self.conf = conf.plugins_load[name]
         self.name = name
         self.result = None
 

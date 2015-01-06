@@ -27,14 +27,13 @@ class PluginController(object):
         self.wp = WorkerPool()
         self.plugin_path = conf.settings.PLUGINS_PATH
 
-    @staticmethod
-    def available_plugins():
+    @classmethod
+    def available_plugins(cls):
         """
         返回plugins目录下所有enable为true的plugin名称
         """
         from conf.settings import PLUGINS_PATH
         plugin_list = os.listdir(PLUGINS_PATH)
-        plugins_available = []
         for plugin in plugin_list:
             plugin_config_path = os.path.join(
                 PLUGINS_PATH, plugin, 'config.yaml'
@@ -47,14 +46,15 @@ class PluginController(object):
                         logger.exception('load %s\'s config fail!' % plugin)
                     else:
                         if plugin_config['enable']:
-                            plugins_available.append(plugin)
-        return plugins_available
+                            # 在conf中载入plugin的配置信息
+                            conf.plugins_available[plugin] = plugin_config
+        return conf.plugins_available
 
     def plugin_init(self, plugins_sepcific=None):
         """
         初始化插件
         """
-        plugins_available = PluginController.available_plugins()
+        plugins_available = conf.plugins_available.keys()
         if plugins_sepcific:
             for plugin in plugins_sepcific:
                 if plugin in plugins_available:
@@ -67,21 +67,11 @@ class PluginController(object):
 
     def __load_plugin(self, plugin):
         """
-        载入名为plugin的插件
+        载入名为plugin的插件. plugin的存在性和config的enable合法性由调用者保证
         """
-        plugin_config_path = os.path.join(
-            self.plugin_path, plugin, 'config.yaml'
-        )
-
-        if os.path.exists(plugin_config_path):
-            with open(plugin_config_path) as f:
-                try:
-                    plugin_config = yaml.load(f)
-                except Exception:
-                    logger.exception('load %s\'s config fail!' % plugin)
-                else:
-                    conf.plugins[plugin] = plugin_config
-                    self.__register_plugin(plugin)
+        # 指向在conf.plugins_availavle中的信息, 不再重新读入配置文件
+        conf.plugins_load[plugin] = conf.plugins_available[plugin]
+        self.__register_plugin(plugin)
 
     def __register_plugin(self, plugin):
         """
@@ -105,7 +95,7 @@ class PluginController(object):
         """
         归类插件
         """
-        inputs = conf.plugins[plugin]['input']
+        inputs = conf.plugins_load[plugin]['input']
         for inp in inputs:
             if inp in conf.settings.ALLOW_INPUTS:
                 conf.reg_plugins[inp].add(plugin)
@@ -122,7 +112,7 @@ class PluginController(object):
     def __add_job_by_type(self, target):
         domain_type = target.get('domain_type')
         parent_module = target.pop('parent_module')
-        onerepeat = conf.plugins.get(parent_module, {}).get('onerepeat')
+        onerepeat = conf.plugins_load.get(parent_module, {}).get('onerepeat')
         domain = target.get('domain')
 
         if domain_type in conf.settings.ALLOW_INPUTS:

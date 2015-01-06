@@ -85,7 +85,7 @@ def parse(args=None):
         type=int, default=10,
         help=_format_help('Request timeout')
     )
-    available_plugins = PluginController.available_plugins()
+    available_plugins = PluginController.available_plugins().keys()
     parser.add_argument('-p', '--plugins', metavar='plugin',
         dest='plugins_specific', nargs='+',
         default=None,

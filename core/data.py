@@ -10,7 +10,8 @@ from attrdict import AttrDict
 
 # 配置存储
 conf = AttrDict()
-conf.plugins = AttrDict()  # 加载的插件配置
+conf.plugins_available = AttrDict() # 加载plugins目录下, config.yaml中`enable`为True的plugin
+conf.plugins_load = AttrDict()      # 加载使用的插件配置
 conf.reg_plugins = AttrDict()
 conf.reg_plugins.domain = set([])
 conf.reg_plugins.root_domain = set([])
