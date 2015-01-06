@@ -28,14 +28,15 @@ class PluginController(object):
         self.plugin_path = conf.settings.PLUGINS_PATH
 
     @classmethod
-    def available_plugins(cls):
+    def get_available_plugins(cls):
         """
         返回plugins目录下所有enable为true的plugin名称
         """
-        plugin_list = os.listdir(conf.settings.PLUGINS_PATH)
+        from conf.settings import PLUGINS_PATH
+        plugin_list = os.listdir(PLUGINS_PATH)
         for plugin in plugin_list:
             plugin_config_path = os.path.join(
-                conf.settings.PLUGINS_PATH, plugin, 'config.yaml'
+                PLUGINS_PATH, plugin, 'config.yaml'
             )
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
