@@ -30,6 +30,7 @@ from core.data import result
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
 from core.controllers.taskmanager import task_monitor
+from core.livetest import LiveTest
 
 logger = logging.getLogger('3102')
 domain = output_file = output_format = None
@@ -51,6 +52,7 @@ def complete():
 def on_signal(signum, frame):
     logger.warning('3102 will exit,signal:%d' % signum)
     plugin_controller.exit()
+    livetest.exit()
 
 
 def start(args):
@@ -58,6 +60,7 @@ def start(args):
     global output_format
     global domain
     global plugin_controller
+    global livetest
     domain = args.target
     domain_type = get_domain_type(domain)
     if domain_type in settings.ALLOW_INPUTS:
@@ -72,6 +75,7 @@ def start(args):
         conf.max_level = args.max_level
         output_file = args.output_file
         output_format = args.output_format
+        live_test = args.live_test
         # 初始化爬虫
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
@@ -79,6 +83,8 @@ def start(args):
         plugin_controller = PluginController()
         plugin_controller.plugin_init()
         logger.info('Loaded plugins: %s' % ','.join(conf.plugins.keys()))
+
+        livetest = LiveTest()
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)
@@ -104,6 +110,10 @@ def start(args):
 
         # 开启插件执行
         plugin_controller.start()
+
+        if live_test:
+            logger.info('start livetest')
+            livetest.start()
 
         complete()
     else:

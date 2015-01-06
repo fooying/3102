@@ -99,5 +99,7 @@ optional arguments:
                           (DEFAULT: False)
   --timeout TIMEOUT     Request timeout
                           (DEFAULT: 10)
+  --live_test           Turn off Domain live test
+                          (DEFAULT: False)
 
 ```

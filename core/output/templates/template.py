@@ -15,6 +15,14 @@ class Output(object):
     def __init__(self):
         self.logger = logging.getLogger('3012')
         self.result = result
+        self.keys = self.get_keys()
 
     def save(self, output_file):
         pass
+
+    def get_keys(self):
+        for key in ['root_domain', 'ip', 'domain']:
+            for item in self.result[key].values():
+                if item.keys():
+                    return item.keys()
+

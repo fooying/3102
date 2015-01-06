@@ -85,6 +85,10 @@ def parse(args=None):
         type=int, default=10,
         help=_format_help('Request timeout')
     )
+    parser.add_argument(
+        '--live_test', action='store_true',
+        help=_format_help('Turn off Domain live test')
+    )
     args = parser.parse_args(args)
     return args
 
