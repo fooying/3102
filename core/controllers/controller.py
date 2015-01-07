@@ -52,7 +52,6 @@ def complete():
 def on_signal(signum, frame):
     logger.warning('3102 will exit,signal:%d' % signum)
     plugin_controller.exit()
-    livetest.exit()
 
 
 def start(args):
@@ -60,7 +59,6 @@ def start(args):
     global output_format
     global domain
     global plugin_controller
-    global livetest
     domain = args.target
     domain_type = get_domain_type(domain)
     if domain_type in settings.ALLOW_INPUTS:
@@ -84,7 +82,6 @@ def start(args):
         plugin_controller.plugin_init()
         logger.info('Loaded plugins: %s' % ','.join(conf.plugins.keys()))
 
-        livetest = LiveTest()
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)
@@ -112,8 +109,10 @@ def start(args):
         plugin_controller.start()
 
         if live_test:
-            logger.info('start livetest')
+            livetest = LiveTest()
+            logger.info('start livetest...')
             livetest.start()
+            logger.info('livetest completed')
 
         complete()
     else:

@@ -87,7 +87,7 @@ def parse(args=None):
     )
     parser.add_argument(
         '--live_test', action='store_true',
-        help=_format_help('Turn off Domain live test')
+        help=_format_help('Turn on Domain live test')
     )
     args = parser.parse_args(args)
     return args
