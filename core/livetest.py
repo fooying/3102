@@ -13,8 +13,6 @@ from comm.coroutine import WorkerPool
 from core.data import result
 from core.data import api
 
-patch_all()
-logger = logging.getLogger('3102')
 
 class LiveTest(object):
 
