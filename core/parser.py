@@ -86,8 +86,8 @@ def parse(args=None):
         help=_format_help('Request timeout')
     )
     parser.add_argument(
-        '--live_test', action='store_true',
-        help=_format_help('Turn on Domain live test')
+        '--alive_check', action='store_true',
+        help=_format_help('Check alive and accessible status of domain')
     )
     args = parser.parse_args(args)
     return args

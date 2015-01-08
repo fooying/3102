@@ -30,7 +30,7 @@ from core.data import result
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
 from core.controllers.taskmanager import task_monitor
-from core.livetest import LiveTest
+from core.alivecheck import AliveCheck
 
 logger = logging.getLogger('3102')
 domain = output_file = output_format = None
@@ -73,7 +73,7 @@ def start(args):
         conf.max_level = args.max_level
         output_file = args.output_file
         output_format = args.output_format
-        live_test = args.live_test
+        alive_check = args.alive_check
         # 初始化爬虫
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
@@ -108,11 +108,12 @@ def start(args):
         # 开启插件执行
         plugin_controller.start()
 
-        if live_test:
-            livetest = LiveTest()
-            logger.info('start livetest...')
-            livetest.start()
-            logger.info('livetest completed')
+        if alive_check:
+            alivecheck = AliveCheck()
+            print '\n'
+            logger.info('start alive check...')
+            alivecheck.start()
+            logger.info('alive check completed')
 
         complete()
     else:

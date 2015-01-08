@@ -14,13 +14,13 @@ from core.data import result
 from core.data import api
 
 
-class LiveTest(object):
+class AliveCheck(object):
 
     def __init__(self):
         self.exit_flag = False
         self.req = api.request
 
-    def __test_targets(self):
+    def __check_targets(self):
         self.wp = WorkerPool()
         title_regex = re.compile("<title>(.*?)<\/title>", re.DOTALL|re.M)
         for key in ['root_domain', 'ip', 'domain']:
@@ -29,12 +29,18 @@ class LiveTest(object):
         self.wp.run()
 
     def __load_targets(self, target, title_regex):
-        req = self.req.request('GET', 'http://' + target['domain'], timeout=10)
-        target['status_code'] = req.status_code
-        # 标题过长情况要不要考虑一下
-        if req.status_code == 200:
-            title_match = title_regex.search(req.content)
-            target['title'] = title_match.group(1) if title_match else 'failed'
+        try:
+            req = self.req.request('GET', 'http://' + target['domain'], timeout=5)
+        except Exception, e:
+            pass
+        else:
+            target['status_code'] = req.status_code
+            # 标题过长情况要不要考虑一下
+            if req.status_code == 200:
+                content = req.content
+                encoding = req.apparent_encoding if req.encoding == 'ISO-8859-1' else req.encoding
+                title_match = title_regex.search(content)
+                target['title'] = title_match.group(1).decode(encoding, 'replace').encode('utf-8','replace') if title_match else 'failed'
 
     def __init_targets(self):
         for key in ['root_domain', 'ip', 'domain']:
@@ -47,4 +53,4 @@ class LiveTest(object):
 
     def start(self):
         self.__init_targets()
-        self.__test_targets()
+        self.__check_targets()
