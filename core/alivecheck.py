@@ -38,9 +38,8 @@ class AliveCheck(object):
             # 标题过长情况要不要考虑一下
             if req.status_code == 200:
                 content = req.content
-                encoding = req.apparent_encoding if req.encoding == 'ISO-8859-1' else req.encoding
                 title_match = title_regex.search(content)
-                target['title'] = title_match.group(1).decode(encoding, 'replace').encode('utf-8','replace') if title_match else 'failed'
+                target['title'] = title_match.group(1).decode(req.encoding, 'replace').encode('utf-8','replace') if title_match else 'failed'
 
     def __init_targets(self):
         for key in ['root_domain', 'ip', 'domain']:
