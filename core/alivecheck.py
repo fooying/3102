@@ -39,7 +39,7 @@ class AliveCheck(object):
             if req.status_code == 200:
                 content = req.content
                 title_match = title_regex.search(content)
-                target['title'] = title_match.group(1).decode(req.encoding, 'replace').encode('utf-8','replace') if title_match else 'failed'
+                target['title'] = title_match.group(1) if title_match else 'failed'
 
     def __init_targets(self):
         for key in ['root_domain', 'ip', 'domain']:
