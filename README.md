@@ -60,6 +60,7 @@ $ source venv/bin/activate
 
         Domain/ip Fuzzing tool for vulnerability mining
                By Fooying(www.fooying.com)
+
 usage:
   eg1: python run3102.py --target
 
@@ -100,4 +101,5 @@ optional arguments:
                           (DEFAULT: 10)
   --alive_check         Check alive and accessible status of domain
                           (DEFAULT: False)
+
 ```
