@@ -69,9 +69,13 @@ class ip2domain(Plugin):
                 for n in range(total_num-1):
                     url = ('http://cn.bing.com/search?q='
                            'ip:%s&first=%s1&FORM=PERE3' % (domain, n))
-                    html = self.req.request('GET', url).text
-                    new_domain_list = re.findall(domain_regx, html, re.X)
-                    domain_list.extend(new_domain_list)
+                    try:
+                        html = self.req.request('GET', url).text
+                    except:
+                        html = ''
+                    else:
+                        new_domain_list = re.findall(domain_regx, html, re.X)
+                        domain_list.extend(new_domain_list)
                     time.sleep(1)
 
             domains, root_domains, ips = self.__classify_result(domain_list)

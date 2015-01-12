@@ -328,7 +328,8 @@ class DnsHelper:
         ns_records = list(set(ns_records))
         # Test each NS Server
         for ns_srv in ns_records:
-            if self.check_tcp_dns(ns_srv):
+            #if self.check_tcp_dns(ns_srv):
+            if True:
 
                 try:
                     zone = self.from_wire(dns.query.xfr(ns_srv, self._domain))
