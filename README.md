@@ -99,5 +99,7 @@ optional arguments:
                           (DEFAULT: False)
   --timeout TIMEOUT     Request timeout
                           (DEFAULT: 10)
+  --alive_check         Check alive and accessible status of domain
+                          (DEFAULT: False)
 
 ```

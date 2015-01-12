@@ -20,18 +20,23 @@ class OutputHtml(Output):
             f.write(html)
 
     def _html_generate(self):
-        tr = '<tr> <td>{{ domain }}</td> <td>{{ module }}</td> <td>{{ level }}</td> <td>{{ parent_domain }}</td> </tr>'
-        tr_dict = {}
+        td_dict = {}
+        td_piece = th_str = ''
+        for key in self.keys:
+            td_piece += ' <td>{{ %s }}</td> ' % key
+            th_str += ' <th>%s</td> ' % key
+        td = '<tr>%s</tr>' % td_piece
+
         tables = ''
         self._table_base = dedent(self._table_base)
         self._html_base = dedent(self._html_base)
         for key in ['root_domain', 'ip', 'domain']:
             for item in self.result[key].values():
-                group = tr_dict.setdefault(item['module'], [])
+                group = td_dict.setdefault(item['module'], [])
                 group.append(item)
-        for item in tr_dict:
-            tr_str = '\n'.join([self._generate_key(tr, _) for _ in tr_dict[item]])
-            tables += self._table_base % self._reindent(tr_str, 4)
+        for item in td_dict:
+            td_str = '\n'.join([self._generate_key(td, _) for _ in td_dict[item]])
+            tables += self._table_base % (self._reindent(th_str, 4), self._reindent(td_str, 4))
         html = self._html_base % self._reindent(tables, 16)
         return html
 
@@ -56,12 +61,7 @@ class OutputHtml(Output):
 
     _table_base = """\
     <thead>
-        <tr>
-            <th>domain</th>
-            <th>module</th>
-            <th>level</th>
-            <th>parent_domain</th>
-        </tr>
+    %s
     </thead>
     <tbody>
     %s

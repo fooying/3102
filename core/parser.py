@@ -96,6 +96,10 @@ def parse(args=None):
         type=int, default=10,
         help=_format_help('Request timeout')
     )
+    parser.add_argument(
+        '--alive_check', action='store_true',
+        help=_format_help('Check alive and accessible status of domain')
+    )
     args = parser.parse_args(args)
     return args
 
