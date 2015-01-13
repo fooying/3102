@@ -48,7 +48,6 @@ class subdomain_brute(Plugin):
     def _check_wildcard(self, subdomain):
         try:
             ip = socket.gethostbyname(subdomain)
-            print ip
             return True
         except:
             return False
