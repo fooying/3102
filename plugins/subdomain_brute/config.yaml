@@ -1,0 +1,7 @@
+enable: false
+onerepeat: False
+input: ['root_domain']
+output: ['ip', 'domain']
+descript: 暴力破解子域名
+name: subdomain_brute
+chinesename: 暴力破解子域名
