@@ -1,4 +1,4 @@
-enable: false
+enable: true
 onerepeat: False
 input: ['root_domain']
 output: ['ip', 'domain']

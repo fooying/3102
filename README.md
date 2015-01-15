@@ -20,6 +20,7 @@ $ sudo apt-get install python-virtualenv
 $ sudo apt-get install python-setuptools
 $ easy_install pip
 ```
+3102暂时只支持Python版本2.6.x和2.7.x
 
 ```bash
 $ git clone git@github.com:fooying/3102.git
