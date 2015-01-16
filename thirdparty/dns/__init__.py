@@ -52,3 +52,5 @@ __all__ = [
     'wiredata',
     'zone',
 ]
+
+import dns
