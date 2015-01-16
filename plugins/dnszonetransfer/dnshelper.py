@@ -18,12 +18,13 @@
 
 
 import re
-import dns.query
-import dns.resolver
-import dns.reversename
 import socket
-from dns.zone import *
-from dns.dnssec import algorithm_to_text
+
+from thirdparty import dns.query
+from thirdparty import dns.resolver
+from thirdparty import dns.reversename
+from thirdparty.dns.zone import *
+from thirdparty.dns.dnssec import algorithm_to_text
 
 
 DNS_PORT_NUMBER = 53

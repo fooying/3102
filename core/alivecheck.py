@@ -7,7 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
-from gevent.monkey import patch_all
+from thirdparty.gevent.monkey import patch_all
 
 from comm.coroutine import WorkerPool
 from core.data import result

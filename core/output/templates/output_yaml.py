@@ -6,7 +6,7 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-from yaml import dump
+from thirdparty.yaml import dump
 
 from template import Output
 

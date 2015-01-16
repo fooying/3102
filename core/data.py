@@ -6,7 +6,7 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-from attrdict import AttrDict
+from thirdparty.attrdict import AttrDict
 
 # 配置存储
 conf = AttrDict()

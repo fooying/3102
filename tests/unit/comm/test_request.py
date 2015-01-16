@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import requests
+from thirdparty import requests
 
 from unittest import TestCase
-from request import Req
+from comm.request import Req
 
 
 class Request(TestCase):

@@ -8,8 +8,9 @@ Mail:f00y1n9[at]gmail.com
 
 import random
 import logging
-import requests
-from gevent.monkey import patch_all
+
+from thirdparty import requests
+from thirdparty.gevent.monkey import patch_all
 
 from coroutine import WorkerPool
 
