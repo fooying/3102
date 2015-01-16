@@ -1,5 +1,0 @@
-attrdict
-gevent
-requests
-pyyaml
-dnspython

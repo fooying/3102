@@ -60,6 +60,7 @@ onerepeat:
 ### 可以使用的方法
 * 具体参考comm目录下的文件与方法
 * from comm.文件名 import 方法
+* 使用的第三方模块请放置于thirdparty目录,并通过thirdparty.module的方式引用
 
 ### 插件测试用例
 * 进入tests下对应单元或功能测试目录下创建对应插件目录,编写测试用例

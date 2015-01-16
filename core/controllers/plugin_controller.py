@@ -8,10 +8,10 @@ Mail:f00y1n9[at]gmail.com
 
 import os
 import yaml
-import gevent
 import logging
 
-from gevent.monkey import patch_all
+from thirdparty import gevent
+from thirdparty.gevent.monkey import patch_all
 
 from core.data import kb
 from core.data import conf
