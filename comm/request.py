@@ -31,9 +31,6 @@ def request_patch():
                 self.encoding = encodings[0]
             else:
                 self.encoding = self.apparent_encoding
-            _content = _content.decode(self.encoding, 'replace')
-            _content = _content.encode('utf8', 'replace')
-            self._content = _content
         return _content
     requests.models.Response.content = property(content)
 

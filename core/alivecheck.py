@@ -30,7 +30,7 @@ class AliveCheck(object):
 
     def __load_targets(self, target, title_regex):
         try:
-            req = self.req.request('GET', 'http://' + target['domain'], timeout=5)
+            req = self.req.request('GET', 'http://' + target['domain'])
         except Exception, e:
             pass
         else:
@@ -39,7 +39,8 @@ class AliveCheck(object):
             if req.status_code == 200:
                 content = req.content
                 title_match = title_regex.search(content)
-                target['title'] = title_match.group(1) if title_match else 'failed'
+                title = title_match.group(1) if title_match else 'failed'
+                target['title'] = title.decode(req.encoding, 'ignore').encode('utf-8', 'ignore') if req.encoding else title
 
     def __init_targets(self):
         for key in ['root_domain', 'ip', 'domain']:
