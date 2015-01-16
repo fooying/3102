@@ -13,29 +13,21 @@
 * 动态调度,自动回收结果并做判断及下发新任务进行插件的执行处理
 * 系统信号捕获,在某插件卡死情况下,可以Ctrl+C结束执行,可捕获并输出已有结果
 
-### 安装与开发
-#### 安装
+### 使用与开发
+#### 使用
+* 3102暂时只支持Python版本2.6.x和2.7.x
+* 查看帮助信息
 ```bash
-$ sudo apt-get install python-virtualenv
-$ sudo apt-get install python-setuptools
-$ easy_install pip
+$ python run3102.py -h
 ```
-3102暂时只支持Python版本2.6.x和2.7.x
-
+* 最简单的使用命令
 ```bash
-$ git clone git@github.com:fooying/3102.git
-$ cd 3102
-$ virtualenv venv
-$ source venv/bin/activate
-$ pip install -U pip
-$ pip install -r requirement.txt
+$ python run3102.py -t 目标domain/ip
 ```
 
 #### 参与开发
-```bash
-$ cd 3102
-$ source venv/bin/activate
-```
+* 请将使用的第三方模块库置于thirdparty目录
+
 * 插件开发:[docs/plugins/README.md](docs/plugins/README.md)
 * 结果输出模板开发:[docs/output/README.md](docs/output/README.md)
 
