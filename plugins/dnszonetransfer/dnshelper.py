@@ -20,9 +20,9 @@
 import re
 import socket
 
-from thirdparty import dns.query
-from thirdparty import dns.resolver
-from thirdparty import dns.reversename
+from thirdparty.dns import query as dns_query
+from thirdparty.dns import resolver as dns_resolver
+from thirdparty.dns import reversename as dns_reversename
 from thirdparty.dns.zone import *
 from thirdparty.dns.dnssec import algorithm_to_text
 
@@ -35,10 +35,10 @@ class DnsHelper:
     def __init__(self, domain, ns_server=None, request_timeout=3.0, ):
         self._domain = domain
         if ns_server:
-            self._res = dns.resolver.Resolver(configure=False)
+            self._res = dns_resolver.Resolver(configure=False)
             self._res.nameservers = [ns_server]
         else:
-            self._res = dns.resolver.Resolver(configure=True)
+            self._res = dns_resolver.Resolver(configure=True)
         # Set timing
         self._res.timeout = request_timeout
         self._res.lifetime = request_timeout
@@ -64,10 +64,10 @@ class DnsHelper:
         Function for performing general resolution types returning the RDATA
         """
         if ns:
-            res = dns.resolver.Resolver(configure=False)
+            res = dns_resolver.Resolver(configure=False)
             res.nameservers = [ns]
         else:
-            res = dns.resolver.Resolver(configure=True)
+            res = dns_resolver.Resolver(configure=True)
 
         answers = res.query(target, type)
         return answers
@@ -227,7 +227,7 @@ class DnsHelper:
         Function for resolving PTR Record given it's IPv4 or IPv6 Address.
         """
         found_ptr = []
-        n = dns.reversename.from_address(ipaddress)
+        n = dns_reversename.from_address(ipaddress)
         try:
             answers = self._res.query(n, 'PTR')
             for a in answers:
@@ -333,7 +333,7 @@ class DnsHelper:
             if True:
 
                 try:
-                    zone = self.from_wire(dns.query.xfr(ns_srv, self._domain))
+                    zone = self.from_wire(dns_query.xfr(ns_srv, self._domain))
                     zone_records.append({'type': 'info', 'zone_transfer': 'success', 'ns_server': ns_srv})
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.SOA):
                         for rdata in rdataset:
