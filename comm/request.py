@@ -31,9 +31,6 @@ def request_patch():
                 self.encoding = encodings[0]
             else:
                 self.encoding = self.apparent_encoding
-            _content = _content.decode(self.encoding, 'replace')
-            _content = _content.encode('utf8', 'replace')
-            self._content = _content
         return _content
     requests.models.Response.content = property(content)
 
@@ -41,6 +38,7 @@ request_patch()
 
 
 class Req(object):
+
     def __init__(self, timeout=10, proxy_list=[], verify_proxy=False):
         self.timeout = timeout
         self.verify = False

@@ -6,7 +6,7 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-#https://publicsuffix.org/list/effective_tld_names.dat
+# https://publicsuffix.org/list/effective_tld_names.dat
 
 SUFFIXS = set([
     "ac",

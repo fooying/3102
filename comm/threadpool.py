@@ -12,6 +12,7 @@ from six.moves import range
 
 
 class ThreadPool(object):
+
     def __init__(self, pool_size=10, queue_size=0):
         self.task_queue = Queue.Queue(queue_size)
         self.workers = []
@@ -37,6 +38,7 @@ class ThreadPool(object):
 
 
 class Work(threading.Thread):
+
     def __init__(self, task_queue):
         threading.Thread.__init__(self)
         self.task_queue = task_queue

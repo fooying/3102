@@ -19,7 +19,7 @@ INDENT = ' ' * 2
 USAGE = os.linesep.join([
     '',
     '%seg1: python run3102.py --target ' % INDENT,
-    ])
+])
 
 
 def parse(args=None):
@@ -39,12 +39,11 @@ def parse(args=None):
     )
     available_plugins = PluginController.get_available_plugins().keys()
     parser.add_argument(
-        '-p', '--plugins', metavar='plugin',
-        dest='plugins_specific', nargs='+',
-        default=None,
+        '-p', '--plugins', metavar='PLUGIN',
+        dest='plugins_specific', default=None,
         help=_format_help([
             'Specify the plugins',
-            'avaliable: '+' ,'.join(available_plugins),
+            'avaliable: ' + ','.join(available_plugins),
         ])
     )
     parser.add_argument(

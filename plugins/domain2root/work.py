@@ -12,6 +12,7 @@ from comm.utils import is_ip, is_url
 
 
 class domain2root(Plugin):
+
     def __init__(self):
         super(domain2root, self).__init__('domain2root')
 

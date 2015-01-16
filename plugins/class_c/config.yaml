@@ -1,0 +1,7 @@
+enable: true
+onerepeat: False
+input: ['ip']
+output: ['ip']
+descript: C段扫描
+name: class_c
+chinesename: C段扫描

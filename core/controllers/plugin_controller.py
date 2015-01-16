@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
+import re
 import yaml
 import logging
 
@@ -23,6 +24,7 @@ logger = logging.getLogger('3102')
 
 
 class PluginController(object):
+
     def __init__(self):
         self.exit_flag = False
         self.wp = WorkerPool()
@@ -56,7 +58,7 @@ class PluginController(object):
         """
         plugins_available = conf.plugins_available.keys()
         if plugins_sepcific:
-            for plugin in plugins_sepcific:
+            for plugin in re.split(r'[,|;]', plugins_sepcific):
                 if plugin in plugins_available:
                     self.__load_plugin(plugin)
                 else:
@@ -125,7 +127,7 @@ class PluginController(object):
 
     def __init_plugin_progress(self, plugin, domain):
         key = '%s_%s' % (plugin, domain)
-        kb.progress[key] = {'status':'wait', 'start_time':0, 'end_time':0}
+        kb.progress[key] = {'status': 'wait', 'start_time': 0, 'end_time': 0}
 
     def run_job(self):
         self.wp.run()
