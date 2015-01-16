@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
+import re
 import yaml
 import logging
 
@@ -57,7 +58,7 @@ class PluginController(object):
         """
         plugins_available = conf.plugins_available.keys()
         if plugins_sepcific:
-            for plugin in plugins_sepcific:
+            for plugin in re.split(r'[,|;]', plugins_sepcific):
                 if plugin in plugins_available:
                     self.__load_plugin(plugin)
                 else:

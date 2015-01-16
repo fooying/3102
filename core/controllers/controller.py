@@ -83,7 +83,7 @@ def start(args):
 
         plugin_controller = PluginController()
         plugin_controller.plugin_init(args.plugins_specific)
-        logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
+        logger.info('Loaded plugins: %s' % ', '.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)
