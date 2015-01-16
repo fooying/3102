@@ -14,6 +14,7 @@ patch_all()
 
 
 class WorkerPool(object):
+
     def __init__(self, pool_size=5000):
         self.job_pool = Pool(size=pool_size)
         self.result = Queue()

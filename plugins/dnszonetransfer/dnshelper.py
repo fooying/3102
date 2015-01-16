@@ -32,6 +32,7 @@ DNS_QUERY_TIMEOUT = 4.0
 
 
 class DnsHelper:
+
     def __init__(self, domain, ns_server=None, request_timeout=3.0, ):
         self._domain = domain
         if ns_server:
@@ -134,7 +135,7 @@ class DnsHelper:
                 ipv4_answers = self._res.query(name, 'A')
                 for ardata in ipv4_answers:
                     mx_records.append(['MX', name[:-1], ardata.address,
-                                      rdata.preference])
+                                       rdata.preference])
             except:
                 pass
         try:
@@ -143,7 +144,7 @@ class DnsHelper:
                 ipv6_answers = self._res.query(name, 'AAAA')
                 for ardata in ipv6_answers:
                     mx_records.append(['MX', name[:-1], ardata.address,
-                                      rdata.preference])
+                                       rdata.preference])
             return mx_records
         except:
             return mx_records
@@ -245,17 +246,17 @@ class DnsHelper:
             answers = self._res.query(host, 'SRV')
             for a in answers:
                 target = a.target.to_text()
-                #print a.target.to_text()
+                # print a.target.to_text()
                 ips = self.get_ip(target[:-1])
                 if ips:
                     for ip in ips:
                         if re.search('(^A|AAAA)', ip[0]):
                             record.append(['SRV', host, a.target.to_text()[:-1], ip[2],
-                                          str(a.port), str(a.weight)])
+                                           str(a.port), str(a.weight)])
 
                 else:
                     record.append(['SRV', host, a.target.to_text()[:-1], "no_ip",
-                                  str(a.port), str(a.weight)])
+                                   str(a.port), str(a.weight)])
         except:
             return record
         return record
@@ -329,7 +330,7 @@ class DnsHelper:
         ns_records = list(set(ns_records))
         # Test each NS Server
         for ns_srv in ns_records:
-            #if self.check_tcp_dns(ns_srv):
+            # if self.check_tcp_dns(ns_srv):
             if True:
 
                 try:
@@ -360,15 +361,15 @@ class DnsHelper:
 
                                     if appended:
                                         zone_records.append({'zone_server': ns_srv, 'type': 'NS',
-                                                        'target': target, 'address': n_ip[2]})
+                                                             'target': target, 'address': n_ip[2]})
                                     else:
                                         zone_records.append({'zone_server': ns_srv, 'type': 'NS',
-                                                        'target': rdata.target.to_text()[:-1], 'address': n_ip[2]})
+                                                             'target': rdata.target.to_text()[:-1], 'address': n_ip[2]})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.TXT):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'TXT',
-                                                'strings': ''.join(rdata.strings)})
+                                                 'strings': ''.join(rdata.strings)})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.SPF):
                         for rdata in rdataset:
@@ -393,14 +394,14 @@ class DnsHelper:
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.AAAA):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'AAAA',
-                                                'name': str(name) + '.' + self._domain,
-                                                'address': rdata.address})
+                                                 'name': str(name) + '.' + self._domain,
+                                                 'address': rdata.address})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.A):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'A',
-                                                'name': str(name) + '.' + self._domain,
-                                                'address': rdata.address})
+                                                 'name': str(name) + '.' + self._domain,
+                                                 'address': rdata.address})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.CNAME):
                         for rdata in rdataset:
@@ -418,49 +419,49 @@ class DnsHelper:
                                 for t_ip in self.get_ip(rdata.target.to_text()):
                                     if re.search(r'^A', t_ip[0]):
                                         zone_records.append({'zone_server': ns_srv, 'type': 'SRV',
-                                                            'name': str(name) + '.' + self._domain,
-                                                            'target': rdata.target.to_text()[:-1],
-                                                            'address': t_ip[2],
-                                                            'port': str(rdata.port),
-                                                            'weight': str(rdata.weight)})
+                                                             'name': str(name) + '.' + self._domain,
+                                                             'target': rdata.target.to_text()[:-1],
+                                                             'address': t_ip[2],
+                                                             'port': str(rdata.port),
+                                                             'weight': str(rdata.weight)})
                             else:
                                 zone_records.append({'zone_server': ns_srv, 'type': 'SRV',
-                                                    'name': str(name) + '.' + self._domain,
-                                                    'target': rdata.target.to_text()[:-1],
-                                                    'address': "no_ip",
-                                                    'port': str(rdata.port),
-                                                    'weight': str(rdata.weight)})
+                                                     'name': str(name) + '.' + self._domain,
+                                                     'target': rdata.target.to_text()[:-1],
+                                                     'address': "no_ip",
+                                                     'port': str(rdata.port),
+                                                     'weight': str(rdata.weight)})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.HINFO):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'HINFO',
-                                                'cpu': rdata.cpu, 'os': rdata.os})
+                                                 'cpu': rdata.cpu, 'os': rdata.os})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.WKS):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'WKS',
-                                                'address': rdata.address, 'bitmap': rdata.bitmap,
-                                                'protocol': rdata.protocol})
+                                                 'address': rdata.address, 'bitmap': rdata.bitmap,
+                                                 'protocol': rdata.protocol})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.RP):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'RP',
-                                                'mbox': rdata.mbox.to_text(), 'txt': rdata.txt.to_text()})
+                                                 'mbox': rdata.mbox.to_text(), 'txt': rdata.txt.to_text()})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.AFSDB):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'AFSDB',
-                                                'subtype': str(rdata.subtype), 'hostname': rdata.hostname.to_text()})
+                                                 'subtype': str(rdata.subtype), 'hostname': rdata.hostname.to_text()})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.LOC):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'LOC',
-                                                'coordinates': rdata.to_text()})
+                                                 'coordinates': rdata.to_text()})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.X25):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'X25',
-                                                'address': rdata.address})
+                                                 'address': rdata.address})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.ISDN):
                         for rdata in rdataset:
@@ -497,15 +498,15 @@ class DnsHelper:
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.SIG):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'SIG',
-                                                'algorithm': algorithm_to_text(rdata.algorithm),
-                                                'expiration': rdata.expiration,
-                                                'inception': rdata.inception,
-                                                'key_tag': rdata.key_tag,
-                                                'labels': rdata.labels,
-                                                'original_ttl': rdata.original_ttl,
-                                                'signature': rdata.signature,
-                                                'signer': str(rdata.signer),
-                                                'type_covered': rdata.type_covered})
+                                                 'algorithm': algorithm_to_text(rdata.algorithm),
+                                                 'expiration': rdata.expiration,
+                                                 'inception': rdata.inception,
+                                                 'key_tag': rdata.key_tag,
+                                                 'labels': rdata.labels,
+                                                 'original_ttl': rdata.original_ttl,
+                                                 'signature': rdata.signature,
+                                                 'signer': str(rdata.signer),
+                                                 'type_covered': rdata.type_covered})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.RRSIG):
                         for rdata in rdataset:
@@ -531,10 +532,10 @@ class DnsHelper:
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.DS):
                         for rdata in rdataset:
                             zone_records.append({'zone_server': ns_srv, 'type': 'DS',
-                                                'algorithm': algorithm_to_text(rdata.algorithm),
-                                                'digest': dns.rdata._hexify(rdata.digest),
-                                                'digest_type': rdata.digest_type,
-                                                'key_tag': rdata.key_tag})
+                                                 'algorithm': algorithm_to_text(rdata.algorithm),
+                                                 'digest': dns.rdata._hexify(rdata.digest),
+                                                 'digest_type': rdata.digest_type,
+                                                 'key_tag': rdata.key_tag})
 
                     for (name, rdataset) in zone.iterate_rdatasets(dns.rdatatype.NSEC):
                         for rdata in rdataset:
@@ -574,17 +575,18 @@ class DnsHelper:
 
 def main():
     #resolver = DnsHelper('qq.com')
-    #print(resolver.get_a("www.qq.com"))
-    #print(resolver.get_aaaa('baddata-cname-to-baddata-aaaa.test.dnssec-tools.org'))
-    #print(resolver.get_mx())
-    #print(resolver.get_ip('www.google.com'))
-    #print(resolver.get_txt("3rdparty1._spf.paypal.com"))
-    #print(resolver.get_ns())
-    #print(resolver.get_soa())
-    #print(resolver.get_txt())
-    #print(resolver.get_spf())
+    # print(resolver.get_a("www.qq.com"))
+    # print(resolver.get_aaaa('baddata-cname-to-baddata-aaaa.test.dnssec-tools.org'))
+    # print(resolver.get_mx())
+    # print(resolver.get_ip('www.google.com'))
+    # print(resolver.get_txt("3rdparty1._spf.paypal.com"))
+    # print(resolver.get_ns())
+    # print(resolver.get_soa())
+    # print(resolver.get_txt())
+    # print(resolver.get_spf())
     ##tresolver = DnsHelper('weightmans.com')
-    import pdb;pdb.set_trace()
+    import pdb
+    pdb.set_trace()
     tresolver = DnsHelper('scanv.com')
     print(tresolver.zone_transfer())
 

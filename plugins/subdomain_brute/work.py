@@ -17,6 +17,7 @@ from comm.coroutine import WorkerPool
 
 
 class subdomain_brute(Plugin):
+
     def __init__(self):
         super(subdomain_brute, self).__init__('subdomain_brute')
 
@@ -66,4 +67,3 @@ class subdomain_brute(Plugin):
             pass
         else:
             result.append(subdomain)
-

@@ -19,6 +19,7 @@ logger = logging.getLogger('3102')
 
 
 class Output(object):
+
     def __init__(self, domain, output_format=DEFAULT_FORMAT, output_file=None):
         self.output_format = output_format
         self.template_path = settings.OUTPUT_TEMPLATE_PATH

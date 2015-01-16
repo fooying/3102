@@ -30,6 +30,7 @@ ICP_API_CONFIG = {
 
 
 class icp(Plugin):
+
     def __init__(self):
         super(icp, self).__init__('icp')
         self.config = ICP_API_CONFIG
@@ -41,7 +42,7 @@ class icp(Plugin):
             text = self.req.request('GET', url).text
         except:
             text = ''
-        result = re.findall(regx, text, re.I|re.S|re.X)
+        result = re.findall(regx, text, re.I | re.S | re.X)
         return result
 
     def query_zt_by_domain(self, domain):

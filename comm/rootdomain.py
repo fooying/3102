@@ -27,7 +27,7 @@ class Domain:
     @classmethod
     def get_domain(cls, url):
         url = cls().url_format(url)
-        domain = url[:url.index("/")+1] if "/" in url else url
+        domain = url[:url.index("/") + 1] if "/" in url else url
         return domain
 
     @classmethod

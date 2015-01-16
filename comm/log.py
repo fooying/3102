@@ -52,7 +52,7 @@ class ColorFormatter(logging.Formatter):
         if self.use_color and levelname in self.COLORS:
             fore_color = 30 + self.COLORS[levelname]
             fore_symbol = self.SYMBOLS[levelname]
-            format_str = self.COLOR_SEQ %(fore_color, fore_symbol, format_str)
+            format_str = self.COLOR_SEQ % (fore_color, fore_symbol, format_str)
         return format_str
 
 
