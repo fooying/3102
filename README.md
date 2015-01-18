@@ -16,14 +16,23 @@
 ### 使用与开发
 #### 使用
 * 3102暂时只支持Python版本2.6.x和2.7.x
-* 查看帮助信息
+* 查看帮助信息  
 ```bash
 $ python run3102.py -h
 ```
-* 最简单的使用命令
-```bash
-$ python run3102.py -t 目标domain/ip
-```
+* 使用例子
+  * 基本用法  
+  ```bash
+  $ python run3102.py -t 目标domain/ip
+  ```
+  * 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中:  
+  ```bash
+  $ python run3102.py -t www.example.com -o ./output.csv
+  ```
+  * 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:  
+  ```bash
+  $ python run3102.py -t www.example.com -p domain2ip domain2root icp -o ./output.csv`
+  ```
 
 #### 参与开发
 * 请将使用的第三方模块库置于thirdparty目录
@@ -41,16 +50,7 @@ $ python run3102.py -t 目标domain/ip
 ### 感谢
 * 感谢名单 [docs/THANKS.md](docs/THANKS.md)
 
-### 使用说明
-#### Example
-* 扫描www.example.com相关的站点/ip:  
-`python run3102.py -t www.example.com`
-* 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中:  
-`python run3102.py -t www.example.com -o ./output.csv`
-* 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:
-`python run3102.py -t www.example.com -p domain2ip domain2root icp -o ./output.csv`
-
-#### 详细选项说明
+### 详细选项说明
 ```
 
                  _____  __  _____  _____
