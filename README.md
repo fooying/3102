@@ -42,6 +42,15 @@ $ python run3102.py -t 目标domain/ip
 * 感谢名单 [docs/THANKS.md](docs/THANKS.md)
 
 ### 使用说明
+#### Example
+* 扫描www.example.com相关的站点/ip:  
+`python run3102.py -t www.example.com`
+* 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中:  
+`python run3102.py -t www.example.com -o ./output.csv`
+* 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:
+`python run3102.py -t www.example.com -p domain2ip domain2root icp -o output.csv`
+
+#### 详细选项说明
 ```
 
                  _____  __  _____  _____
@@ -55,13 +64,17 @@ $ python run3102.py -t 目标domain/ip
                By Fooying(www.fooying.com)
 
 usage:
-  eg1: python run3102.py --target
+  eg1: python run3102.py -t www.example.com
 
 optional arguments:
   -h, --help            Show this help message and exit
   -V, --version         show program's version number and exit
   -t TARGET, --target TARGET
                         Target domain/rootdomain/ip
+                          (DEFAULT: None)
+  -p plugin [plugin ...], --plugins plugin [plugin ...]
+                        Specify the plugins
+                        avaliable: domain2ip ,domain2root ,icp ,dnszonetransfer ,ip2domain ,subdomain ,subdomain_brute
                           (DEFAULT: None)
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
