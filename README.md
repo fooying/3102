@@ -31,7 +31,7 @@ $ python run3102.py -h
   ```
   * 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:  
   ```bash
-  $ python run3102.py -t www.example.com -p domain2ip domain2root icp -o ./output.csv`
+  $ python run3102.py -t www.example.com -p domain2ip domain2root icp -o ./output.csv
   ```
 
 #### 参与开发
