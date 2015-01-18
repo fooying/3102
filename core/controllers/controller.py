@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 import sys
 if 'threading' in sys.modules:
     del sys.modules['threading']
-from thirdparty.gevent.monkey import patch_all
+from gevent.monkey import patch_all
 patch_all()
 
 import os

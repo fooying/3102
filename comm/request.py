@@ -10,7 +10,7 @@ import random
 import logging
 
 from thirdparty import requests
-from thirdparty.gevent.monkey import patch_all
+from gevent.monkey import patch_all
 
 from coroutine import WorkerPool
 

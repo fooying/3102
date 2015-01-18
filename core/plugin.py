@@ -10,7 +10,7 @@ import os
 import time
 import logging
 
-from thirdparty.gevent.monkey import patch_all
+from gevent.monkey import patch_all
 
 from core.data import kb
 from core.data import api
