@@ -76,11 +76,11 @@ def add_task_and_save(pc, one_result):
 
 
 def save_result(one_result, domain, task_type):
-        want_save_result = copy.deepcopy(one_result)
-        want_save_result.update({'domain': domain})
-        want_save_result.pop('result')
-        result[task_type][domain] = want_save_result
-        kb.status.result_num += 1
+    want_save_result = copy.deepcopy(one_result)
+    want_save_result.update({'domain': domain})
+    want_save_result.pop('result')
+    result[task_type][domain] = want_save_result
+    kb.status.result_num += 1
 
 
 def get_all_job_status():
