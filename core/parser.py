@@ -18,7 +18,7 @@ VERSION_INFO = '3102 Version:%s, by Fooying' % VERSION
 INDENT = ' ' * 2
 USAGE = os.linesep.join([
     '',
-    '%seg1: python run3102.py --target ' % INDENT,
+    '%seg1: python run3102.py -t www.example.com ' % INDENT,
     ])
 
 
