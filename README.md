@@ -48,7 +48,7 @@ $ python run3102.py -t 目标domain/ip
 * 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中:  
 `python run3102.py -t www.example.com -o ./output.csv`
 * 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:
-`python run3102.py -t www.example.com -p domain2ip domain2root icp -o output.csv`
+`python run3102.py -t www.example.com -p domain2ip domain2root icp -o ./output.csv`
 
 #### 详细选项说明
 ```
