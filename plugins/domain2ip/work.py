@@ -12,6 +12,7 @@ from core.plugin import Plugin
 
 
 class domain2ip(Plugin):
+
     def __init__(self):
         super(domain2ip, self).__init__('domain2ip')
 

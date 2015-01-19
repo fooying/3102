@@ -10,7 +10,7 @@ from thirdparty.attrdict import AttrDict
 
 # 配置存储
 conf = AttrDict()
-conf.plugins_available = AttrDict() # 加载plugins目录下, config.yaml中`enable`为True的plugin
+conf.plugins_available = AttrDict()  # 加载plugins目录下, config.yaml中`enable`为True的plugin
 conf.plugins_load = AttrDict()      # 加载使用的插件配置
 conf.reg_plugins = AttrDict()
 conf.reg_plugins.domain = set([])
@@ -29,7 +29,7 @@ kb.status.level = 0  # 当前进行层级
 kb.status.result_num = 0  # 结果数
 
 # 用于存储每个任务的进度详情
-kb.progress =  AttrDict()
+kb.progress = AttrDict()
 
 # 全局接口
 api = AttrDict()

@@ -22,7 +22,7 @@ class AliveCheck(object):
 
     def __check_targets(self):
         self.wp = WorkerPool()
-        title_regex = re.compile("<title>(.*?)<\/title>", re.DOTALL|re.M)
+        title_regex = re.compile("<title>(.*?)<\/title>", re.DOTALL | re.M)
         for key in ['root_domain', 'ip', 'domain']:
             for item in result[key]:
                 self.wp.add_job(self.__load_targets, result[key][item], title_regex)

@@ -19,7 +19,7 @@ INDENT = ' ' * 2
 USAGE = os.linesep.join([
     '',
     '%seg1: python run3102.py -t www.example.com ' % INDENT,
-    ])
+])
 
 
 def parse(args=None):
@@ -44,7 +44,7 @@ def parse(args=None):
         default=None,
         help=_format_help([
             'Specify the plugins',
-            'avaliable: '+' ,'.join(available_plugins),
+            'avaliable: ' + ' ,'.join(available_plugins),
         ])
     )
     parser.add_argument(
