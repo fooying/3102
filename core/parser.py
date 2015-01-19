@@ -44,7 +44,7 @@ def parse(args=None):
         default=None,
         help=_format_help([
             'Specify the plugins',
-            'avaliable: ' + ' ,'.join(available_plugins),
+            'avaliable: ' + ' '.join(available_plugins),
         ])
     )
     parser.add_argument(
