@@ -41,6 +41,7 @@ request_patch()
 
 
 class Req(object):
+
     def __init__(self, timeout=10, proxy_list=[], verify_proxy=False):
         self.timeout = timeout
         self.verify = False

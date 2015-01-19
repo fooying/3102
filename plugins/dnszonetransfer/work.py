@@ -12,6 +12,7 @@ from dnshelper import DnsHelper
 
 
 class dnszonetransfer(Plugin):
+
     def __init__(self):
         super(dnszonetransfer, self).__init__('dnszonetransfer')
 

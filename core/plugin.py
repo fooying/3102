@@ -20,6 +20,7 @@ patch_all()
 
 
 class Plugin(object):
+
     def __init__(self, name):
         self.plugin_path = os.path.join(conf.settings.PLUGINS_PATH, name)
         self.logger = logging.getLogger('3102')
