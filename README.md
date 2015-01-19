@@ -15,7 +15,8 @@
 
 ### 使用与开发
 #### 使用
-* 3102暂时只支持Python版本2.6.x和2.7.x
+* 3102暂时只支持Python版本2.6.x和2.7.x  
+* 3102需要gevent库的支持,使用前请先使用`pip install gevent`进行安装  
 * 查看帮助信息  
 ```bash
 $ python run3102.py -h

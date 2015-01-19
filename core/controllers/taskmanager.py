@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 import copy
 import logging
 
-from thirdparty import gevent
+import gevent
 
 from core.data import kb
 from core.data import conf

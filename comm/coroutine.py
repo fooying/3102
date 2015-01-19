@@ -6,9 +6,9 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-from thirdparty.gevent.pool import Pool
-from thirdparty.gevent.queue import Queue
-from thirdparty.gevent.monkey import patch_all
+from gevent.pool import Pool
+from gevent.queue import Queue
+from gevent.monkey import patch_all
 
 patch_all()
 
