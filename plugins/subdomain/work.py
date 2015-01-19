@@ -12,6 +12,7 @@ from core.plugin import Plugin
 
 
 class subdomain(Plugin):
+
     def __init__(self):
         super(subdomain, self).__init__('subdomain')
 

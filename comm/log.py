@@ -11,7 +11,9 @@ import sys
 import logging
 
 FORMAT = ("$BOLD[%(asctime)s] [%(levelname)s] %(message)s$RESET")
-SIMPLE_FORMATER = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+SIMPLE_FORMATER = logging.Formatter(
+    '[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S'
+)
 
 
 class CUSTOM_LOGGING:
@@ -52,7 +54,7 @@ class ColorFormatter(logging.Formatter):
         if self.use_color and levelname in self.COLORS:
             fore_color = 30 + self.COLORS[levelname]
             fore_symbol = self.SYMBOLS[levelname]
-            format_str = self.COLOR_SEQ %(fore_color, fore_symbol, format_str)
+            format_str = self.COLOR_SEQ % (fore_color, fore_symbol, format_str)
         return format_str
 
 

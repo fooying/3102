@@ -15,6 +15,7 @@ from comm.utils import get_domain_type
 
 
 class ip2domain(Plugin):
+
     def __init__(self):
         super(ip2domain, self).__init__('ip2domain')
 
@@ -52,7 +53,6 @@ class ip2domain(Plugin):
         super(ip2domain, self).start(domain, domain_type, level)
         url = ('http://cn.bing.com/search?q='
                'ip:%s&first=999999991&FORM=PERE' % domain)
-        result = None
         try:
             html = self.req.request('GET', url).text
         except:
@@ -66,7 +66,7 @@ class ip2domain(Plugin):
             total_num, page_count = self.__get_count(html)
 
             if page_count > 0:
-                for n in range(total_num-1):
+                for n in range(total_num - 1):
                     url = ('http://cn.bing.com/search?q='
                            'ip:%s&first=%s1&FORM=PERE3' % (domain, n))
                     try:

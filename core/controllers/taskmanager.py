@@ -45,8 +45,7 @@ def print_task_status(log=False):
     if log:
         logger.info(msg)
     else:
-        print '\033[1;34m[m] %s\033[1;m\r' % msg,;
-
+        print '\033[1;34m[m] %s\033[1;m\r' % msg,
 
 
 def add_task_and_save(pc, one_result):

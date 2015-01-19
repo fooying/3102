@@ -23,5 +23,6 @@ class OutputCsv(Output):
 
             for group in module_dict:
                 for item in module_dict[group]:
-                    items = [item[_].replace(',', '') if _ == 'title' else item[_] for _ in self.keys]
+                    items = [item[_].replace(',', '') if _ == 'title'
+                             else item[_] for _ in self.keys]
                     f.write(','.join('{}'.format(_) for _ in items) + '\n')

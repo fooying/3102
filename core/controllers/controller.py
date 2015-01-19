@@ -13,7 +13,6 @@ from gevent.monkey import patch_all
 patch_all()
 
 import os
-import time
 import signal
 import logging
 import threading
@@ -44,10 +43,11 @@ def complete():
     print '\n'
     logger.info('output result to file...')
     Output(domain, output_format, output_file).save()
-    logger.log(CUSTOM_LOGGING.good, os.linesep.join(['result count:',
-       '    ip: %s' % len(result.ip),
-       '    domain: %s' % len(result.domain),
-       '    root domain: %s' % len(result.root_domain),
+    logger.log(CUSTOM_LOGGING.good, os.linesep.join([
+        'result count:',
+        '    ip: %s' % len(result.ip),
+        '    domain: %s' % len(result.domain),
+        '    root domain: %s' % len(result.root_domain),
     ]))
     logger.info('Complete 3102!')
 
@@ -84,7 +84,6 @@ def start(args):
         plugin_controller = PluginController()
         plugin_controller.plugin_init(args.plugins_specific)
         logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
-
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)
