@@ -74,7 +74,7 @@ optional arguments:
                           (DEFAULT: None)
   -p plugin [plugin ...], --plugins plugin [plugin ...]
                         Specify the plugins
-                        avaliable: domain2ip ,domain2root ,icp ,dnszonetransfer ,ip2domain ,subdomain ,subdomain_brute
+                        avaliable: domain2ip domain2root icp dnszonetransfer ip2domain subdomain subdomain_brute
                           (DEFAULT: None)
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
@@ -85,7 +85,7 @@ optional arguments:
   --format OUTPUT_FORMAT
                         The format to output result,
                         default list:
-                        csv/txt/json/yaml/html
+                        txt/yaml/json/csv/html
                           (DEFAULT: csv)
   --log_file LOG_FILE   Log file
                           (DEFAULT: None)
