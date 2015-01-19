@@ -10,8 +10,8 @@ import os
 import yaml
 import logging
 
-from thirdparty import gevent
-from thirdparty.gevent.monkey import patch_all
+import gevent
+from gevent.monkey import patch_all
 
 from core.data import kb
 from core.data import conf

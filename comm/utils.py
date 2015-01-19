@@ -8,6 +8,7 @@ Mail:f00y1n9[at]gmail.com
 
 import os
 import re
+import sys
 import logging
 
 from comm.rootdomain import Domain
@@ -120,3 +121,63 @@ def get_proxy_list_by_file(file_path):
     else:
         proxy_list = []
     return proxy_list
+
+# utils copy from sqlmap ;)
+def weAreFrozen():
+    """
+    Returns whether we are frozen via py2exe.
+    This will affect how we find out where we are located.
+    Reference: http://www.py2exe.org/index.cgi/WhereAmI
+    """
+
+    return hasattr(sys, "frozen")
+
+def isListLike(value):
+    """
+    Returns True if the given value is a list-like instance
+
+    >>> isListLike([1, 2, 3])
+    True
+    >>> isListLike(u'2')
+    False
+    """
+
+    return isinstance(value, (list, tuple, set))
+
+def getUnicode(value, encoding=None, noneToNull=False):
+    """
+    Return the unicode representation of the supplied value:
+
+    >>> getUnicode(u'test')
+    u'test'
+    >>> getUnicode('test')
+    u'test'
+    >>> getUnicode(1)
+    u'1'
+    """
+
+    if noneToNull and value is None:
+        return NULL
+
+    if isListLike(value):
+        value = list(getUnicode(_, encoding, noneToNull) for _ in value)
+        return value
+
+    if isinstance(value, unicode):
+        return value
+    elif isinstance(value, basestring):
+        while True:
+            try:
+                return unicode(value, encoding or kb.get("pageEncoding") or UNICODE_ENCODING)
+            except UnicodeDecodeError, ex:
+                try:
+                    return unicode(value, UNICODE_ENCODING)
+                except:
+                    value = value[:ex.start] + "".join(INVALID_UNICODE_CHAR_FORMAT % ord(_) for _ in value[ex.start:ex.end]) + value[ex.end:]
+    else:
+        try:
+            return unicode(value)
+        except UnicodeDecodeError:
+            return unicode(str(value), errors="ignore")  # encoding ignored for non-basestring instances
+
+
