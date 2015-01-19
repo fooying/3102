@@ -35,8 +35,12 @@ class OutputHtml(Output):
                 group = td_dict.setdefault(item['module'], [])
                 group.append(item)
         for item in td_dict:
-            td_str = '\n'.join([self._generate_key(td, _) for _ in td_dict[item]])
-            tables += self._table_base % (self._reindent(th_str, 4), self._reindent(td_str, 4))
+            td_str = '\n'.join(
+                [self._generate_key(td, _) for _ in td_dict[item]]
+            )
+            tables += self._table_base % (
+                self._reindent(th_str, 4), self._reindent(td_str, 4)
+            )
         html = self._html_base % self._reindent(tables, 16)
         return html
 
@@ -44,7 +48,8 @@ class OutputHtml(Output):
         content = template
         for key in self._extract_vars(template):
             if key not in context:
-                raise ValueError("%s is missing from the template context" % key)
+                error_msg = "%s is missing from the template context" % key
+                raise ValueError(error_msg)
             content = content.replace("{{ %s }}" % key, str(context[key]))
         return content
 
@@ -68,7 +73,6 @@ class OutputHtml(Output):
     </tbody>
     """
 
-
     _html_base = """\
     <!DOCTYPE html>
     <html lang="zh-cn">
@@ -77,7 +81,7 @@ class OutputHtml(Output):
             <title></title>
             <style type="text/css">
             caption{padding-top:8px;padding-bottom:8px;color:#777;text-align:left}th{text-align:left}.table{width:100%%;max-width:100%%;margin-bottom:20px}.table>thead>tr>th,.table>tbody>tr>th,.table>tfoot>tr>th,.table>thead>tr>td,.table>tbody>tr>td,.table>tfoot>tr>td{padding:8px;line-height:1.42857143;vertical-align:top;border-top:1px solid #ddd}.table>thead>tr>th{vertical-align:bottom;border-bottom:2px solid #ddd}
-            </style> 
+            </style>
         </head>
         <body>
             <div class="container">

@@ -10,7 +10,7 @@ from comm.request import Req
 class Request(TestCase):
     def setUp(self):
         proxy = [
-                ('http', 'http://202.109.163.75:8085'),
+            ('http', 'http://202.109.163.75:8085'),
             ('http', 'http://10.10.1.1:123')
         ]
         self.r = Req(proxy_list=proxy, verify_proxy=True)
@@ -34,4 +34,3 @@ class Request(TestCase):
             assert True
         else:
             assert False
-

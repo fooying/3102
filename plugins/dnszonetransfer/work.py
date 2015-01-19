@@ -18,13 +18,12 @@ class dnszonetransfer(Plugin):
 
     def start(self, domain, domain_type, level):
         super(dnszonetransfer, self).start(domain, domain_type, level)
-        result = None
         try:
             resolver = DnsHelper(domain)
             mx_list = resolver.get_mx()
             soa_list = resolver.get_soa()
             txt_list = resolver.get_txt()
-            #spf_list = resolver.get_spf()
+            # spf_list = resolver.get_spf()
             transfer_list = resolver.zone_transfer()
         except:
             pass
