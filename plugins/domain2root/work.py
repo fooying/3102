@@ -8,7 +8,6 @@ Mail:f00y1n9[at]gmail.com
 
 from core.plugin import Plugin
 from comm.rootdomain import Domain
-from comm.utils import is_ip, is_url
 
 
 class domain2root(Plugin):

@@ -25,4 +25,3 @@ class Output(object):
             for item in self.result[key].values():
                 if item.keys():
                     return item.keys()
-

@@ -11,7 +11,9 @@ import sys
 import logging
 
 FORMAT = ("$BOLD[%(asctime)s] [%(levelname)s] %(message)s$RESET")
-SIMPLE_FORMATER = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+SIMPLE_FORMATER = logging.Formatter(
+    '[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S'
+)
 
 
 class CUSTOM_LOGGING:

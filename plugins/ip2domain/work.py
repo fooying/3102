@@ -53,7 +53,6 @@ class ip2domain(Plugin):
         super(ip2domain, self).start(domain, domain_type, level)
         url = ('http://cn.bing.com/search?q='
                'ip:%s&first=999999991&FORM=PERE' % domain)
-        result = None
         try:
             html = self.req.request('GET', url).text
         except:

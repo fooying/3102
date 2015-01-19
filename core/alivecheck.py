@@ -7,11 +7,10 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import re
-from thirdparty.gevent.monkey import patch_all
 
-from comm.coroutine import WorkerPool
-from core.data import result
 from core.data import api
+from core.data import result
+from comm.coroutine import WorkerPool
 
 
 class AliveCheck(object):
@@ -25,13 +24,18 @@ class AliveCheck(object):
         title_regex = re.compile("<title>(.*?)<\/title>", re.DOTALL | re.M)
         for key in ['root_domain', 'ip', 'domain']:
             for item in result[key]:
-                self.wp.add_job(self.__load_targets, result[key][item], title_regex)
+                self.wp.add_job(
+                    self.__load_targets,
+                    result[key][item],
+                    title_regex
+                )
         self.wp.run()
 
     def __load_targets(self, target, title_regex):
         try:
-            req = self.req.request('GET', 'http://' + target['domain'], timeout=5)
-        except Exception, e:
+            req = self.req.request(
+                'GET', 'http://' + target['domain'], timeout=5)
+        except:
             pass
         else:
             target['status_code'] = req.status_code
