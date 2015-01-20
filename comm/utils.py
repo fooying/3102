@@ -168,11 +168,13 @@ def getUnicode(value, encoding=None, noneToNull=False):
     elif isinstance(value, basestring):
         while True:
             try:
-                return unicode(value, encoding or kb.get("pageEncoding") or UNICODE_ENCODING)
+                return unicode(value, encoding or 'utf8')
             except UnicodeDecodeError, ex:
                 try:
-                    return unicode(value, UNICODE_ENCODING)
+                    return unicode(value, 'utf8')
                 except:
+                    # Format used for representing invalid unicode characters
+                    INVALID_UNICODE_CHAR_FORMAT = r"\?%02x"
                     value = value[:ex.start] + "".join(INVALID_UNICODE_CHAR_FORMAT % ord(_) for _ in value[ex.start:ex.end]) + value[ex.end:]
     else:
         try:
