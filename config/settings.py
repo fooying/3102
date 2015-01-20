@@ -8,35 +8,29 @@ Mail:f00y1n9[at]gmail.com
 
 import os
 import sys
-import platform
+from comm.revision import getRevisionNumber
 
-VERSION = 'v2.0'
+VERSION = "2.1"
+REVISION = getRevisionNumber()
+VERSION_STRING = "3102/%s%s" % (VERSION, "-%s" % REVISION if REVISION else "-nongit-%s" % time.strftime("%Y%m%d", time.gmtime(os.path.getctime(__file__))))
+DESCRIPTION = "Domain/ip Fuzzing tool for vulnerability mining"
+SITE = "http://www.fooying.com"
+ISSUES_PAGE = "https://github.com/fooying/3102/issues"
+GIT_REPOSITORY = "git@github.com:fooying/3102.git"
+GIT_PAGE = "https://github.com/fooying/3102"
 
-START_STR = r'''
+COLOR_VERSION = '\033[01;37m{\033[01;%dm%s\033[01;37m}\033[01;33m\n' % ((31 + hash(REVISION) % 6) if REVISION else 30, VERSION_STRING.split('/')[-1])
+COLOR_DESCRIPTION = '\033[1;32m%s\033[1;m' % (DESCRIPTION + '\n\t    By Fooying (%s)' % SITE)
+
+BANNER = '''\033[01;32m
                  _____  __  _____  _____
-                |____ |/  ||  _  |/ __  \
+                |____ |/  ||  _  |/ __  \       
                     / /`| || |/' |`' / /'
                     \ \ | ||  /| |  / /
                 .___/ /_| |\ |_/ /./ /___
-                \____/ \___/\___/ \_____/
-
-        Domain/ip Fuzzing tool for vulnerability mining
-               By Fooying(www.fooying.com)
-'''
-if sys.stdout.isatty() and platform.system() != 'Windows':
-    START_STR = '\033[1;32m' + START_STR + '\033[1;m'
+                \____/ \___/\___/ \_____/       {color_version}
+        {color_description}
+'''.format(color_version=COLOR_VERSION, color_description=COLOR_DESCRIPTION)
 
 # 允许的输入和输出
 ALLOW_OUTPUT = ALLOW_INPUTS = ['domain', 'root_domain', 'ip']
-
-# 环境路径配置
-dirname = os.path.dirname
-abspath = os.path.abspath
-join = os.path.join
-
-ROOT_PATH = dirname(dirname(abspath(__file__)))
-
-PLUGINS_OPPOSITE_PATH = 'plugins'
-PLUGINS_PATH = join(ROOT_PATH, PLUGINS_OPPOSITE_PATH)
-OUTPUT_TEMPLATE_OPPOSITE_PATH = join('core', 'output', 'templates')
-OUTPUT_TEMPLATE_PATH = join(ROOT_PATH, OUTPUT_TEMPLATE_OPPOSITE_PATH)

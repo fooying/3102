@@ -7,14 +7,15 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
-import yaml
 import logging
+from thirdparty import yaml
 
 import gevent
 from gevent.monkey import patch_all
 
 from core.data import kb
 from core.data import conf
+from core.data import paths
 from config import settings
 from comm.coroutine import WorkerPool
 
@@ -27,17 +28,17 @@ class PluginController(object):
     def __init__(self):
         self.exit_flag = False
         self.wp = WorkerPool()
-        self.plugin_path = settings.PLUGINS_PATH
+        self.plugin_path = paths.PLUGINS_PATH
 
     @classmethod
     def get_available_plugins(cls):
         """
         返回plugins目录下所有enable为true的plugin名称
         """
-        plugin_list = os.listdir(settings.PLUGINS_PATH)
+        plugin_list = os.listdir(paths.PLUGINS_PATH)
         for plugin in plugin_list:
             plugin_config_path = os.path.join(
-                settings.PLUGINS_PATH, plugin, 'config.yaml'
+                paths.PLUGINS_PATH, plugin, 'config.yaml'
             )
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
@@ -82,7 +83,7 @@ class PluginController(object):
         kb.plugins[plugin]['name'] = plugin
         try:
             _import_path = '.'.join(
-                settings.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
+                paths.PLUGINS_OPPOSITE_PATH.split(os.path.sep)
             )
             plugin_path = '%s.%s.work' % (_import_path, plugin)
             _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数

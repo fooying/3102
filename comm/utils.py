@@ -10,8 +10,11 @@ import os
 import re
 import sys
 import logging
+import platform
 
 from comm.rootdomain import Domain
+from config.settings import BANNER
+from core.data import paths
 
 
 def is_ip(ip_str):
@@ -121,6 +124,24 @@ def get_proxy_list_by_file(file_path):
     else:
         proxy_list = []
     return proxy_list
+
+def banner():
+    _ = BANNER
+    if not sys.stdout.isatty() or platform.system() is 'Windows':
+        _ = re.sub("\033.+?m", "", _)
+    print _
+
+def setPaths():
+    """
+    Sets absolute paths for project directories and files
+    """
+
+    paths.THIRDPARTY_PATH = os.path.join(paths.ROOT_PATH, "thirdparty")
+    paths.PLUGINS_OPPOSITE_PATH = "plugins"
+    paths.PLUGINS_PATH = os.path.join(paths.ROOT_PATH, "plugins")
+    paths.OUTPUT_TEMPLATE_OPPOSITE_PATH = os.path.join("core", "output", "templates")
+    paths.OUTPUT_TEMPLATE_PATH = os.path.join(paths.ROOT_PATH, paths.OUTPUT_TEMPLATE_OPPOSITE_PATH)
+
 
 # utils copy from sqlmap ;)
 def weAreFrozen():

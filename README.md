@@ -59,10 +59,10 @@ $ python run3102.py -h
                     / /`| || |/' |`' / /'
                     \ \ | ||  /| |  / /
                 .___/ /_| |\ |_/ /./ /___
-                \____/ \___/\___/ \_____/
+                \____/ \___/\___/ \_____/       {2.1-ef7e093}
 
         Domain/ip Fuzzing tool for vulnerability mining
-               By Fooying(www.fooying.com)
+            By Fooying (http://www.fooying.com)
 
 usage:
   eg1: python run3102.py -t www.example.com
@@ -75,7 +75,8 @@ optional arguments:
                           (DEFAULT: None)
   -p plugin [plugin ...], --plugins plugin [plugin ...]
                         Specify the plugins
-                        avaliable: domain2ip domain2root icp dnszonetransfer ip2domain subdomain subdomain_brute
+                        avaliable: domain2ip domain2root icp dnszonetransfer
+                        ip2domain subdomain subdomain_brute
                           (DEFAULT: None)
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
