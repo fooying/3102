@@ -10,8 +10,10 @@ import os
 import re
 import sys
 import logging
+import platform
 
 from comm.rootdomain import Domain
+from config.settings import BANNER
 
 
 def is_ip(ip_str):
@@ -121,6 +123,12 @@ def get_proxy_list_by_file(file_path):
     else:
         proxy_list = []
     return proxy_list
+
+def banner():
+    _ = BANNER
+    if not sys.stdout.isatty() or platform.system() is 'Windows':
+        _ = re.sub("\033.+?m", "", _)
+    print _
 
 # utils copy from sqlmap ;)
 def weAreFrozen():
