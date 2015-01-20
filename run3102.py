@@ -42,7 +42,6 @@ def main(args=None):
         setPaths()
 
         banner()
-        sys.path.insert(0, paths.THIRDPARTY_PATH)
 
         args = parse()
         start(args)
