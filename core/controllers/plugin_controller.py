@@ -7,8 +7,8 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
-import yaml
 import logging
+from thirdparty import yaml
 
 import gevent
 from gevent.monkey import patch_all
