@@ -39,7 +39,6 @@ class AliveCheck(object):
             pass
         else:
             target['status_code'] = req.status_code
-            # 标题过长情况要不要考虑一下
             if req.status_code == 200:
                 content = req.content
                 title_match = title_regex.search(content)

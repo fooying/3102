@@ -27,6 +27,7 @@ from comm.utils import get_proxy_list_by_file
 
 from config import settings
 from core.data import api
+from core.data import paths
 from core.data import conf
 from core.data import result
 from core.output.output import Output
@@ -35,14 +36,11 @@ from core.controllers.taskmanager import task_monitor
 from core.alivecheck import AliveCheck
 
 logger = logging.getLogger('3102')
-domain = output_file = output_format = None
-plugin_controller = None
-
 
 def complete():
     print '\n'
     logger.info('output result to file...')
-    Output(domain, output_format, output_file).save()
+    Output(conf.domain, conf.output_format, paths.output_file).save()
     logger.log(CUSTOM_LOGGING.good, os.linesep.join([
         'result count:',
         '    ip: %s' % len(result.ip),
@@ -54,18 +52,14 @@ def complete():
 
 def on_signal(signum, frame):
     logger.warning('3102 will exit,signal:%d' % signum)
-    plugin_controller.exit()
+    conf.plugin_controller.exit()
 
 
 def start(args):
-    global output_file
-    global output_format
-    global domain
-    global plugin_controller
-    domain = args.target
-    domain_type = get_domain_type(domain)
+    conf.domain = args.target
+    domain_type = get_domain_type(conf.domain)
     if domain_type in settings.ALLOW_INPUTS:
-        domain = Domain.url_format(domain)
+        conf.domain = Domain.url_format(conf.domain)
 
         # 初始化日志
         log_level = get_log_level(args.log_level)
@@ -74,15 +68,15 @@ def start(args):
         # 初始化配置
         conf.settings = settings
         conf.max_level = args.max_level
-        output_file = args.output_file
-        output_format = args.output_format
+        paths.output_file = args.output_file
+        conf.output_format = args.output_format
         alive_check = args.alive_check
         # 初始化爬虫
         proxy_list = get_proxy_list_by_file(args.proxy_file)
         api.request = Req(args.timeout, proxy_list, args.verify_proxy)
 
-        plugin_controller = PluginController()
-        plugin_controller.plugin_init(args.plugins_specific)
+        conf.plugin_controller = PluginController()
+        conf.plugin_controller.plugin_init(args.plugins_specific)
         logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
@@ -98,17 +92,17 @@ def start(args):
             'level': 0,
             'parent_domain': ''
         }
-        first_target['result'][domain_type].append(domain)
-        plugin_controller.wp.result.put(first_target)
+        first_target['result'][domain_type].append(conf.domain)
+        conf.plugin_controller.wp.result.put(first_target)
 
         # 开启任务监控
         logger.info('start task monitor and plugin...')
-        kwargs = {'pc': plugin_controller}
+        kwargs = {'pc': conf.plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
 
         # 开启插件执行
-        plugin_controller.start()
+        conf.plugin_controller.start()
 
         if alive_check:
             alivecheck = AliveCheck()

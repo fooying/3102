@@ -9,12 +9,18 @@ Mail:f00y1n9[at]gmail.com
 import sys
 import os
 
-from comm.utils import weAreFrozen, getUnicode, banner
+from core.parser import parse
+from core.controllers.controller import start
+from core.data import paths
+from comm.utils import weAreFrozen
+from comm.utils import getUnicode
+from comm.utils import banner
+from comm.utils import setPaths
+
 
 def modulePath():
     """
     This will get us the program's directory, even if we are frozen using py2exe
-
     Reference from sqlmap. (sqlmapproject/sqlmap)[https://github.com/sqlmapproject/sqlmap]
     """
 
@@ -27,12 +33,16 @@ def modulePath():
 
 
 def main(args=None):
-    banner()
-    ROOT_PATH = modulePath()
-    sys.path.insert(0, os.path.join(ROOT_PATH, 'thirdparty'))
+    """
+    Main function of 3102 when running from command line.
+    """
+
     try:
-        from core.parser import parse
-        from core.controllers.controller import start
+        paths.ROOT_PATH = modulePath()
+        setPaths()
+
+        banner()
+        sys.path.insert(0, paths.THIRDPARTY_PATH)
 
         args = parse()
         start(args)

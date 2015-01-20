@@ -11,7 +11,7 @@ import logging
 import tempfile
 import urlparse
 
-from config import settings
+from core.data import paths
 from comm.log import CUSTOM_LOGGING
 
 DEFAULT_FORMAT = 'csv'
@@ -22,7 +22,7 @@ class Output(object):
 
     def __init__(self, domain, output_format=DEFAULT_FORMAT, output_file=None):
         self.output_format = output_format
-        self.template_path = settings.OUTPUT_TEMPLATE_PATH
+        self.template_path = paths.OUTPUT_TEMPLATE_PATH
         self.domain = domain
         self.output_file = output_file
         self.__get_tmp_output_file()
@@ -44,7 +44,7 @@ class Output(object):
     @classmethod
     def get_output_formats(cls):
         formats = set([])
-        file_list = os.listdir(settings.OUTPUT_TEMPLATE_PATH)
+        file_list = os.listdir(paths.OUTPUT_TEMPLATE_PATH)
         for file_name in file_list:
             if file_name.startswith('output_'):
                 output_format = file_name[7:-3] if file_name.endswith('.py')\
@@ -85,7 +85,7 @@ class Output(object):
 
     def __write_result(self):
         import_template_path = '.'.join(
-            settings.OUTPUT_TEMPLATE_OPPOSITE_PATH.split(os.path.sep)
+            paths.OUTPUT_TEMPLATE_OPPOSITE_PATH.split(os.path.sep)
         )
         template_path = '%s.output_%s' % (
             import_template_path, self.output_format

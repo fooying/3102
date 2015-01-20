@@ -17,6 +17,9 @@ conf.reg_plugins.domain = set([])
 conf.reg_plugins.root_domain = set([])
 conf.reg_plugins.ip = set([])
 conf.max_level = 10
+conf.output_format = None
+conf.domain = None
+conf.plugin_controller = None
 
 # 中间数据存储
 kb = AttrDict()
@@ -41,3 +44,6 @@ result = AttrDict()
 result.domain = AttrDict()
 result.ip = AttrDict()
 result.root_domain = AttrDict()
+
+# paths
+paths = AttrDict()

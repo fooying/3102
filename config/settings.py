@@ -34,15 +34,3 @@ BANNER = '''\033[01;32m
 
 # 允许的输入和输出
 ALLOW_OUTPUT = ALLOW_INPUTS = ['domain', 'root_domain', 'ip']
-
-# 环境路径配置
-dirname = os.path.dirname
-abspath = os.path.abspath
-join = os.path.join
-
-ROOT_PATH = dirname(dirname(abspath(__file__)))
-
-PLUGINS_OPPOSITE_PATH = 'plugins'
-PLUGINS_PATH = join(ROOT_PATH, PLUGINS_OPPOSITE_PATH)
-OUTPUT_TEMPLATE_OPPOSITE_PATH = join('core', 'output', 'templates')
-OUTPUT_TEMPLATE_PATH = join(ROOT_PATH, OUTPUT_TEMPLATE_OPPOSITE_PATH)

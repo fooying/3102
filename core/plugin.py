@@ -15,6 +15,7 @@ from gevent.monkey import patch_all
 from core.data import kb
 from core.data import api
 from core.data import conf
+from core.data import paths
 
 patch_all()
 
@@ -22,7 +23,7 @@ patch_all()
 class Plugin(object):
 
     def __init__(self, name):
-        self.plugin_path = os.path.join(conf.settings.PLUGINS_PATH, name)
+        self.plugin_path = os.path.join(paths.PLUGINS_PATH, name)
         self.logger = logging.getLogger('3102')
         self.req = api.request
         self.conf = conf.plugins_load[name]
