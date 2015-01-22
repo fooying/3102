@@ -11,7 +11,7 @@ import tempfile
 import urlparse
 
 from core.data import paths
-from core.data import logger
+from core.data import api
 from comm.log import CUSTOM_LOGGING
 
 DEFAULT_FORMAT = 'csv'
@@ -25,7 +25,7 @@ class Output(object):
         self.domain = domain
         self.output_file = output_file
         self.__get_tmp_output_file()
-        self.logger = logger
+        self.logger = api.logger
         self.__check_file_extension()
 
     def save(self):

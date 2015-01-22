@@ -13,7 +13,7 @@ import gevent
 from core.data import kb
 from core.data import conf
 from core.data import result
-from core.data import logger
+from core.data import api
 from comm.utils import is_intra_ip
 from comm.rootdomain import Domain
 
@@ -42,7 +42,7 @@ def print_task_status(log=False):
     )
     msg = msg.ljust(80, ' ')
     if log:
-        logger.info(msg)
+        api.logger.info(msg)
     else:
         print '\033[1;34m[m] %s\033[1;m\r' % msg,
 

@@ -38,7 +38,7 @@ kb.progress = AttrDict()
 # 全局接口
 api = AttrDict()
 api.request = None
-api.logger = None
+api.logger = logging.getLogger("3102")
 
 # 结果存储
 result = AttrDict()
@@ -48,6 +48,3 @@ result.root_domain = AttrDict()
 
 # paths
 paths = AttrDict()
-
-# logger
-logger = logging.getLogger('3102')

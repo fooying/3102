@@ -8,12 +8,12 @@ Mail:f00y1n9[at]gmail.com
 
 
 from core.data import result
-from core.data import logger
+from core.data import api
 
 
 class Output(object):
     def __init__(self):
-        self.logger = logger
+        self.logger = api.logger
         self.result = result
         self.keys = self.get_keys()
 

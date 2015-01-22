@@ -29,28 +29,28 @@ from core.data import api
 from core.data import paths
 from core.data import conf
 from core.data import result
-from core.data import logger
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
 from core.controllers.taskmanager import task_monitor
 from core.alivecheck import AliveCheck
 
 
+
 def complete():
     print '\n'
-    logger.info('output result to file...')
+    api.logger.info('output result to file...')
     Output(conf.domain, conf.output_format, paths.output_file).save()
-    logger.log(CUSTOM_LOGGING.good, os.linesep.join([
+    api.logger.log(CUSTOM_LOGGING.good, os.linesep.join([
         'result count:',
         '    ip: %s' % len(result.ip),
         '    domain: %s' % len(result.domain),
         '    root domain: %s' % len(result.root_domain),
     ]))
-    logger.info('Complete 3102!')
+    api.logger.info('Complete 3102!')
 
 
 def on_signal(signum, frame):
-    logger.warning('3102 will exit,signal:%d' % signum)
+    api.logger.warning('3102 will exit,signal:%d' % signum)
     conf.plugin_controller.exit()
 
 
@@ -63,7 +63,7 @@ def start(args):
         # 初始化日志
         log_level = get_log_level(args.log_level)
         init_logger(log_file_path=args.log_file, log_level=log_level)
-        logger.info('system init...')
+        api.logger.info('system init...')
         # 初始化配置
         conf.settings = settings
         conf.max_level = args.max_level
@@ -76,14 +76,14 @@ def start(args):
 
         conf.plugin_controller = PluginController()
         conf.plugin_controller.plugin_init(args.plugins_specific)
-        logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
+        api.logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
         signal.signal(signal.SIGUSR1, on_signal)
         signal.signal(signal.SIGTERM, on_signal)
         signal.signal(signal.SIGINT, on_signal)
 
-        logger.info('start target...')
+        api.logger.info('start target...')
         # 首个目标
         first_target = {
             'result': {'root_domain': [], 'domain': [], 'ip': []},
@@ -95,7 +95,7 @@ def start(args):
         conf.plugin_controller.wp.result.put(first_target)
 
         # 开启任务监控
-        logger.info('start task monitor and plugin...')
+        api.logger.info('start task monitor and plugin...')
         kwargs = {'pc': conf.plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
@@ -106,13 +106,13 @@ def start(args):
         if alive_check:
             alivecheck = AliveCheck()
             print '\n'
-            logger.info('start alive check...')
+            api.logger.info('start alive check...')
             alivecheck.start()
-            logger.info('alive check completed')
+            api.logger.info('alive check completed')
 
         complete()
     else:
-        logger.error(
+        api.logger.error(
             'Please input a target in the correct'
             ' format(domain/root_domain/ip)!'
         )
