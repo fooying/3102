@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 from thirdparty.attrdict import AttrDict
+import logging
 
 # 配置存储
 conf = AttrDict()
@@ -47,3 +48,6 @@ result.root_domain = AttrDict()
 
 # paths
 paths = AttrDict()
+
+# logger
+logger = logging.getLogger('3102')

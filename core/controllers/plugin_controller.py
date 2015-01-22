@@ -7,7 +7,6 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
-import logging
 from thirdparty import yaml
 
 import gevent
@@ -16,11 +15,11 @@ from gevent.monkey import patch_all
 from core.data import kb
 from core.data import conf
 from core.data import paths
+from core.data import logger
 from config import settings
 from comm.coroutine import WorkerPool
 
 patch_all()
-logger = logging.getLogger('3102')
 
 
 class PluginController(object):

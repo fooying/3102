@@ -6,14 +6,14 @@ Copyright (c) 2014 Fooying (http://www.fooying.com)
 Mail:f00y1n9[at]gmail.com
 """
 
-import logging
 
 from core.data import result
+from core.data import logger
 
 
 class Output(object):
     def __init__(self):
-        self.logger = logging.getLogger('3012')
+        self.logger = logger
         self.result = result
         self.keys = self.get_keys()
 

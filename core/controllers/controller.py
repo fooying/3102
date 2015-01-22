@@ -14,7 +14,6 @@ patch_all()
 
 import os
 import signal
-import logging
 import threading
 
 from comm.request import Req
@@ -30,12 +29,12 @@ from core.data import api
 from core.data import paths
 from core.data import conf
 from core.data import result
+from core.data import logger
 from core.output.output import Output
 from core.controllers.plugin_controller import PluginController
 from core.controllers.taskmanager import task_monitor
 from core.alivecheck import AliveCheck
 
-logger = logging.getLogger('3102')
 
 def complete():
     print '\n'

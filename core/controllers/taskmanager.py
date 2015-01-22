@@ -7,17 +7,16 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import copy
-import logging
 
 import gevent
 
 from core.data import kb
 from core.data import conf
 from core.data import result
+from core.data import logger
 from comm.utils import is_intra_ip
 from comm.rootdomain import Domain
 
-logger = logging.getLogger('3102')
 
 
 def task_monitor(pc):

@@ -7,15 +7,14 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
-import logging
 import tempfile
 import urlparse
 
 from core.data import paths
+from core.data import logger
 from comm.log import CUSTOM_LOGGING
 
 DEFAULT_FORMAT = 'csv'
-logger = logging.getLogger('3102')
 
 
 class Output(object):

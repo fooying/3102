@@ -7,17 +7,13 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import random
-import logging
 
 from thirdparty import requests
 from gevent.monkey import patch_all
-
+from core.data import logger
 from coroutine import WorkerPool
 
-
 patch_all()
-
-logger = logging.getLogger('3102')
 
 
 def request_patch():
