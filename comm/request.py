@@ -7,17 +7,13 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import random
-import logging
 
 from thirdparty import requests
 from gevent.monkey import patch_all
-
+from core.data import api
 from coroutine import WorkerPool
 
-
 patch_all()
-
-logger = logging.getLogger('3102')
 
 
 def request_patch():
@@ -48,7 +44,7 @@ class Req(object):
         self.proxy_list = proxy_list
         self.verify_proxy = False
         if self.proxy_list and verify_proxy:
-            logger.info('start verify proxy...please wait')
+            api.logger.info('start verify proxy...please wait')
             self.verify_proxy = False
             self.__verify_proxy()
 
@@ -56,7 +52,7 @@ class Req(object):
         """
         进行代码验证处理,建议提供的代理列表是可用的,直接关闭验证
         """
-        logger.info('start verify proxy...')
+        api.logger.info('start verify proxy...')
         wp = WorkerPool()
         for proxy in self.proxy_list:
             proxies = {
@@ -68,7 +64,7 @@ class Req(object):
         result = wp.result
         wp.run()
         self.proxy_list = [proxy[1] for proxy in result if proxy[0]]
-        logger.info('proxy verify completed!')
+        api.logger.info('proxy verify completed!')
         self.verify_proxy = False
 
     def __emulate_request(self, **kwargs):
