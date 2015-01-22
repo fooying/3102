@@ -7,7 +7,6 @@ Mail:f00y1n9[at]gmail.com
 """
 
 import os
-import logging
 from thirdparty import yaml
 
 import gevent
@@ -16,11 +15,11 @@ from gevent.monkey import patch_all
 from core.data import kb
 from core.data import conf
 from core.data import paths
+from core.data import api
 from config import settings
 from comm.coroutine import WorkerPool
 
 patch_all()
-logger = logging.getLogger('3102')
 
 
 class PluginController(object):
@@ -45,7 +44,7 @@ class PluginController(object):
                     try:
                         plugin_config = yaml.load(f)
                     except Exception:
-                        logger.exception('load %s\'s config fail!' % plugin)
+                        api.logger.exception('load %s\'s config fail!' % plugin)
                     else:
                         if plugin_config['enable']:
                             # 在conf中载入plugin的配置信息
@@ -62,7 +61,7 @@ class PluginController(object):
                 if plugin in plugins_available:
                     self.__load_plugin(plugin)
                 else:
-                    logger.exception('plugin: %s NOT found!' % plugin)
+                    api.logger.exception('plugin: %s NOT found!' % plugin)
         else:
             for plugin in plugins_available:
                 self.__load_plugin(plugin)
@@ -89,7 +88,7 @@ class PluginController(object):
             _plugin = __import__(plugin_path, fromlist='*')  # 动态加载函数
             kb.plugins[plugin]['handle'] = _plugin
         except Exception:
-            logger.exception('register plugin %s failed!' % plugin)
+            api.logger.exception('register plugin %s failed!' % plugin)
         else:
             self.__classify_plugin(plugin)
 

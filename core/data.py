@@ -7,6 +7,7 @@ Mail:f00y1n9[at]gmail.com
 """
 
 from thirdparty.attrdict import AttrDict
+import logging
 
 # 配置存储
 conf = AttrDict()
@@ -37,7 +38,7 @@ kb.progress = AttrDict()
 # 全局接口
 api = AttrDict()
 api.request = None
-api.logger = None
+api.logger = logging.getLogger("3102")
 
 # 结果存储
 result = AttrDict()
