@@ -19,13 +19,13 @@ class domain2ip(Plugin):
     def start(self, domain, domain_type, level):
         super(domain2ip, self).start(domain, domain_type, level)
         try:
-            ip = socket.gethostbyname(domain)
+            _, _, ipaddrlist = socket.gethostbyname_ex(domain)
         except socket.gaierror:
             pass
         else:
             self.result = {
                 'root_domain': [],
-                'ip': [ip],
+                'ip': ipaddrlist,
                 'domain': []
             }
         super(domain2ip, self).end()
