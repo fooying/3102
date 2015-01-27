@@ -22,7 +22,10 @@ class dnszonetransfer(Plugin):
             resolver = DnsHelper(domain)
             mx_list = resolver.get_mx()
             soa_list = resolver.get_soa()
-            txt_list = resolver.get_txt()
+            
+            # issue#28: 放弃dns插件中txt记录的数据，这部分数据不能保证一定是关联IP
+            # txt_list = resolver.get_txt()
+
             # spf_list = resolver.get_spf()
             transfer_list = resolver.zone_transfer()
         except:
