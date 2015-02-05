@@ -22,7 +22,6 @@ class dnszonetransfer(Plugin):
             resolver = DnsHelper(domain)
             mx_list = resolver.get_mx()
             soa_list = resolver.get_soa()
-            
             # issue#28: 放弃dns插件中txt记录的数据，这部分数据不能保证一定是关联IP
             # txt_list = resolver.get_txt()
 
@@ -31,7 +30,7 @@ class dnszonetransfer(Plugin):
         except:
             pass
         else:
-            record_lists = [mx_list, soa_list, txt_list]
+            record_lists = [mx_list, soa_list]
 
             domains = []
             ips = []
