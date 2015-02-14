@@ -11,6 +11,7 @@ import re
 import sys
 import logging
 import platform
+import unicodedata
 
 from comm.rootdomain import Domain
 from config.settings import BANNER
@@ -141,6 +142,21 @@ def setPaths():
     paths.PLUGINS_PATH = os.path.join(paths.ROOT_PATH, "plugins")
     paths.OUTPUT_TEMPLATE_OPPOSITE_PATH = os.path.join("core", "output", "templates")
     paths.OUTPUT_TEMPLATE_PATH = os.path.join(paths.ROOT_PATH, paths.OUTPUT_TEMPLATE_OPPOSITE_PATH)
+
+    _ = os.path.join(os.path.expanduser("~"), ".3102")
+    paths.OUTPUT_PATH = getUnicode(paths.get("OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
+
+
+def normalizeUnicode(value):
+    """
+    Does an ASCII normalization of unicode strings
+    Reference: http://www.peterbe.com/plog/unicode-to-ascii
+
+    >>> normalizeUnicode(u'\u0161u\u0107uraj')
+    'sucuraj'
+    """
+
+    return unicodedata.normalize('NFKD', value).encode('ascii', 'ignore') if isinstance(value, unicode) else value
 
 
 # utils copy from sqlmap ;)
