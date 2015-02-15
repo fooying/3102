@@ -26,9 +26,19 @@ $ python run3102.py -h
   ```bash
   $ python run3102.py -t 目标domain/ip
   ```
-  * 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中:  
+  * 扫描www.example.com相关的站点/ip,使用html保存结果:  
   ```bash
+  $ python run3102.py -t www.example.com --format html
+  ```
+  * 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.csv中(默认format为csv):  
+  ```bash
+  $ python run3102.py -t www.example.com -o ./output
   $ python run3102.py -t www.example.com -o ./output.csv
+  ```
+  * 扫描www.example.com相关的站点/ip,结果保存在当前文件夹下output.html中:  
+  ```bash
+  $ python run3102.py -t www.example.com -o ./output.html
+  $ python run3102.py -t www.example.com -o ./output --format html
   ```
   * 指定只执行`domain2ip`,`domain2root`,`icp`三个插件,结果保存在当前文件夹下output.csv中:  
   ```bash
