@@ -144,9 +144,6 @@ class Output(object):
             self.output_file += '.' + extension
 
     def __heuristic_check_extension(self):
-        if self.output_format == DEFAULT_FORMAT:
-            return 
-
         output_formats = self.get_output_formats()
         for extension in output_formats:
             if self.output_file.endswith('.' + extension):
