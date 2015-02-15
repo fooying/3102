@@ -13,6 +13,7 @@ from gevent.monkey import patch_all
 patch_all()
 
 import os
+import time
 import signal
 import threading
 
@@ -41,16 +42,17 @@ def complete():
     api.logger.info('Output result to file...')
     Output(conf.domain, conf.output_format, paths.output_file).save()
     api.logger.log(CUSTOM_LOGGING.good, os.linesep.join([
-        'result count:',
+        'Result count:',
         '    ip: %s' % len(result.ip),
         '    domain: %s' % len(result.domain),
         '    root domain: %s' % len(result.root_domain),
     ]))
-    api.logger.info('Complete 3102!')
+    api.logger.info('Complete 3102 at %s' % time.strftime("%X"))
 
 
 def on_signal(signum, frame):
-    api.logger.warning('3102 will exit,signal:%d' % signum)
+    print
+    api.logger.warning('User aborted, 3102 will exit, signal:%d' % signum)
     conf.plugin_controller.exit()
 
 
@@ -63,7 +65,7 @@ def start(args):
         # 初始化日志
         log_level = get_log_level(args.log_level)
         init_logger(log_file_path=args.log_file, log_level=log_level)
-        api.logger.info('System init...')
+        api.logger.info('System init at %s' % time.strftime("%X"))
         # 初始化配置
         conf.settings = settings
         conf.max_level = args.max_level
