@@ -78,7 +78,7 @@ def start(args):
 
         conf.plugin_controller = PluginController()
         conf.plugin_controller.plugin_init(args.plugins_specific)
-        api.logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
+        api.logger.info('Loaded plugins: %s' % ', '.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
         if hasattr(signal, 'SIGUSR1'):

@@ -22,11 +22,12 @@ class Output(object):
 
     def __init__(self, domain, output_format=DEFAULT_FORMAT, output_file=None):
         self.logger = api.logger
-        self.output_format = output_format
         self.template_path = paths.OUTPUT_TEMPLATE_PATH
+        self.output_format = output_format
         self.domain = domain
         self.output_file = output_file
         self.__get_output_file()
+        self.__heuristic_check_extension()
         self.__check_file_extension()
 
     def save(self):
@@ -42,8 +43,7 @@ class Output(object):
                 output_format = file_name[7:-3] if file_name.endswith('.py')\
                     else file_name[7:-4]
                 formats.add(output_format)
-        format_str = '/'.join(formats)
-        return format_str
+        return formats
 
     def __deal_config(self):
         py_file = os.path.join(
@@ -142,3 +142,9 @@ class Output(object):
         extension = self.output_format
         if self.output_file and not self.output_file.endswith('.' + extension):
             self.output_file += '.' + extension
+
+    def __heuristic_check_extension(self):
+        output_formats = self.get_output_formats()
+        for extension in output_formats:
+            if self.output_file.endswith('.' + extension):
+                self.output_format = extension
