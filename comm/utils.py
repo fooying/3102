@@ -143,6 +143,8 @@ def setPaths():
     paths.OUTPUT_TEMPLATE_OPPOSITE_PATH = os.path.join("core", "output", "templates")
     paths.OUTPUT_TEMPLATE_PATH = os.path.join(paths.ROOT_PATH, paths.OUTPUT_TEMPLATE_OPPOSITE_PATH)
 
+    paths.CONFIG_FILE_PATH = os.path.join(paths.ROOT_PATH, "3102.conf")
+
     _ = os.path.join(os.path.expanduser("~"), ".3102")
     paths.OUTPUT_PATH = getUnicode(paths.get("OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
 
@@ -218,5 +220,3 @@ def getUnicode(value, encoding=None, noneToNull=False):
             return unicode(value)
         except UnicodeDecodeError:
             return unicode(str(value), errors="ignore")  # encoding ignored for non-basestring instances
-
-

@@ -28,6 +28,7 @@ from comm.utils import get_proxy_list_by_file
 from config import settings
 from core.data import api
 from core.data import paths
+from core.data import cmdLineOptions
 from core.data import conf
 from core.data import result
 from core.output.output import Output
@@ -56,28 +57,28 @@ def on_signal(signum, frame):
     conf.plugin_controller.exit()
 
 
-def start(args):
-    conf.domain = args.target
+def start():
+    conf.domain = cmdLineOptions.target
     domain_type = get_domain_type(conf.domain)
     if domain_type in settings.ALLOW_INPUTS:
         conf.domain = Domain.url_format(conf.domain)
 
         # 初始化日志
-        log_level = get_log_level(args.log_level)
-        init_logger(log_file_path=args.log_file, log_level=log_level)
+        log_level = get_log_level(cmdLineOptions.log_level)
+        init_logger(log_file_path=cmdLineOptions.log_file, log_level=log_level)
         api.logger.info('System init at %s' % time.strftime("%X"))
         # 初始化配置
         conf.settings = settings
-        conf.max_level = args.max_level
-        paths.output_file = args.output_file
-        conf.output_format = args.output_format
-        alive_check = args.alive_check
+        conf.max_level = cmdLineOptions.max_level
+        paths.output_file = cmdLineOptions.output_file
+        conf.output_format = cmdLineOptions.output_format
+        alive_check = cmdLineOptions.alive_check
         # 初始化爬虫
-        proxy_list = get_proxy_list_by_file(args.proxy_file)
-        api.request = Req(args.timeout, proxy_list, args.verify_proxy)
+        proxy_list = get_proxy_list_by_file(cmdLineOptions.proxy_file)
+        api.request = Req(cmdLineOptions.timeout, proxy_list, cmdLineOptions.verify_proxy)
 
         conf.plugin_controller = PluginController()
-        conf.plugin_controller.plugin_init(args.plugins_specific)
+        conf.plugin_controller.plugin_init(cmdLineOptions.plugins_specific)
         api.logger.info('Loaded plugins: %s' % ', '.join(conf.plugins_load.keys()))
 
         # 绑定信号事件

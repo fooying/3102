@@ -48,3 +48,6 @@ result.root_domain = AttrDict()
 
 # paths
 paths = AttrDict()
+
+# cmdline options
+cmdLineOptions = AttrDict()
