@@ -220,3 +220,24 @@ def getUnicode(value, encoding=None, noneToNull=False):
             return unicode(value)
         except UnicodeDecodeError:
             return unicode(str(value), errors="ignore")  # encoding ignored for non-basestring instances
+
+
+def checkFile(filename):
+    """
+    Checks for file existence and readability
+    """
+
+    valid = True
+
+    if filename is None or not os.path.isfile(filename):
+        valid = False
+
+    if valid:
+        try:
+            with open(filename, "rb") as f:
+                pass
+        except:
+            valid = False
+
+    if not valid:
+        raise Exception("unable to read file '%s'" % filename)
