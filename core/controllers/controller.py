@@ -13,6 +13,7 @@ from gevent.monkey import patch_all
 patch_all()
 
 import os
+import time
 import signal
 import threading
 
@@ -27,6 +28,7 @@ from comm.utils import get_proxy_list_by_file
 from config import settings
 from core.data import api
 from core.data import paths
+from core.data import cmdLineOptions
 from core.data import conf
 from core.data import result
 from core.output.output import Output
@@ -38,45 +40,46 @@ from core.alivecheck import AliveCheck
 
 def complete():
     print '\n'
-    api.logger.info('output result to file...')
+    api.logger.info('Output result to file...')
     Output(conf.domain, conf.output_format, paths.output_file).save()
     api.logger.log(CUSTOM_LOGGING.good, os.linesep.join([
-        'result count:',
+        'Result count:',
         '    ip: %s' % len(result.ip),
         '    domain: %s' % len(result.domain),
         '    root domain: %s' % len(result.root_domain),
     ]))
-    api.logger.info('Complete 3102!')
+    api.logger.info('Complete 3102 at %s' % time.strftime("%X"))
 
 
 def on_signal(signum, frame):
-    api.logger.warning('3102 will exit,signal:%d' % signum)
+    print
+    api.logger.warning('User aborted, 3102 will exit, signal:%d' % signum)
     conf.plugin_controller.exit()
 
 
-def start(args):
-    conf.domain = args.target
+def start():
+    conf.domain = cmdLineOptions.target
     domain_type = get_domain_type(conf.domain)
     if domain_type in settings.ALLOW_INPUTS:
         conf.domain = Domain.url_format(conf.domain)
 
         # 初始化日志
-        log_level = get_log_level(args.log_level)
-        init_logger(log_file_path=args.log_file, log_level=log_level)
-        api.logger.info('system init...')
+        log_level = get_log_level(cmdLineOptions.log_level)
+        init_logger(log_file_path=cmdLineOptions.log_file, log_level=log_level)
+        api.logger.info('System init at %s' % time.strftime("%X"))
         # 初始化配置
         conf.settings = settings
-        conf.max_level = args.max_level
-        paths.output_file = args.output_file
-        conf.output_format = args.output_format
-        alive_check = args.alive_check
+        conf.max_level = cmdLineOptions.max_level
+        paths.output_file = cmdLineOptions.output_file
+        conf.output_format = cmdLineOptions.output_format
+        alive_check = cmdLineOptions.alive_check
         # 初始化爬虫
-        proxy_list = get_proxy_list_by_file(args.proxy_file)
-        api.request = Req(args.timeout, proxy_list, args.verify_proxy)
+        proxy_list = get_proxy_list_by_file(cmdLineOptions.proxy_file)
+        api.request = Req(cmdLineOptions.timeout, proxy_list, cmdLineOptions.verify_proxy)
 
         conf.plugin_controller = PluginController()
-        conf.plugin_controller.plugin_init(args.plugins_specific)
-        api.logger.info('Loaded plugins: %s' % ','.join(conf.plugins_load.keys()))
+        conf.plugin_controller.plugin_init(cmdLineOptions.plugins_specific)
+        api.logger.info('Loaded plugins: %s' % ', '.join(conf.plugins_load.keys()))
 
         # 绑定信号事件
         if hasattr(signal, 'SIGUSR1'):
@@ -84,7 +87,7 @@ def start(args):
         signal.signal(signal.SIGTERM, on_signal)
         signal.signal(signal.SIGINT, on_signal)
 
-        api.logger.info('start target...')
+        api.logger.info('Start target [%s]' % conf.domain)
         # 首个目标
         first_target = {
             'result': {'root_domain': [], 'domain': [], 'ip': []},
@@ -96,7 +99,7 @@ def start(args):
         conf.plugin_controller.wp.result.put(first_target)
 
         # 开启任务监控
-        api.logger.info('start task monitor and plugin...')
+        api.logger.info('Start task monitor and plugin...')
         kwargs = {'pc': conf.plugin_controller}
         monitor = threading.Thread(target=task_monitor, kwargs=kwargs)
         monitor.start()
@@ -107,9 +110,9 @@ def start(args):
         if alive_check:
             alivecheck = AliveCheck()
             print '\n'
-            api.logger.info('start alive check...')
+            api.logger.info('Start alive check...')
             alivecheck.start()
-            api.logger.info('alive check completed')
+            api.logger.info('Alive check completed')
 
         complete()
     else:

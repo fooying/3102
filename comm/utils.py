@@ -11,6 +11,7 @@ import re
 import sys
 import logging
 import platform
+import unicodedata
 
 from comm.rootdomain import Domain
 from config.settings import BANNER
@@ -142,6 +143,23 @@ def setPaths():
     paths.OUTPUT_TEMPLATE_OPPOSITE_PATH = os.path.join("core", "output", "templates")
     paths.OUTPUT_TEMPLATE_PATH = os.path.join(paths.ROOT_PATH, paths.OUTPUT_TEMPLATE_OPPOSITE_PATH)
 
+    paths.CONFIG_FILE_PATH = os.path.join(paths.ROOT_PATH, "3102.conf")
+
+    _ = os.path.join(os.path.expanduser("~"), ".3102")
+    paths.OUTPUT_PATH = getUnicode(paths.get("OUTPUT_PATH", os.path.join(_, "output")), encoding=sys.getfilesystemencoding())
+
+
+def normalizeUnicode(value):
+    """
+    Does an ASCII normalization of unicode strings
+    Reference: http://www.peterbe.com/plog/unicode-to-ascii
+
+    >>> normalizeUnicode(u'\u0161u\u0107uraj')
+    'sucuraj'
+    """
+
+    return unicodedata.normalize('NFKD', value).encode('ascii', 'ignore') if isinstance(value, unicode) else value
+
 
 # utils copy from sqlmap ;)
 def weAreFrozen():
@@ -204,3 +222,22 @@ def getUnicode(value, encoding=None, noneToNull=False):
             return unicode(str(value), errors="ignore")  # encoding ignored for non-basestring instances
 
 
+def checkFile(filename):
+    """
+    Checks for file existence and readability
+    """
+
+    valid = True
+
+    if filename is None or not os.path.isfile(filename):
+        valid = False
+
+    if valid:
+        try:
+            with open(filename, "rb") as f:
+                pass
+        except:
+            valid = False
+
+    if not valid:
+        raise Exception("unable to read file '%s'" % filename)

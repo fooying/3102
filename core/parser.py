@@ -60,7 +60,7 @@ def parse(args=None):
         help=_format_help([
             'The format to output result,',
             'default list:',
-            Output.get_output_formats()
+            '/'.join(Output.get_output_formats())
         ])
     )
     parser.add_argument(

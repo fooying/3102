@@ -12,6 +12,8 @@ import os
 from core.parser import parse
 from core.controllers.controller import start
 from core.data import paths
+from core.data import cmdLineOptions
+from core.option import initOptions
 from comm.utils import weAreFrozen
 from comm.utils import getUnicode
 from comm.utils import banner
@@ -29,7 +31,7 @@ def modulePath():
     except NameError:
         _ = inspect.getsourcefile(modulePath)
 
-    return os.path.dirname(os.path.realpath(getUnicode(_, sys.getfilesystemencoding())))
+    return getUnicode(os.path.dirname(os.path.realpath(_)), sys.getfilesystemencoding())
 
 
 def main(args=None):
@@ -44,8 +46,9 @@ def main(args=None):
         banner()
         sys.path.insert(0, paths.THIRDPARTY_PATH)
 
-        args = parse()
-        start(args)
+        cmdLineOptions.update(parse().__dict__)
+        initOptions(cmdLineOptions)
+        start()
     except Exception, e:
         print e
         import traceback
