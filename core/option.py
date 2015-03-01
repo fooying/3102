@@ -31,5 +31,7 @@ def _mergeOptions(inputOptions, overrideOptions):
             mergeOption = config.get(section, option)
             if option == 'plugins_specific':
                 mergeOption = mergeOption.split()
+            if option == 'pool_size':
+                mergeOption = int(mergeOption)
             if mergeOption:
                 inputOptions[option] = mergeOption

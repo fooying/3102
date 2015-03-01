@@ -9,14 +9,16 @@ Mail:f00y1n9[at]gmail.com
 from gevent.pool import Pool
 from gevent.queue import Queue
 from gevent.monkey import patch_all
+from core.data import cmdLineOptions
 
 patch_all()
 
 
 class WorkerPool(object):
 
-    def __init__(self, pool_size=500):
-        self.job_pool = Pool(size=pool_size)
+    def __init__(self):
+        self.pool_size = cmdLineOptions.pool_size
+        self.job_pool = Pool(size=self.pool_size)
         self.result = Queue()
         self.target_queue = Queue()
 

@@ -52,6 +52,11 @@ def parse(args=None):
         type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
     parser.add_argument(
+        '--pool_size', dest='pool_size',
+        type=int, default=500,
+        help=_format_help('Max number of Thread pool size')
+    )
+    parser.add_argument(
         '-o', '--output_file', dest='output_file',
         help=_format_help('File to ouput result')
     )
