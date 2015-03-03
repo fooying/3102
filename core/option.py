@@ -29,9 +29,10 @@ def _mergeOptions(inputOptions, overrideOptions):
     for section in config.sections():
         for option in config.options(section):
             mergeOption = config.get(section, option)
-            if option == 'plugins_specific':
-                mergeOption = mergeOption.split()
-            if option == 'pool_size':
-                mergeOption = int(mergeOption)
             if mergeOption:
+                if option == 'plugins_specific':
+                    mergeOption = mergeOption.split()
+                elif option in ('max_level', 'pool_size', 'timeout', 'log_level'):
+                    mergeOption = int(mergeOption)
+
                 inputOptions[option] = mergeOption

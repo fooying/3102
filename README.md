@@ -91,6 +91,9 @@ optional arguments:
   -m MAX_LEVEL, --max_level MAX_LEVEL
                         Max level to get domain/ip/rootdomain
                           (DEFAULT: 4)
+  --pool_size POOL_SIZE
+                        Max number of Thread pool size
+                          (DEFAULT: 500)
   -o OUTPUT_FILE, --output_file OUTPUT_FILE
                         File to ouput result
                           (DEFAULT: None)
