@@ -8,6 +8,7 @@ Mail:f00y1n9[at]gmail.com
 
 from thirdparty.attrdict import AttrDict
 import logging
+from config.defaults import DEFAULTS_OPTIONS
 
 # 配置存储
 conf = AttrDict()
@@ -17,10 +18,11 @@ conf.reg_plugins = AttrDict()
 conf.reg_plugins.domain = set([])
 conf.reg_plugins.root_domain = set([])
 conf.reg_plugins.ip = set([])
-conf.max_level = 10
-conf.output_format = None
+conf.max_level = DEFAULTS_OPTIONS['max_level']
+conf.output_format = DEFAULTS_OPTIONS['output_file']
 conf.domain = None
 conf.plugin_controller = None
+conf.pool_size = DEFAULTS_OPTIONS['pool_size']
 
 # 中间数据存储
 kb = AttrDict()
@@ -49,5 +51,3 @@ result.root_domain = AttrDict()
 # paths
 paths = AttrDict()
 
-# cmdline options
-cmdLineOptions = AttrDict()

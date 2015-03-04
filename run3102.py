@@ -9,11 +9,9 @@ Mail:f00y1n9[at]gmail.com
 import sys
 import os
 
-from core.parser import parse
 from core.controllers.controller import start
 from core.data import paths
-from core.data import cmdLineOptions
-from core.option import initOptions
+from core.option import getOptions
 from comm.utils import weAreFrozen
 from comm.utils import getUnicode
 from comm.utils import banner
@@ -40,15 +38,13 @@ def main(args=None):
     """
 
     try:
-        paths.ROOT_PATH = modulePath()
-        setPaths()
+        setPaths(modulePath())
 
         banner()
         sys.path.insert(0, paths.THIRDPARTY_PATH)
 
-        cmdLineOptions.update(parse().__dict__)
-        initOptions(cmdLineOptions)
-        start()
+        options = getOptions()
+        start(options)
     except Exception, e:
         print e
         import traceback

@@ -132,10 +132,11 @@ def banner():
         _ = re.sub("\033.+?m", "", _)
     print _
 
-def setPaths():
+def setPaths(root_path):
     """
     Sets absolute paths for project directories and files
     """
+    paths.ROOT_PATH = root_path
 
     paths.THIRDPARTY_PATH = os.path.join(paths.ROOT_PATH, "thirdparty")
     paths.PLUGINS_OPPOSITE_PATH = "plugins"
