@@ -25,8 +25,6 @@ USAGE = os.linesep.join([
 def parseCmdOptions():
     '''
     解析命令行参数
-
-    notice: 若添加参数，需要把默认值添加到 `config`目录下`defaults.py`文件中
     '''
 
     parser = argparse.ArgumentParser(
@@ -49,6 +47,7 @@ def parseCmdOptions():
     parser.add_argument(
         '-p', '--plugins', metavar='plugin',
         dest='plugins_specific', nargs='+',
+        default=None,
         help=_format_help([
             'Specify the plugins',
             'avaliable: ' + '\n'.join([' '.join(available_plugins[i:i+3]) for i in range(0, len(available_plugins), 4)])
@@ -56,12 +55,12 @@ def parseCmdOptions():
     )
     parser.add_argument(
         '-m', '--max_level', 
-        dest='max_level',
+        dest='max_level', default=4,
         type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
     parser.add_argument(
         '--pool_size', 
-        dest='pool_size', type=int,
+        dest='pool_size', type=int, default=500,
         help=_format_help('Max number of Thread pool size')
     )
     parser.add_argument(
@@ -71,7 +70,7 @@ def parseCmdOptions():
     )
     parser.add_argument(
         '--format',
-        dest='output_format',
+        dest='output_format', default='csv',
         help=_format_help([
             'The format to output result,',
             'default list:',
@@ -93,7 +92,7 @@ def parseCmdOptions():
     parser.add_argument(
         '--log_level',
         dest='log_level',
-        type=int, choices=loglevel_choices,
+        type=int, default=1, choices=loglevel_choices,
         help=_format_help('Log level of output to file', loglevel_choices)
     )
     # Proxy
@@ -114,7 +113,7 @@ def parseCmdOptions():
 
     parser.add_argument(
         '--timeout',
-        dest='timeout', type=int,
+        dest='timeout', type=int, default=10,
         help=_format_help('Request timeout')
     )
     parser.add_argument(

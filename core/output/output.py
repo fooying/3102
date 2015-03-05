@@ -12,6 +12,7 @@ import urlparse
 
 from core.data import paths
 from core.data import api
+from core.data import options
 from comm.log import CUSTOM_LOGGING
 from comm.utils import getUnicode, normalizeUnicode
 
@@ -113,7 +114,7 @@ class Output(object):
                     raise Exception(errMsg)
 
                 warnMsg = "unable to create output directory "
-                warnMsg += "'%s' (%s). " % (conf.outputPath, getUnicode(ex))
+                warnMsg += "'%s' (%s). " % (options.outputPath, getUnicode(ex))
                 warnMsg += "Using temporary directory '%s' instead" % tempDir
                 self.logger.warn(warnMsg)
 

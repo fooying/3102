@@ -8,35 +8,35 @@ Mail:f00y1n9[at]gmail.com
 
 import ConfigParser 
 
-from thirdparty.attrdict import AttrDict
-from core.data import paths
+from core.data import paths, options
 from comm.utils import getUnicode, checkFile
-from config.defaults import DEFAULTS_OPTIONS
 from core.parser import parseCmdOptions
 
-def getOptions():
-    options = AttrDict()
-    # 载入程序员(开发人员)固定的默认值
-    options.update(DEFAULTS_OPTIONS)
-    
-    # 载入用户定义的`.conf`配置文件中的值
-    options.update(getConfOptions())
 
-    # 载入命令行传入参数的值
+DEFAULTS_OPTIONS = {
+    'plugins_specific': None,
+    'max_level': 4,
+    'timeout': 10,
+    'pool_size': 500,
+    'output_format': 'csv',
+    'output_file': None,
+    'log_file': None,
+    'log_level': 1,
+    'proxy_file': None,
+    'verify_proxy': False,
+    'alive_check': False,
+}
+
+def _isDefaultOption(cmdOptions, option):
+    return cmdOptions[option] == DEFAULTS_OPTIONS[option]
+
+def initOptions():
     cmdOptions = parseCmdOptions()
-    cleanCmdOptions = {}
-    for key in cmdOptions:
-        # 使用action='store_true'的选项，如果值是False的话，不更新，以`3102.conf`为准
-        if cmdOptions[key] == False:
-            continue
-        # 去除值为None的键值对, 否则会覆盖`.conf`中读取的值
-        elif cmdOptions[key] is not None:
-            cleanCmdOptions[key] = cmdOptions[key]
-    options.update(cleanCmdOptions)
+    _mergeConfOptions(cmdOptions)
+    options.update(cmdOptions)
+    paths.output_file = options.output_file
 
-    return options
-
-def getConfOptions():
+def _mergeConfOptions(cmdOptions):
     configFile = paths.CONFIG_FILE_PATH
     try:
         # 检查配置文件是否存在
@@ -45,20 +45,19 @@ def getConfOptions():
         config = ConfigParser.ConfigParser()
         config.read(configFile)
     except Exception, ex:
+        # FIXME: 这里是 抛出异常,退出程序 还是 提示,然后以默认参数运行会比较好?
         errMsg = "Invalid/Unreadable configuration file : '%s'" % getUnicode(ex)
         raise Exception(errMsg)
-
-    defaults = {}
 
     for section in config.sections():
         for option in config.options(section):
             val = config.get(section, option)
-            if val:
+            if val and _isDefaultOption(cmdOptions, option):
                 # 字符列表的配置
                 if option == 'plugins_specific':
                     val = val.split()
                 # 整型的配置
-                if option in ('max_level', 'pool_size', 'timeout', 'log_level'):
+                elif option in ('max_level', 'pool_size', 'timeout', 'log_level'):
                     val = int(val)
                 # 布尔型的配置
                 elif option in ('alive_check', 'verify_proxy'):
@@ -67,10 +66,8 @@ def getConfOptions():
                     elif val.lower() == 'true':
                         val = True
                     else:
-                        # FIXME: 这里是 抛出异常 还是 容错较高地把值设为False好呢?
+                        # FIXME: 这里是 抛出异常 还是 容错较高地把值设为默认值好呢?
                         errMsg = "Invalid configuration option : '%s'='%s'" % (option, val)
                         raise Exception(errMsg)
 
-                defaults[option] = val
-
-    return defaults
+                cmdOptions[option] = val
