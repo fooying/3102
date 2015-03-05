@@ -12,6 +12,7 @@ from thirdparty.attrdict import AttrDict
 from core.data import paths
 from comm.utils import getUnicode, checkFile
 
+
 def initOptions(inputOptions=AttrDict(), overrideOptions=False):
     _mergeOptions(inputOptions, overrideOptions)
 
@@ -29,10 +30,27 @@ def _mergeOptions(inputOptions, overrideOptions):
     for section in config.sections():
         for option in config.options(section):
             mergeOption = config.get(section, option)
-            if mergeOption:
+            if mergeOption and _isDefaultOption(inputOptions, option):
                 if option == 'plugins_specific':
                     mergeOption = mergeOption.split()
                 elif option in ('max_level', 'pool_size', 'timeout', 'log_level'):
                     mergeOption = int(mergeOption)
 
                 inputOptions[option] = mergeOption
+
+
+def _isDefaultOption(inputOptions, option):
+    defaultOptions = {
+        'plugins_specific': None,
+        'max_level': 4,
+        'timeout': 10,
+        'pool_size': 500,
+        'output_format': 'csv',
+        'output_file': None,
+        'log_file': None,
+        'log_level': 1,
+        'proxy_file': None,
+        'verify_proxy': False,
+        'alive_check': False,
+    }
+    return inputOptions[option] == defaultOptions[option]
