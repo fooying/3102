@@ -34,6 +34,7 @@ def initOptions():
     cmdOptions = parseCmdOptions()
     _mergeConfOptions(cmdOptions)
     options.update(cmdOptions)
+    # FIXME: issue 59
     paths.output_file = options.output_file
 
 def _mergeConfOptions(cmdOptions):
