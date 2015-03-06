@@ -9,7 +9,7 @@ Mail:f00y1n9[at]gmail.com
 from thirdparty.attrdict import AttrDict
 import logging
 
-# 配置存储
+# 插件配置信息存储
 conf = AttrDict()
 conf.plugins_available = AttrDict()  # 可用的插件列表
 conf.plugins_load = AttrDict()       # 加载使用的插件配置
@@ -46,5 +46,5 @@ result.root_domain = AttrDict()
 # paths
 paths = AttrDict()
 
-# options
+# 外部参数信息存储
 options = AttrDict()
