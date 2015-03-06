@@ -22,7 +22,11 @@ USAGE = os.linesep.join([
 ])
 
 
-def parse(args=None):
+def parseCmdOptions():
+    '''
+    解析命令行参数
+    '''
+
     parser = argparse.ArgumentParser(
         usage=USAGE, formatter_class=argparse.RawTextHelpFormatter,
         add_help=False
@@ -31,45 +35,52 @@ def parse(args=None):
         '-h', '--help', action='help',
         help='Show this help message and exit'
     )
-    parser.add_argument('-V', '--version', action='version',
-                        version=VERSION_INFO)
     parser.add_argument(
-        '-t', '--target', dest='target', required=True,
+        '-V', '--version', action='version',
+        version=VERSION_INFO
+    )
+    parser.add_argument(
+        '-t', '--target',
+        dest='target', required=True,
         help=_format_help('Target domain/rootdomain/ip')
     )
     available_plugins = PluginController.get_available_plugins().keys()
     parser.add_argument(
         '-p', '--plugins', metavar='plugin',
-        dest='plugins_specific', nargs='+',
-        default=None,
+        dest='plugins_specific', nargs='+', default=None,
         help=_format_help([
             'Specify the plugins',
-            'avaliable: ' + '\n'.join([' '.join(available_plugins[i:i+4]) for i in range(0, len(available_plugins), 4)])
+            'avaliable: ' + '\n'.join([' '.join(available_plugins[i:i+3]) for i in range(0, len(available_plugins), 4)])
         ])
     )
     parser.add_argument(
-        '-m', '--max_level', dest='max_level', default=4,
+        '-m', '--max_level', 
+        dest='max_level', default=4,
         type=int, help=_format_help('Max level to get domain/ip/rootdomain')
     )
     parser.add_argument(
-        '--pool_size', dest='pool_size',
-        type=int, default=500,
+        '--pool_size', 
+        dest='pool_size', type=int, default=500,
         help=_format_help('Max number of Thread pool size')
     )
     parser.add_argument(
-        '-o', '--output_file', dest='output_file',
+        '-o', '--output_file',
+        dest='output_file', default=None,
         help=_format_help('File to ouput result')
     )
     parser.add_argument(
-        '--format', dest='output_format', default='csv',
+        '--format',
+        dest='output_format', default='csv',
         help=_format_help([
             'The format to output result,',
             'default list:',
             '/'.join(Output.get_output_formats())
         ])
     )
+    # Log
     parser.add_argument(
-        '--log_file', dest='log_file',
+        '--log_file',
+        dest='log_file', default=None,
         help=_format_help('Log file')
     )
     loglevel_choices = {
@@ -79,12 +90,15 @@ def parse(args=None):
         4: 'ERROR',
     }
     parser.add_argument(
-        '--log_level', dest='log_level',
+        '--log_level',
+        dest='log_level',
         type=int, default=1, choices=loglevel_choices,
         help=_format_help('Log level of output to file', loglevel_choices)
     )
+    # Proxy
     parser.add_argument(
-        '--proxy_file', dest='proxy_file',
+        '--proxy_file',
+        dest='proxy_file', default=None,
         help=_format_help([
             'Proxy file, one line one proxy, each line format:',
             'schem,proxy url,',
@@ -92,21 +106,24 @@ def parse(args=None):
         ])
     )
     parser.add_argument(
-        '--verify_proxy', dest='verify_proxy', action='store_true',
-        default=False,
+        '--verify_proxy',
+        dest='verify_proxy', default=False, action='store_true',
         help=_format_help('If verify the proxy list')
     )
+
     parser.add_argument(
-        '--timeout', dest='timeout',
-        type=int, default=10,
+        '--timeout',
+        dest='timeout', type=int, default=10,
         help=_format_help('Request timeout')
     )
     parser.add_argument(
-        '--alive_check', action='store_true',
+        '--alive_check', 
+        dest='alive_check', default=False, action='store_true',
         help=_format_help('Check alive and accessible status of domain')
     )
-    args = parser.parse_args(args)
-    return args
+
+    args = parser.parse_args()
+    return args.__dict__
 
 
 def _format_help(help_info, choices=None):

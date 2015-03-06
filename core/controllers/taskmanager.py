@@ -14,6 +14,7 @@ from core.data import kb
 from core.data import conf
 from core.data import result
 from core.data import api
+from core.data import options
 from comm.utils import is_intra_ip
 from comm.rootdomain import Domain
 
@@ -22,7 +23,7 @@ from comm.rootdomain import Domain
 def task_monitor(pc):
     while not pc.exit_flag:
         try:
-            if conf.max_level <= kb.status.level:
+            if options.max_level <= kb.status.level:
                 print_task_status()
             one_result = pc.wp.result.get(timeout=1)
         except gevent.queue.Empty:
@@ -50,7 +51,7 @@ def print_task_status(log=False):
 def add_task_and_save(pc, one_result):
     level = one_result.get('level', -1) + 1
 
-    if level <= conf.max_level:
+    if level <= options.max_level:
         if level > kb.status.level:
             kb.status.level = level
             print_task_status(True)
