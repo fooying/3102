@@ -40,14 +40,14 @@ def parseCmdOptions():
         version=VERSION_INFO
     )
     parser.add_argument(
-        '-t', '--target', dest='target', required=True,
+        '-t', '--target',
+        dest='target', required=True,
         help=_format_help('Target domain/rootdomain/ip')
     )
     available_plugins = PluginController.get_available_plugins().keys()
     parser.add_argument(
         '-p', '--plugins', metavar='plugin',
-        dest='plugins_specific', nargs='+',
-        default=None,
+        dest='plugins_specific', nargs='+', default=None,
         help=_format_help([
             'Specify the plugins',
             'avaliable: ' + '\n'.join([' '.join(available_plugins[i:i+3]) for i in range(0, len(available_plugins), 4)])
@@ -65,7 +65,7 @@ def parseCmdOptions():
     )
     parser.add_argument(
         '-o', '--output_file',
-        dest='output_file',
+        dest='output_file', default=None,
         help=_format_help('File to ouput result')
     )
     parser.add_argument(
@@ -80,7 +80,7 @@ def parseCmdOptions():
     # Log
     parser.add_argument(
         '--log_file',
-        dest='log_file',
+        dest='log_file', default=None,
         help=_format_help('Log file')
     )
     loglevel_choices = {
@@ -98,7 +98,7 @@ def parseCmdOptions():
     # Proxy
     parser.add_argument(
         '--proxy_file',
-        dest='proxy_file',
+        dest='proxy_file', default=None,
         help=_format_help([
             'Proxy file, one line one proxy, each line format:',
             'schem,proxy url,',
@@ -107,7 +107,7 @@ def parseCmdOptions():
     )
     parser.add_argument(
         '--verify_proxy',
-        dest='verify_proxy', action='store_true',
+        dest='verify_proxy', default=False, action='store_true',
         help=_format_help('If verify the proxy list')
     )
 
@@ -117,7 +117,8 @@ def parseCmdOptions():
         help=_format_help('Request timeout')
     )
     parser.add_argument(
-        '--alive_check', action='store_true',
+        '--alive_check', 
+        dest='alive_check', default=False, action='store_true',
         help=_format_help('Check alive and accessible status of domain')
     )
 
