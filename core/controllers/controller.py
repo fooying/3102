@@ -41,8 +41,7 @@ from core.alivecheck import AliveCheck
 def complete():
     print '\n'
     api.logger.info('Output result to file...')
-    # FIXME: issue 59
-    Output(conf.domain, options.output_format, paths.output_file).save()
+    Output(conf.domain, options.output_format, options.output_file).save()
     api.logger.log(CUSTOM_LOGGING.good, os.linesep.join([
         'Result count:',
         '    ip: %s' % len(result.ip),
