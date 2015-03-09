@@ -106,7 +106,7 @@ def start():
         if options.alive_check:
             alivecheck = AliveCheck()
             print '\n'
-            api.logger.info('Start alive check...')
+            api.logger.info('Init alive check...')
             alivecheck.start()
             api.logger.info('Alive check completed')
 
