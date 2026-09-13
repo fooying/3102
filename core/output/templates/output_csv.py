@@ -18,11 +18,20 @@ class OutputCsv(Output):
             module_dict = {}
             for key in ['root_domain', 'ip', 'domain']:
                 for item in self.result[key].values():
-                    group = module_dict.setdefault(item['module'], [])
+                    module = item.get('module', '')
+                    if module is None:
+                        module = ''
+                    group = module_dict.setdefault(module, [])
                     group.append(item)
 
             for group in module_dict:
                 for item in module_dict[group]:
-                    items = [item[_].replace(',', '') if _ == 'title'
-                             else item[_] for _ in self.keys]
+                    items = []
+                    for field in self.keys:
+                        value = item.get(field, '')
+                        if field == 'title' and hasattr(value, 'replace'):
+                            value = value.replace(',', '')
+                        if value is None:
+                            value = ''
+                        items.append(value)
                     f.write(','.join('{}'.format(_) for _ in items) + '\n')
