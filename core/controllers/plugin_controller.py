@@ -42,7 +42,7 @@ class PluginController(object):
             if os.path.exists(plugin_config_path):
                 with open(plugin_config_path) as f:
                     try:
-                        plugin_config = yaml.load(f)
+                        plugin_config = yaml.load(f, Loader=yaml.SafeLoader)
                     except Exception:
                         api.logger.exception('load %s\'s config fail!' % plugin)
                     else:
